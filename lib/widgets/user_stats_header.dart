@@ -46,7 +46,7 @@ class UserStatsHeader extends StatelessWidget {
               gradient: LinearGradient(colors: [
                 primaryColor,
                 secondaryColor,
-                Color.fromARGB(255, 201, 201, 201),
+                const Color.fromARGB(255, 201, 201, 201),
               ], stops: [
                 progress / 2,
                 progress,

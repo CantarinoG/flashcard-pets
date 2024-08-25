@@ -51,6 +51,9 @@ extension CustomColorScheme on ColorScheme {
   Color get text => brightness == Brightness.light
       ? AppColors.blackColor
       : AppColors.whiteColor;
+  Color get bright => brightness == Brightness.light
+      ? AppColors.whiteColor
+      : AppColors.blackColor;
   Color get warning => brightness == Brightness.light
       ? AppColors.warningColorLight
       : AppColors.warningColorDark;
