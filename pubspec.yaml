@@ -72,6 +72,7 @@ flutter:
     - assets/images/icons/philo.svg
     - assets/images/icons/physe.svg
     - assets/images/icons/sci.svg
+    - assets/images/no_items_placeholder_image.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
