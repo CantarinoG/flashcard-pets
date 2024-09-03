@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class CollectionsMainScreen extends StatelessWidget {
   //Mocked data
-  final List<int> _collections = [];
+  final List<int> _collections = [1, 2, 3];
   CollectionsMainScreen({super.key});
 
   @override

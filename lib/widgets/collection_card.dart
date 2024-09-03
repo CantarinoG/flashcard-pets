@@ -24,6 +24,7 @@ class CollectionCard extends StatelessWidget {
     TextStyle? body = Theme.of(context).textTheme.bodySmall;
 
     return Card(
+      elevation: 4,
       color: brightColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(

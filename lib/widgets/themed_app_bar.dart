@@ -13,12 +13,15 @@ class ThemedAppBar extends StatelessWidget implements PreferredSizeWidget {
     TextStyle? h1 = Theme.of(context).textTheme.headlineLarge;
     Color primary = Theme.of(context).colorScheme.primary;
     Color secondary = Theme.of(context).colorScheme.secondary;
+    Color background = Theme.of(context).colorScheme.surface;
 
     return AppBar(
       title: Text(
         title,
         style: h1?.copyWith(color: secondary),
       ),
+      backgroundColor: background,
+      scrolledUnderElevation: 0,
       centerTitle: true,
       actionsIconTheme: IconThemeData(
         color: primary,

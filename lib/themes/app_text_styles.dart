@@ -22,7 +22,7 @@ class AppTextStyles {
   );
   static const TextStyle header4 = TextStyle(
     fontFamily: 'Poppins',
-    fontSize: 30,
+    fontSize: 18,
     fontWeight: FontWeight.bold,
   );
   static const TextStyle body = TextStyle(
