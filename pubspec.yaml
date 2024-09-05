@@ -74,6 +74,9 @@ flutter:
     - assets/images/icons/physe.svg
     - assets/images/icons/sci.svg
 
+    #Custom icons
+    - assets/images/custom_icons/gift_icon.svg
+
     #Baby pets
     - assets/images/baby_pets/beagle.png
 
