@@ -116,7 +116,7 @@ class SocialScreen extends StatelessWidget {
                       child: TabBarView(
                         children: [
                           FriendsSubscreen(),
-                          const LeaderboardSubscreen(),
+                          LeaderboardSubscreen(),
                         ],
                       ),
                     ),
