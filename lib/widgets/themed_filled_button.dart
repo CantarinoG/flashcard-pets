@@ -4,9 +4,18 @@ import 'package:flutter/material.dart';
 class ThemedFilledButton extends StatelessWidget {
   final void Function() onPressed;
   final String label;
+  final Widget? leadingIcon;
+  final Widget? trailingIcon;
   final double? width;
+  final bool isBold;
   const ThemedFilledButton(
-      {required this.label, required this.onPressed, this.width, super.key});
+      {required this.label,
+      required this.onPressed,
+      this.width,
+      this.leadingIcon,
+      this.trailingIcon,
+      this.isBold = true,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +25,23 @@ class ThemedFilledButton extends StatelessWidget {
       width: width,
       child: FilledButton(
         onPressed: onPressed,
-        child: Text(
-          label,
-          style: bodyEm,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (leadingIcon != null) leadingIcon!,
+            const SizedBox(
+              width: 2,
+            ),
+            Text(
+              label,
+              style: bodyEm.copyWith(
+                  fontWeight: !isBold ? FontWeight.normal : FontWeight.bold),
+            ),
+            const SizedBox(
+              width: 2,
+            ),
+            if (trailingIcon != null) trailingIcon!,
+          ],
         ),
       ),
     );
