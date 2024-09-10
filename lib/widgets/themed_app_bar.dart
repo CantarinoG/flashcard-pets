@@ -20,6 +20,9 @@ class ThemedAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         style: h1?.copyWith(color: secondary),
       ),
+      iconTheme: IconThemeData(
+        color: primary,
+      ),
       backgroundColor: background,
       scrolledUnderElevation: 0,
       centerTitle: true,

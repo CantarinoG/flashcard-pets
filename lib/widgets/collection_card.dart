@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/screens/collection_cards_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,13 @@ class CollectionCard extends StatelessWidget {
 
   const CollectionCard({super.key});
 
-  void _manageCards() {
-    // Logic for managing cards
+  void _manageCards(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CollectionCardsScreen(),
+      ),
+    );
   }
 
   void _editCollection() {
@@ -111,7 +117,7 @@ class CollectionCard extends StatelessWidget {
               onSelected: (CollectionAction result) {
                 switch (result) {
                   case CollectionAction.manageCards:
-                    _manageCards();
+                    _manageCards(context);
                     break;
                   case CollectionAction.editCollection:
                     _editCollection();
