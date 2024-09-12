@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/screens/collection_cards_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
@@ -38,8 +39,18 @@ class CollectionCard extends StatelessWidget {
     );
   }
 
-  void _deleteCollection() {
-    // Logic for deleting the collection
+  void _deleteCollection(BuildContext context) {
+    showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return const ConfirmDeleteDialog(
+          "Deletar Conjunto?",
+          "Tem certeza? Todos os cartões do conjunto também serão deletados. Essa ação não pode ser desfeita.",
+        );
+      },
+    ).then((shouldDelete) {
+      //Handle delete logic here
+    });
   }
 
   @override
@@ -129,7 +140,7 @@ class CollectionCard extends StatelessWidget {
                     _editCollection(context);
                     break;
                   case CollectionAction.deleteCollection:
-                    _deleteCollection();
+                    _deleteCollection(context);
                     break;
                 }
               },
