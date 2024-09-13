@@ -58,7 +58,7 @@ class CollectionCard extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ReviewScreen(),
+        builder: (context) => const ReviewScreen(),
       ),
     );
   }
