@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/screens/pet_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,15 @@ class PetCard extends StatelessWidget {
 
   const PetCard({super.key});
 
+  void _tapPetCard(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PetScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Color brightColor = Theme.of(context).colorScheme.bright;
@@ -24,74 +34,79 @@ class PetCard extends StatelessWidget {
     return Card(
       elevation: 4,
       color: brightColor,
-      child: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 2,
-            child: Card(
-              color: brightColor,
-              margin: const EdgeInsets.all(0),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                  bottomLeft: Radius.zero,
-                  bottomRight: Radius.zero,
+      child: InkWell(
+        onTap: () {
+          _tapPetCard(context);
+        },
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 2,
+              child: Card(
+                color: brightColor,
+                margin: const EdgeInsets.all(0),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                    bottomLeft: Radius.zero,
+                    bottomRight: Radius.zero,
+                  ),
+                ),
+                elevation: 4,
+                child: Image.asset(
+                  imgPath,
+                  fit: BoxFit.cover,
                 ),
               ),
-              elevation: 4,
-              child: Image.asset(
-                imgPath,
-                fit: BoxFit.cover,
-              ),
             ),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            name,
-            style: headLineMedium?.copyWith(
-              color: secondary,
+            const SizedBox(
+              height: 4,
             ),
-          ),
-          Text(
-            breed,
-            style: body?.copyWith(
-              color: disabled,
-            ),
-          ),
-          RichText(
-            text: TextSpan(
-              text: "Lvl ",
-              style: headLineSmallEm.copyWith(
+            Text(
+              name,
+              style: headLineMedium?.copyWith(
                 color: secondary,
               ),
+            ),
+            Text(
+              breed,
+              style: body?.copyWith(
+                color: disabled,
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                text: "Lvl ",
+                style: headLineSmallEm.copyWith(
+                  color: secondary,
+                ),
+                children: [
+                  TextSpan(
+                    text: "$level",
+                    style: body,
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextSpan(
-                  text: "$level",
+                Icon(
+                  Icons.star,
+                  color: secondary,
+                ),
+                Text(
+                  " $skillShort",
                   style: body,
                 ),
               ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.star,
-                color: secondary,
-              ),
-              Text(
-                " $skillShort",
-                style: body,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-        ],
+            const SizedBox(
+              height: 4,
+            ),
+          ],
+        ),
       ),
     );
   }
