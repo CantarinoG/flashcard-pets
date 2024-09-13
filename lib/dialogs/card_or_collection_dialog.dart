@@ -1,6 +1,11 @@
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
 
+enum CardOrCollectionDialogResult {
+  card,
+  collection,
+}
+
 class CardOrCollectionDialog extends StatelessWidget {
   const CardOrCollectionDialog({super.key});
 
@@ -12,7 +17,9 @@ class CardOrCollectionDialog extends StatelessWidget {
         children: [
           ThemedFilledButton(
             label: "Novo Cartão",
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context, CardOrCollectionDialogResult.card);
+            },
             width: 200,
           ),
           const SizedBox(
@@ -20,7 +27,9 @@ class CardOrCollectionDialog extends StatelessWidget {
           ),
           ThemedFilledButton(
             label: "Novo Conjunto",
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context, CardOrCollectionDialogResult.collection);
+            },
             width: 200,
           ),
         ],
