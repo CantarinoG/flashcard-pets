@@ -1,3 +1,6 @@
+import 'package:flashcard_pets/screens/awards_screen.dart';
+import 'package:flashcard_pets/screens/change_avatar_screen.dart';
+import 'package:flashcard_pets/screens/statistics_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/widgets/award_card_basic.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
@@ -17,6 +20,33 @@ class SelfProfileScreen extends StatelessWidget {
   final int _accuracy = 84;
   final int _streak = 4;
   const SelfProfileScreen({super.key});
+
+  void _changeAvatar(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ChangeAvatarScreen(),
+      ),
+    );
+  }
+
+  void _seeStatistic(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const StatisticsScreen(),
+      ),
+    );
+  }
+
+  void _seeAwards(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AwardsScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +86,9 @@ class SelfProfileScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton.filled(
-                      onPressed: () {},
+                      onPressed: () {
+                        _changeAvatar(context);
+                      },
                       icon: const Icon(Icons.edit),
                     ),
                   ),
@@ -134,7 +166,9 @@ class SelfProfileScreen extends StatelessWidget {
           ),
           ThemedFilledButton(
             label: "Ver Estatísticas",
-            onPressed: () {},
+            onPressed: () {
+              _seeStatistic(context);
+            },
             width: double.infinity,
           ),
           const SizedBox(
@@ -148,7 +182,9 @@ class SelfProfileScreen extends StatelessWidget {
                 style: h3?.copyWith(color: secondary),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  _seeAwards(context);
+                },
                 child: Text(
                   "Ver todas",
                   style: bodyEm,
