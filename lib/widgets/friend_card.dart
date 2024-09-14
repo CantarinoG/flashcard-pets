@@ -7,6 +7,7 @@ class FriendCard extends StatelessWidget {
   final String _imgPath = "assets/images/baby_pets/beagle.png";
   final String _name = "Guilherme Cantarino";
   final String _nick = "CantarinoG";
+  final bool _canSendGift = true;
   const FriendCard({super.key});
 
   @override
@@ -64,7 +65,7 @@ class FriendCard extends StatelessWidget {
               ),
             ),
             IconButton.filled(
-              onPressed: () {},
+              onPressed: _canSendGift ? () {} : null,
               icon: SvgPicture.asset(
                 "assets/images/custom_icons/gift_icon.svg",
                 width: 20,
