@@ -43,7 +43,7 @@ class SelfProfileScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const AwardsScreen(),
+        builder: (context) => AwardsScreen(),
       ),
     );
   }

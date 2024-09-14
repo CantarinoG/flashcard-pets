@@ -2,7 +2,7 @@ import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class ThemedFilledButton extends StatelessWidget {
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final String label;
   final Widget? leadingIcon;
   final Widget? trailingIcon;
