@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/screens/user_profile_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,15 @@ class LeaderboardUserCard extends StatelessWidget {
   final int _pontos = 1456;
 
   const LeaderboardUserCard({super.key});
+
+  void _visitUserProfile(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UserProfileScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,70 +44,75 @@ class LeaderboardUserCard extends StatelessWidget {
     return Card(
       elevation: 4,
       color: brightColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 16,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "$_position°",
-              style: h1?.copyWith(color: positionColor),
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            SizedBox(
-              height: 50,
-              width: 50,
-              child: ClipOval(
-                child: Image.asset(
-                  _imgPath,
-                  fit: BoxFit
-                      .cover, // Ensures the image fits nicely within the circular shape
+      child: InkWell(
+        onTap: () {
+          _visitUserProfile(context);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 16,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "$_position°",
+                style: h1?.copyWith(color: positionColor),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              SizedBox(
+                height: 50,
+                width: 50,
+                child: ClipOval(
+                  child: Image.asset(
+                    _imgPath,
+                    fit: BoxFit
+                        .cover, // Ensures the image fits nicely within the circular shape
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _name,
-                      style: h3?.copyWith(
-                        color: secondary,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _name,
+                        style: h3?.copyWith(
+                          color: secondary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text(
-                      "@$_nick",
-                      style: body,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ],
+                      Text(
+                        "@$_nick",
+                        style: body,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Column(
-              children: [
-                Text(
-                  "$_pontos",
-                  style: h4.copyWith(color: secondary),
-                ),
-                Text(
-                  "pontos",
-                  style: bodyEm.copyWith(color: secondary),
-                ),
-              ],
-            ),
-          ],
+              Column(
+                children: [
+                  Text(
+                    "$_pontos",
+                    style: h4.copyWith(color: secondary),
+                  ),
+                  Text(
+                    "pontos",
+                    style: bodyEm.copyWith(color: secondary),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:flashcard_pets/dialogs/leaderboard_filter_dialog.dart';
+import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/widgets/leaderboard_user_card.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
@@ -9,10 +11,38 @@ class LeaderboardSubscreen extends StatelessWidget {
   final int _pontos = 234;
   LeaderboardSubscreen({super.key});
 
+  void _filterByDate(BuildContext context) {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+  }
+
+  void _filterBySubject(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const LeaderboardFilterDialog("Filtrar por Disciplina");
+      },
+    );
+  }
+
+  void _filterByPublic(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const LeaderboardFilterDialog("Filtrar por Público");
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Color secondary = Theme.of(context).colorScheme.secondary;
-    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
+    final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
 
     return _users.isEmpty
         ? const NoItemsPlaceholder(
@@ -29,7 +59,9 @@ class LeaderboardSubscreen extends StatelessWidget {
                     ThemedFilledButton(
                       label: "Data",
                       leadingIcon: const Icon(Icons.calendar_month),
-                      onPressed: () {},
+                      onPressed: () {
+                        _filterByDate(context);
+                      },
                       isBold: false,
                     ),
                     const SizedBox(
@@ -38,7 +70,9 @@ class LeaderboardSubscreen extends StatelessWidget {
                     ThemedFilledButton(
                       label: "Disciplina",
                       leadingIcon: const Icon(Icons.menu_book),
-                      onPressed: () {},
+                      onPressed: () {
+                        _filterBySubject(context);
+                      },
                       isBold: false,
                     ),
                     const SizedBox(
@@ -47,7 +81,9 @@ class LeaderboardSubscreen extends StatelessWidget {
                     ThemedFilledButton(
                       label: "Público",
                       leadingIcon: const Icon(Icons.public),
-                      onPressed: () {},
+                      onPressed: () {
+                        _filterByPublic(context);
+                      },
                       isBold: false,
                     ),
                   ],
@@ -67,10 +103,18 @@ class LeaderboardSubscreen extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              Text(
-                "Seus pontos: $_pontos",
-                style: h3?.copyWith(color: secondary),
-              ),
+              Text.rich(
+                TextSpan(
+                  text: "Sua pontuação: ",
+                  style: body,
+                  children: [
+                    TextSpan(
+                      text: "$_pontos", // Custom style for this part
+                      style: h4.copyWith(color: secondary),
+                    ),
+                  ],
+                ),
+              )
             ],
           );
   }
