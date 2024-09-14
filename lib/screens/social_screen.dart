@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/screens/auth_screen.dart';
 import 'package:flashcard_pets/screens/friends_subscreen.dart';
 import 'package:flashcard_pets/screens/leaderboard_subscreen.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
@@ -7,9 +8,31 @@ import 'package:flutter/material.dart';
 
 class SocialScreen extends StatelessWidget {
   //Mocked data
-  final bool isUserLoggedIn = true;
+  final bool isUserLoggedIn = false;
   final bool isUserSyncronized = true;
   const SocialScreen({super.key});
+
+  void _logIn(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AuthScreen(
+          isLogIn: true,
+        ),
+      ),
+    );
+  }
+
+  void _signUp(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AuthScreen(
+          isLogIn: false,
+        ),
+      ),
+    );
+  }
 
   Widget needLoginSubscreen(BuildContext context) {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
@@ -28,7 +51,9 @@ class SocialScreen extends StatelessWidget {
           ),
           ThemedFilledButton(
             label: "Entrar",
-            onPressed: () {},
+            onPressed: () {
+              _logIn(context);
+            },
             width: 150,
           ),
           const SizedBox(
@@ -36,7 +61,9 @@ class SocialScreen extends StatelessWidget {
           ),
           ThemedFilledButton(
             label: "Cadastrar",
-            onPressed: () {},
+            onPressed: () {
+              _signUp(context);
+            },
             width: 150,
           ),
         ],
