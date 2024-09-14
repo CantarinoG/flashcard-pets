@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/screens/user_profile_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +11,15 @@ class FriendCard extends StatelessWidget {
   final bool _canSendGift = true;
   const FriendCard({super.key});
 
+  void _visitFriendProfile(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UserProfileScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Color brightColor = Theme.of(context).colorScheme.bright;
@@ -20,59 +30,64 @@ class FriendCard extends StatelessWidget {
     return Card(
       elevation: 4,
       color: brightColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 16,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 50,
-              width: 50,
-              child: ClipOval(
-                child: Image.asset(
-                  _imgPath,
-                  fit: BoxFit
-                      .cover, // Ensures the image fits nicely within the circular shape
+      child: InkWell(
+        onTap: () {
+          _visitFriendProfile(context);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 16,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+                width: 50,
+                child: ClipOval(
+                  child: Image.asset(
+                    _imgPath,
+                    fit: BoxFit
+                        .cover, // Ensures the image fits nicely within the circular shape
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _name,
-                      style: h3?.copyWith(
-                        color: secondary,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _name,
+                        style: h3?.copyWith(
+                          color: secondary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text(
-                      "@$_nick",
-                      style: body,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ],
+                      Text(
+                        "@$_nick",
+                        style: body,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            IconButton.filled(
-              onPressed: _canSendGift ? () {} : null,
-              icon: SvgPicture.asset(
-                "assets/images/custom_icons/gift_icon.svg",
-                width: 20,
-                height: 20,
+              IconButton.filled(
+                onPressed: _canSendGift ? () {} : null,
+                icon: SvgPicture.asset(
+                  "assets/images/custom_icons/gift_icon.svg",
+                  width: 20,
+                  height: 20,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
