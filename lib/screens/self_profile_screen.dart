@@ -25,7 +25,7 @@ class SelfProfileScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ChangeAvatarScreen(),
+        builder: (context) => ChangeAvatarScreen(),
       ),
     );
   }
