@@ -39,7 +39,6 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
               child: TextField(
                 autofocus: true,
                 textInputAction: TextInputAction.next,
-                maxLength: 64,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -83,7 +82,6 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
                 child: Expanded(
                   child: TextField(
                     textInputAction: TextInputAction.newline,
-                    maxLength: 5120,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     minLines: null,
