@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/widgets/flashcard_card.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
@@ -14,13 +15,27 @@ class CollectionCardsScreen extends StatelessWidget {
       "Essa coleção é referente à minha disciplina de cálculo I da faculdade.";
   CollectionCardsScreen({super.key});
 
+  void _createNewCard(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CardFormScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
 
     return Scaffold(
       appBar: ThemedAppBar("$_title (${_cards.length})"),
-      floatingActionButton: ThemedFab(() {}, const Icon(Icons.add)),
+      floatingActionButton: ThemedFab(
+        () {
+          _createNewCard(context);
+        },
+        const Icon(Icons.add),
+      ),
       body: ScreenLayout(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

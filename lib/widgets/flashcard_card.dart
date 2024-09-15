@@ -1,5 +1,11 @@
+import 'package:flashcard_pets/screens/review_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
+
+enum CardActions {
+  editCard,
+  deleteCard,
+}
 
 class FlashcardCard extends StatelessWidget {
   //Mocked data
@@ -9,6 +15,19 @@ class FlashcardCard extends StatelessWidget {
   final int _daysToNextRevision = 8;
   final int _mediaAttachedNum = 2;
   const FlashcardCard({super.key});
+
+  void _previewCard(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ReviewScreen(),
+      ),
+    );
+  }
+
+  void _deleteCard(BuildContext context) {}
+
+  void _editCard(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -22,92 +41,122 @@ class FlashcardCard extends StatelessWidget {
     return Card(
       elevation: 4,
       color: brightColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 24,
-        ),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Frente",
-                  style: h3?.copyWith(color: secondary),
-                ),
-                Text(
-                  _frontContent,
-                  style: body,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  "Verso",
-                  style: h3?.copyWith(color: secondary),
-                ),
-                Text(
-                  _backContent,
-                  style: body,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.calendar_today,
-                      color: secondary,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      "$_daysToNextRevision dias",
-                      style: body?.copyWith(color: secondary),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Icon(
-                      Icons.attach_file,
-                      color: secondary,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      "$_mediaAttachedNum anexos",
-                      style: body?.copyWith(color: secondary),
-                    ),
-                    const Expanded(
-                      child: SizedBox(),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: primary,
+      child: InkWell(
+        onTap: () {
+          _previewCard(context);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 24,
+          ),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Frente",
+                    style: h3?.copyWith(color: secondary),
+                  ),
+                  Text(
+                    _frontContent,
+                    style: body,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Text(
+                    "Verso",
+                    style: h3?.copyWith(color: secondary),
+                  ),
+                  Text(
+                    _backContent,
+                    style: body,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        color: secondary,
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Icon(
-                Icons.dashboard,
-                color: secondary,
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        "$_daysToNextRevision dias",
+                        style: body?.copyWith(color: secondary),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Icon(
+                        Icons.attach_file,
+                        color: secondary,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        "$_mediaAttachedNum anexos",
+                        style: body?.copyWith(color: secondary),
+                      ),
+                      const Expanded(
+                        child: SizedBox(),
+                      ),
+                      PopupMenuButton<CardActions>(
+                        tooltip: "Ver opções",
+                        iconColor: primary,
+                        color: brightColor,
+                        onSelected: (CardActions result) {
+                          switch (result) {
+                            case CardActions.editCard:
+                              _editCard(context);
+                              break;
+                            case CardActions.deleteCard:
+                              _deleteCard(context);
+                              break;
+                          }
+                        },
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<CardActions>>[
+                          PopupMenuItem<CardActions>(
+                            value: CardActions.editCard,
+                            child: Text(
+                              'Editar Cartão',
+                              style: body,
+                            ),
+                          ),
+                          PopupMenuItem<CardActions>(
+                            value: CardActions.deleteCard,
+                            child: Text(
+                              'Deletar Cartão',
+                              style: body,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.topLeft,
+                child: Icon(
+                  Icons.dashboard,
+                  color: secondary,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
