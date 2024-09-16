@@ -56,21 +56,23 @@ class AwardCard extends StatelessWidget {
                 const SizedBox(
                   width: 16,
                 ),
-                Column(
-                  children: [
-                    Text(
-                      _title,
-                      style: h3?.copyWith(
-                        color: secondary,
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        _title,
+                        style: h3?.copyWith(
+                          color: secondary,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      _description,
-                      style: body,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                      Text(
+                        _description,
+                        style: body,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
