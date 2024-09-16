@@ -3,18 +3,30 @@ import 'package:flutter/material.dart';
 
 class TextFieldWrapper extends StatelessWidget {
   final String? label;
+  final bool hasOutline;
   final Widget child;
-  const TextFieldWrapper({required this.child, this.label, super.key});
+  const TextFieldWrapper(
+      {required this.child, this.hasOutline = false, this.label, super.key});
 
   @override
   Widget build(BuildContext context) {
     final Color brightColor = Theme.of(context).colorScheme.bright;
+    final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
 
     return Card(
         elevation: 4,
         color: brightColor,
+        shape: hasOutline
+            ? RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: primary, // Color of the border
+                  width: 2,
+                ),
+              )
+            : null,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: 16,
