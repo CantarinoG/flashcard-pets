@@ -20,7 +20,7 @@ class FlashcardCard extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ReviewScreen(),
+        builder: (context) => ReviewScreen(),
       ),
     );
   }
