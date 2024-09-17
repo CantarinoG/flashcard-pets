@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/screens/review_results_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/media_thumb.dart';
@@ -31,6 +32,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
     setState(() {
       _showingBack = !_showingBack;
     });
+  }
+
+  void _evaluateRevision(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ReviewResultsScreen(),
+      ),
+    );
   }
 
   List<Widget> _buildAudioMediaWidgets() {
@@ -171,7 +181,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
               ),
             ThemedFilledButton(
                 label: _showingBack ? "Confirmar" : "Ver Resposta",
-                onPressed: _toggleShowingBack),
+                onPressed: _showingBack
+                    ? () {
+                        _evaluateRevision(context);
+                      }
+                    : _toggleShowingBack),
           ],
         ),
       ),

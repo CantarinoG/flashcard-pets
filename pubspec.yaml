@@ -82,6 +82,7 @@ flutter:
 
     #General images
     - assets/images/no_items_placeholder_image.png
+    - assets/images/finished_revision.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
