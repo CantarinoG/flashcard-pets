@@ -1,4 +1,5 @@
 import 'package:flashcard_pets/themes/app_themes.dart';
+import 'package:flashcard_pets/widgets/media_thumb.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
@@ -14,6 +15,7 @@ class CardFormScreen extends StatefulWidget {
   ];
   final List<int> _audioFiles = [1, 2];
   final List<int> _imgFiles = [1];
+  final String _imgPath = "assets/images/baby_pets/beagle.png";
   CardFormScreen({super.key});
 
   @override
@@ -27,55 +29,16 @@ class _CardFormScreenState extends State<CardFormScreen> {
     Navigator.of(context).pop();
   }
 
-  List<Widget> _buildAudioMediaWidgets(BuildContext context) {
-    final Color primary = Theme.of(context).colorScheme.primary;
-    final Color bright = Theme.of(context).colorScheme.bright;
-
+  List<Widget> _buildAudioMediaWidgets() {
     return widget._audioFiles.map((int img) {
-      return Container(
-        width: 50,
-        height: 50,
-        margin: const EdgeInsets.symmetric(horizontal: 2),
-        decoration: BoxDecoration(
-          color: primary,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: IconButton(
-          icon: const Icon(Icons.mic),
-          color: bright,
-          onPressed: () {},
-        ),
-      );
+      return MediaThumb();
     }).toList();
   }
 
-  List<Widget> _buildImgMediaWidgets(BuildContext context) {
-    final Color primary = Theme.of(context).colorScheme.primary;
-
+  List<Widget> _buildImgMediaWidgets() {
     return widget._imgFiles.map((int img) {
-      return Container(
-        width: 50,
-        height: 50,
-        margin: const EdgeInsets.symmetric(horizontal: 2),
-        decoration: BoxDecoration(
-          color: primary,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: primary,
-            width: 2,
-          ),
-        ),
-        child: InkWell(
-          onTap: () {},
-          borderRadius: BorderRadius.circular(12),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              "assets/images/baby_pets/beagle.png", //mocked, also, should put a default image if not valid
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+      return MediaThumb(
+        imgPath: widget._imgPath,
       );
     }).toList();
   }
@@ -160,8 +123,8 @@ class _CardFormScreenState extends State<CardFormScreen> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    ..._buildAudioMediaWidgets(context),
-                    ..._buildImgMediaWidgets(context),
+                    ..._buildAudioMediaWidgets(),
+                    ..._buildImgMediaWidgets(),
                     Container(
                       width: 50,
                       height: 50,
