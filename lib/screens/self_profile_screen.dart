@@ -34,7 +34,7 @@ class SelfProfileScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const StatisticsScreen(),
+        builder: (context) => StatisticsScreen(),
       ),
     );
   }
