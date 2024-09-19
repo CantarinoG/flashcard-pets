@@ -1,7 +1,9 @@
+import 'package:flashcard_pets/screens/store_screen.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/pet_card.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
+import 'package:flashcard_pets/widgets/themed_fab.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +50,29 @@ class PetsCollectionAppBar extends StatelessWidget
   Widget build(BuildContext context) {
     return const ThemedAppBar(
       "Pets",
+    );
+  }
+}
+
+class PetsCollectionFab extends StatelessWidget {
+  const PetsCollectionFab({super.key});
+
+  void _onTap(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StoreScreen(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ThemedFab(
+      () {
+        _onTap(context);
+      },
+      const Icon(Icons.shopping_bag),
     );
   }
 }

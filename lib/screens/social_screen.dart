@@ -1,9 +1,11 @@
+import 'package:flashcard_pets/dialogs/add_friend_dialog.dart';
 import 'package:flashcard_pets/dialogs/notifications_dialog.dart';
 import 'package:flashcard_pets/screens/auth_screen.dart';
 import 'package:flashcard_pets/screens/friends_subscreen.dart';
 import 'package:flashcard_pets/screens/leaderboard_subscreen.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
+import 'package:flashcard_pets/widgets/themed_fab.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
@@ -193,6 +195,29 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ]
           : null,
+    );
+  }
+}
+
+class SocialFab extends StatelessWidget {
+  const SocialFab({super.key});
+
+  void _onTap(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AddFriendDialog();
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ThemedFab(
+      () {
+        _onTap(context);
+      },
+      const Icon(Icons.add),
     );
   }
 }
