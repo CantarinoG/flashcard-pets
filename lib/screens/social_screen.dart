@@ -1,7 +1,9 @@
+import 'package:flashcard_pets/dialogs/notifications_dialog.dart';
 import 'package:flashcard_pets/screens/auth_screen.dart';
 import 'package:flashcard_pets/screens/friends_subscreen.dart';
 import 'package:flashcard_pets/screens/leaderboard_subscreen.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
+import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
@@ -153,6 +155,44 @@ class SocialScreen extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
+  //Mocked data
+  final bool _userIsLoggedInAndSynced = true;
+  final bool _anySocialNotifications = true;
+  const SocialAppBar({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return ThemedAppBar(
+      "Social",
+      actions: _userIsLoggedInAndSynced
+          ? [
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return NotificationsDialog();
+                    },
+                  );
+                },
+                icon: Badge(
+                  backgroundColor:
+                      _anySocialNotifications ? Colors.red : Colors.transparent,
+                  child: const Icon(
+                    Icons.notifications,
+                  ),
+                ),
+              ),
+            ]
+          : null,
     );
   }
 }

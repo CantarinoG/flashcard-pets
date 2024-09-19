@@ -1,10 +1,14 @@
+import 'package:flashcard_pets/dialogs/change_name_dialog.dart';
 import 'package:flashcard_pets/screens/awards_screen.dart';
 import 'package:flashcard_pets/screens/change_avatar_screen.dart';
+import 'package:flashcard_pets/screens/configurations_screen.dart';
 import 'package:flashcard_pets/screens/statistics_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
+import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/award_card_basic.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/statistics_display.dart';
+import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
@@ -208,6 +212,102 @@ class SelfProfileScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+enum SelfProfileAction {
+  synchronize,
+  toggleTheme,
+  configurations,
+  changeName,
+}
+
+class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const SelfProfileAppBar({super.key});
+
+  void _changeSettings(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfigurationsScreen(),
+      ),
+    );
+  }
+
+  void _changeName(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const ChangeNameDialog();
+      },
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    final Color brightColor = Theme.of(context).colorScheme.bright;
+    final Color primary = Theme.of(context).colorScheme.primary;
+
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+
+    return ThemedAppBar(
+      "Perfil",
+      actions: [
+        PopupMenuButton<SelfProfileAction>(
+          tooltip: "Ver opções",
+          iconColor: primary,
+          color: brightColor,
+          onSelected: (SelfProfileAction result) {
+            switch (result) {
+              case SelfProfileAction.synchronize:
+                break;
+              case SelfProfileAction.toggleTheme:
+                break;
+              case SelfProfileAction.configurations:
+                _changeSettings(context);
+                break;
+              case SelfProfileAction.changeName:
+                _changeName(context);
+                break;
+            }
+          },
+          itemBuilder: (BuildContext context) =>
+              <PopupMenuEntry<SelfProfileAction>>[
+            PopupMenuItem<SelfProfileAction>(
+              value: SelfProfileAction.synchronize,
+              child: Text(
+                'Sincronizar',
+                style: body,
+              ),
+            ),
+            PopupMenuItem<SelfProfileAction>(
+              value: SelfProfileAction.toggleTheme,
+              child: Text(
+                'Mudar Tema (Claro/Escuro)',
+                style: body,
+              ),
+            ),
+            PopupMenuItem<SelfProfileAction>(
+              value: SelfProfileAction.configurations,
+              child: Text(
+                'Configurações',
+                style: body,
+              ),
+            ),
+            PopupMenuItem<SelfProfileAction>(
+              value: SelfProfileAction.changeName,
+              child: Text(
+                'Alterar Nome',
+                style: body,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

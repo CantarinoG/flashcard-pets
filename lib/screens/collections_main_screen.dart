@@ -1,6 +1,7 @@
 import 'package:flashcard_pets/widgets/collection_card.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
+import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,21 @@ class CollectionsMainScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CollectionMainAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
+  const CollectionMainAppBar({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return const ThemedAppBar(
+      "Flashcards",
     );
   }
 }
