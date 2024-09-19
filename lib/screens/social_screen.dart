@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class SocialScreen extends StatelessWidget {
   //Mocked data
-  final bool isUserLoggedIn = false;
+  final bool isUserLoggedIn = true;
   final bool isUserSyncronized = true;
   const SocialScreen({super.key});
 

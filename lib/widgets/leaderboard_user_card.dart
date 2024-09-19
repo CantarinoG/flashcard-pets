@@ -17,7 +17,7 @@ class LeaderboardUserCard extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const UserProfileScreen(),
+        builder: (context) => UserProfileScreen(),
       ),
     );
   }

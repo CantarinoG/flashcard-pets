@@ -15,7 +15,7 @@ class FriendCard extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const UserProfileScreen(),
+        builder: (context) => UserProfileScreen(),
       ),
     );
   }
