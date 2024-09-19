@@ -6,7 +6,7 @@ class NoItemsPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
 
     return Center(
       child: Column(

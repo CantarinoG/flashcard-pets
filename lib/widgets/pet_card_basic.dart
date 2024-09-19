@@ -11,11 +11,11 @@ class PetCardBasic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color brightColor = Theme.of(context).colorScheme.bright;
-    Color secondary = Theme.of(context).colorScheme.secondary;
-    Color disabled = Theme.of(context).disabledColor;
-    TextStyle? body = Theme.of(context).textTheme.bodySmall;
-    TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
+    final Color brightColor = Theme.of(context).colorScheme.bright;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
+    final Color disabled = Theme.of(context).disabledColor;
 
     return Card(
       elevation: 4,

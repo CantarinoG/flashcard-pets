@@ -23,6 +23,18 @@ class PetScreen extends StatelessWidget {
   final String _skillDesc = "% mais ouro ao revisar cartões.";
   const PetScreen({super.key});
 
+  void _sell() {
+    //...
+  }
+
+  void _changeName() {
+    //...
+  }
+
+  void _feed() {
+    //...
+  }
+
   @override
   Widget build(BuildContext context) {
     final double progress = _currentXp / _goalXp;
@@ -31,7 +43,6 @@ class PetScreen extends StatelessWidget {
     final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
-
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
@@ -41,8 +52,8 @@ class PetScreen extends StatelessWidget {
         "Pets",
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.delete),
+            onPressed: _sell,
+            icon: const Icon(Icons.attach_money),
           ),
         ],
       ),
@@ -74,7 +85,7 @@ class PetScreen extends StatelessWidget {
                   width: 4,
                 ),
                 IconButton.filled(
-                  onPressed: () {},
+                  onPressed: _changeName,
                   icon: const Icon(Icons.edit),
                   color: bright,
                 )
@@ -131,7 +142,10 @@ class PetScreen extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            ThemedFilledButton(label: "Alimentar", onPressed: () {}),
+            ThemedFilledButton(
+              label: "Alimentar",
+              onPressed: _feed,
+            ),
             const SizedBox(
               height: 8,
             ),

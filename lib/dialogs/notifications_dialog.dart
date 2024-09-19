@@ -8,6 +8,14 @@ class NotificationsDialog extends StatelessWidget {
   final List<int> _notifications = [1, 1];
   NotificationsDialog({super.key});
 
+  void _goBack(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
+  void _receiveAll(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -20,7 +28,7 @@ class NotificationsDialog extends StatelessWidget {
                 ThemedFilledButton(
                     label: "Voltar",
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      _goBack(context);
                     }),
               ],
             )
@@ -32,7 +40,7 @@ class NotificationsDialog extends StatelessWidget {
                   ThemedFilledButton(
                     label: "Receber Todos",
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      _receiveAll(context);
                     },
                   ),
                   const SizedBox(

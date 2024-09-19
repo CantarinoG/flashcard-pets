@@ -33,10 +33,12 @@ class AwardCardBasic extends StatelessWidget {
             const SizedBox(
               height: 4,
             ),
-            Text(_awardName,
-                style: bodyEm.copyWith(
-                  color: secondary,
-                )),
+            Text(
+              _awardName,
+              style: bodyEm.copyWith(
+                color: secondary,
+              ),
+            ),
           ],
         ),
       ),

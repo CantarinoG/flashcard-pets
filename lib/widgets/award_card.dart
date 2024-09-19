@@ -17,6 +17,10 @@ class AwardCard extends StatelessWidget {
   final bool _isCompleted = false;
   AwardCard({super.key});
 
+  void _claimAward() {
+    //...
+  }
+
   @override
   Widget build(BuildContext context) {
     Color brightColor = Theme.of(context).colorScheme.bright;
@@ -141,7 +145,7 @@ class AwardCard extends StatelessWidget {
             ),
             ThemedFilledButton(
                 label: "Resgatar Recompensa",
-                onPressed: _isCompleted ? () {} : null),
+                onPressed: _isCompleted ? _claimAward : null),
           ],
         ),
       ),

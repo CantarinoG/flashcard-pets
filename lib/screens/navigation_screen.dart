@@ -1,5 +1,3 @@
-// ignore_for_file: unused_field
-
 import 'package:flashcard_pets/screens/collections_main_screen.dart';
 import 'package:flashcard_pets/screens/pets_collection_screen.dart';
 import 'package:flashcard_pets/screens/self_profile_screen.dart';

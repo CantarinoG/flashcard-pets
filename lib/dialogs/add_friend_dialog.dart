@@ -5,6 +5,14 @@ import 'package:flutter/material.dart';
 class AddFriendDialog extends StatelessWidget {
   const AddFriendDialog({super.key});
 
+  void _cancel(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
+  void _add(BuildContext context) {
+    Navigator.of(context).pop(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
@@ -43,7 +51,7 @@ class AddFriendDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            _cancel(context);
           },
           child: Text(
             "Cancelar",
@@ -54,7 +62,7 @@ class AddFriendDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(true);
+            _add(context);
           },
           child: Text(
             "Adicionar",

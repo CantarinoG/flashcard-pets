@@ -24,13 +24,13 @@ class LeaderboardUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color brightColor = Theme.of(context).colorScheme.bright;
-    final Color secondary = Theme.of(context).colorScheme.secondary;
     final TextStyle? h1 = Theme.of(context).textTheme.headlineLarge;
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
-    final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
+    final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
+    final Color brightColor = Theme.of(context).colorScheme.bright;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
 
     Color positionColor = secondary;
     if (_position == 1) {
@@ -45,6 +45,7 @@ class LeaderboardUserCard extends StatelessWidget {
       elevation: 4,
       color: brightColor,
       child: InkWell(
+        borderRadius: BorderRadius.circular(12),
         onTap: () {
           _visitUserProfile(context);
         },

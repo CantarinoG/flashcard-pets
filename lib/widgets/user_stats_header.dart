@@ -3,17 +3,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class UserStatsHeader extends StatelessWidget {
   //Mocked Data
-  final level = 10;
-  final gold = 200;
-  final progress = 0.67;
+  final _level = 10;
+  final _gold = 200;
+  final _progress = 0.67;
 
   const UserStatsHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
-    Color primaryColor = Theme.of(context).colorScheme.primary;
-    Color secondaryColor = Theme.of(context).colorScheme.secondary;
+    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
+    final Color primaryColor = Theme.of(context).colorScheme.primary;
+    final Color secondaryColor = Theme.of(context).colorScheme.secondary;
 
     return Column(
       children: [
@@ -21,7 +21,7 @@ class UserStatsHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Lvl $level",
+              "Lvl $_level",
               style: h3,
             ),
             Row(
@@ -32,7 +32,7 @@ class UserStatsHeader extends StatelessWidget {
                   height: 30,
                 ),
                 Text(
-                  "$gold",
+                  "$_gold",
                   style: h3,
                 )
               ],
@@ -48,9 +48,9 @@ class UserStatsHeader extends StatelessWidget {
                 secondaryColor,
                 const Color.fromARGB(255, 201, 201, 201),
               ], stops: [
-                progress / 2,
-                progress,
-                progress,
+                _progress / 2,
+                _progress,
+                _progress,
               ])),
           child: const SizedBox(height: 8),
         ),

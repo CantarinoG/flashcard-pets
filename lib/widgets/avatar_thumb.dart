@@ -9,6 +9,10 @@ class AvatarThumb extends StatelessWidget {
   final int _unlockLevel = 30;
   const AvatarThumb({super.key});
 
+  void _onTap() {
+    //...
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
@@ -29,7 +33,7 @@ class AvatarThumb extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(50),
-        onTap: () {},
+        onTap: _onTap,
         child: _isLocked
             ? ClipOval(
                 child: Container(

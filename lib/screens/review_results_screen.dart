@@ -21,9 +21,8 @@ class ReviewResultsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
-    final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
-
+    final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(

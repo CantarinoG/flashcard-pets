@@ -10,10 +10,10 @@ class ThemedAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle? h1 = Theme.of(context).textTheme.headlineLarge;
-    Color primary = Theme.of(context).colorScheme.primary;
-    Color secondary = Theme.of(context).colorScheme.secondary;
-    Color background = Theme.of(context).colorScheme.surface;
+    final TextStyle? h1 = Theme.of(context).textTheme.headlineLarge;
+    final Color primary = Theme.of(context).colorScheme.primary;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
+    final Color background = Theme.of(context).colorScheme.surface;
 
     return AppBar(
       title: Text(

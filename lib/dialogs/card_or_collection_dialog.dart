@@ -9,6 +9,14 @@ enum CardOrCollectionDialogResult {
 class CardOrCollectionDialog extends StatelessWidget {
   const CardOrCollectionDialog({super.key});
 
+  void _chooseCard(BuildContext context) {
+    Navigator.pop(context, CardOrCollectionDialogResult.card);
+  }
+
+  void _chooseCollection(BuildContext context) {
+    Navigator.pop(context, CardOrCollectionDialogResult.collection);
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -18,7 +26,7 @@ class CardOrCollectionDialog extends StatelessWidget {
           ThemedFilledButton(
             label: "Novo Cartão",
             onPressed: () {
-              Navigator.pop(context, CardOrCollectionDialogResult.card);
+              _chooseCard(context);
             },
             width: 200,
           ),
@@ -28,7 +36,7 @@ class CardOrCollectionDialog extends StatelessWidget {
           ThemedFilledButton(
             label: "Novo Conjunto",
             onPressed: () {
-              Navigator.pop(context, CardOrCollectionDialogResult.collection);
+              _chooseCollection(context);
             },
             width: 200,
           ),

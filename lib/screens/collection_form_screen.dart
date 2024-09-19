@@ -24,7 +24,17 @@ class CollectionFormScreen extends StatefulWidget {
 }
 
 class _CollectionFormScreenState extends State<CollectionFormScreen> {
-  String _selectedItem = "Artes";
+  late String _selectedItem = widget._subjects[0];
+
+  void _changeSelectedSubject(String? value) {
+    setState(() {
+      _selectedItem = value ?? widget._subjects[0];
+    });
+  }
+
+  void _register() {
+    //...
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +74,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
                       child: Text(item),
                     );
                   }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedItem = newValue ?? "";
-                    });
-                  },
+                  onChanged: _changeSelectedSubject,
                   underline: const SizedBox.shrink(),
                 ),
               ),
@@ -99,7 +105,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
             const SizedBox(
               height: 8,
             ),
-            ThemedFilledButton(label: "Cadastrar", onPressed: () {}),
+            ThemedFilledButton(label: "Cadastrar", onPressed: _register),
           ],
         ),
       ),

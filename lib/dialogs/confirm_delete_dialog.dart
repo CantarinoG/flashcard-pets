@@ -7,6 +7,14 @@ class ConfirmDeleteDialog extends StatelessWidget {
   final String _message;
   const ConfirmDeleteDialog(this._title, this._message, {super.key});
 
+  void _cancel(BuildContext context) {
+    Navigator.of(context).pop(false);
+  }
+
+  void _delete(BuildContext context) {
+    Navigator.of(context).pop(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
@@ -32,7 +40,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(false);
+            _cancel(context);
           },
           child: Text(
             "Cancelar",
@@ -43,7 +51,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(true);
+            _delete(context);
           },
           child: Text(
             "Excluir",

@@ -7,9 +7,9 @@ class ThemedBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color primaryColor = Theme.of(context).colorScheme.primary;
-    Color backgroundColor = Theme.of(context).colorScheme.surface;
-    TextStyle? bodyStyle = Theme.of(context).textTheme.bodySmall;
+    final TextStyle? bodyStyle = Theme.of(context).textTheme.bodySmall;
+    final Color primaryColor = Theme.of(context).colorScheme.primary;
+    final Color backgroundColor = Theme.of(context).colorScheme.surface;
 
     return BottomNavigationBar(
       currentIndex: _currentIndex,

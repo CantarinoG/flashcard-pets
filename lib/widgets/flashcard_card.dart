@@ -25,23 +25,27 @@ class FlashcardCard extends StatelessWidget {
     );
   }
 
-  void _deleteCard(BuildContext context) {}
+  void _deleteCard(BuildContext context) {
+    //...
+  }
 
-  void _editCard(BuildContext context) {}
+  void _editCard(BuildContext context) {
+    //...
+  }
 
   @override
   Widget build(BuildContext context) {
-    Color brightColor = Theme.of(context).colorScheme.bright;
-    Color primary = Theme.of(context).colorScheme.primary;
-    Color secondary = Theme.of(context).colorScheme.secondary;
-
-    TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
-    TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final Color brightColor = Theme.of(context).colorScheme.bright;
+    final Color primary = Theme.of(context).colorScheme.primary;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
 
     return Card(
       elevation: 4,
       color: brightColor,
       child: InkWell(
+        borderRadius: BorderRadius.circular(12),
         onTap: () {
           _previewCard(context);
         },

@@ -10,6 +10,10 @@ class BoolSettingsCard extends StatelessWidget {
   //Should also receive a function to do something with the value inputed.
   const BoolSettingsCard({super.key});
 
+  void _switch(bool value) {
+    //...
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
@@ -38,7 +42,7 @@ class BoolSettingsCard extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              Switch(value: _initialValue, onChanged: (value) {}),
+              Switch(value: _initialValue, onChanged: _switch),
               const SizedBox(
                 height: 8,
               ),

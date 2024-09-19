@@ -23,10 +23,20 @@ class CardFormScreen extends StatefulWidget {
 }
 
 class _CardFormScreenState extends State<CardFormScreen> {
-  String _selectedItem = "AEDs";
+  late String _selectedItem = widget._collections[0];
 
   void _registerCard(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  void _changeSelectedCollection(String? value) {
+    setState(() {
+      _selectedItem = value ?? widget._collections[0];
+    });
+  }
+
+  void _addMedia() {
+    //...
   }
 
   List<Widget> _buildAudioMediaWidgets() {
@@ -68,11 +78,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
                       child: Text(item),
                     );
                   }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedItem = newValue ?? "";
-                    });
-                  },
+                  onChanged: _changeSelectedCollection,
                   underline: const SizedBox.shrink(),
                 ),
               ),
@@ -136,7 +142,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
                       child: IconButton(
                         icon: const Icon(Icons.add),
                         color: bright,
-                        onPressed: () {},
+                        onPressed: _addMedia,
                       ),
                     ),
                   ],

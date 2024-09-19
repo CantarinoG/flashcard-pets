@@ -17,7 +17,6 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _obscurePassText = true;
   bool _obscureConfirmedPassText = true;
 
-  // TextEditingControllers
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -33,7 +32,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   void dispose() {
-    // Dispose of the controllers
     _nameController.dispose();
     _usernameController.dispose();
     _emailController.dispose();
@@ -60,11 +58,18 @@ class _AuthScreenState extends State<AuthScreen> {
     });
   }
 
+  void _forgotPassword() {
+    //...
+  }
+
+  void _confirm(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? h1 = Theme.of(context).textTheme.headlineLarge;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
-
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
@@ -191,7 +196,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
             if (_isLogIn)
               TextButton(
-                onPressed: () {},
+                onPressed: _forgotPassword,
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(
@@ -208,7 +213,7 @@ class _AuthScreenState extends State<AuthScreen> {
               label: _isLogIn ? "Entrar" : "Criar",
               width: double.infinity,
               onPressed: () {
-                Navigator.of(context).pop();
+                _confirm(context);
               },
             ),
           ],

@@ -20,17 +20,22 @@ class FriendCard extends StatelessWidget {
     );
   }
 
+  void _sendGift() {
+    //...
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Color brightColor = Theme.of(context).colorScheme.bright;
-    final Color secondary = Theme.of(context).colorScheme.secondary;
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final Color brightColor = Theme.of(context).colorScheme.bright;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
 
     return Card(
       elevation: 4,
       color: brightColor,
       child: InkWell(
+        borderRadius: BorderRadius.circular(12),
         onTap: () {
           _visitFriendProfile(context);
         },
@@ -79,7 +84,7 @@ class FriendCard extends StatelessWidget {
                 ),
               ),
               IconButton.filled(
-                onPressed: _canSendGift ? () {} : null,
+                onPressed: _canSendGift ? _sendGift : null,
                 icon: SvgPicture.asset(
                   "assets/images/custom_icons/gift_icon.svg",
                   width: 20,

@@ -43,6 +43,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
   }
 
+  void _showInfo() {
+    //...
+  }
+
+  void _changeSliderValue(double value) {
+    //...
+  }
+
   List<Widget> _buildAudioMediaWidgets() {
     return widget._audioFiles.map((int img) {
       return MediaThumb();
@@ -63,7 +71,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
-
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
 
@@ -160,7 +167,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     width: 8,
                   ),
                   IconButton.filled(
-                      onPressed: () {}, icon: const Icon(Icons.info_outline)),
+                    onPressed: _showInfo,
+                    icon: const Icon(Icons.info_outline),
+                  ),
                 ],
               ),
             if (_showingBack)
@@ -170,7 +179,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
             if (_showingBack)
               Slider(
                 value: 4,
-                onChanged: (value) {},
+                onChanged: _changeSliderValue,
                 min: 0,
                 max: 5,
                 label: "5",

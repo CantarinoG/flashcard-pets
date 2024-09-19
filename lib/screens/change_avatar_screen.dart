@@ -9,6 +9,10 @@ class ChangeAvatarScreen extends StatelessWidget {
   final List<int> _avatars = [1, 2, 3, 4, 5];
   ChangeAvatarScreen({super.key});
 
+  void _confirm(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
@@ -41,7 +45,7 @@ class ChangeAvatarScreen extends StatelessWidget {
       ),
       floatingActionButton: ThemedFab(
         () {
-          Navigator.of(context).pop();
+          _confirm(context);
         },
         const Icon(Icons.check),
       ),

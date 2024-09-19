@@ -40,9 +40,9 @@ class LeaderboardSubscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color secondary = Theme.of(context).colorScheme.secondary;
-    final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
 
     return _users.isEmpty
         ? const NoItemsPlaceholder(

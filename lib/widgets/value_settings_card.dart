@@ -15,7 +15,6 @@ class ValueSettingsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
-
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color disabled = Theme.of(context).disabledColor;
     final Color bright = Theme.of(context).colorScheme.bright;

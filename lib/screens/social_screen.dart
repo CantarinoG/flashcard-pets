@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 
 class SocialScreen extends StatelessWidget {
   //Mocked data
-  final bool isUserLoggedIn = true;
-  final bool isUserSyncronized = true;
+  final bool _isUserLoggedIn = true;
+  final bool _isUserSyncronized = true;
   const SocialScreen({super.key});
 
   void _logIn(BuildContext context) {
@@ -36,6 +36,10 @@ class SocialScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _sync() {
+    //...
   }
 
   Widget needLoginSubscreen(BuildContext context) {
@@ -92,7 +96,7 @@ class SocialScreen extends StatelessWidget {
           ),
           ThemedFilledButton(
             label: "Sincronizar",
-            onPressed: () {},
+            onPressed: _sync,
             width: 150,
           ),
         ],
@@ -102,18 +106,19 @@ class SocialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
-    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
 
     return ScreenLayout(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const UserStatsHeader(),
-          if (!isUserLoggedIn) needLoginSubscreen(context),
-          if (isUserLoggedIn && !isUserSyncronized) needSyncSubscreen(context),
-          if (isUserLoggedIn && isUserSyncronized)
+          if (!_isUserLoggedIn) needLoginSubscreen(context),
+          if (_isUserLoggedIn && !_isUserSyncronized)
+            needSyncSubscreen(context),
+          if (_isUserLoggedIn && _isUserSyncronized)
             Expanded(
               child: DefaultTabController(
                 length: 2,
@@ -170,6 +175,15 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
+  void _showNotification(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return NotificationsDialog();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ThemedAppBar(
@@ -178,12 +192,7 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? [
               IconButton(
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return NotificationsDialog();
-                    },
-                  );
+                  _showNotification(context);
                 },
                 icon: Badge(
                   backgroundColor:

@@ -10,12 +10,17 @@ class PetStoreCard extends StatelessWidget {
   final String? skillShort = "+2% ouro";
   const PetStoreCard({super.key});
 
+  void _buy() {
+    //...
+  }
+
   @override
   Widget build(BuildContext context) {
-    Color brightColor = Theme.of(context).colorScheme.bright;
-    Color secondary = Theme.of(context).colorScheme.secondary;
-    TextStyle? headLineMedium = Theme.of(context).textTheme.headlineMedium;
-    TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle? headLineMedium =
+        Theme.of(context).textTheme.headlineMedium;
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final Color brightColor = Theme.of(context).colorScheme.bright;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
 
     return Card(
       elevation: 4,
@@ -70,7 +75,10 @@ class PetStoreCard extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          ThemedFilledButton(label: "Comprar", onPressed: () {}),
+          ThemedFilledButton(
+            label: "Comprar",
+            onPressed: _buy,
+          ),
           const SizedBox(
             height: 8,
           )

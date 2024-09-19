@@ -15,10 +15,10 @@ enum CollectionAction {
 
 class CollectionCard extends StatelessWidget {
   //Mocked data.
-  final String title = "Trigonometria";
-  final int cardsNumber = 26;
-  final int reviewsToday = 12;
-  final String imgPath = "assets/images/icons/math.svg";
+  final String _title = "Trigonometria";
+  final int _cardsNumber = 26;
+  final int _reviewsToday = 12;
+  final String _imgPath = "assets/images/icons/math.svg";
 
   const CollectionCard({super.key});
 
@@ -65,19 +65,19 @@ class CollectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color brightColor = Theme.of(context).colorScheme.bright;
-    Color primary = Theme.of(context).colorScheme.primary;
-    Color secondary = Theme.of(context).colorScheme.secondary;
-    Color disabled = Theme.of(context).colorScheme.disabled;
-
-    TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
-    TextStyle? h3em = Theme.of(context).textTheme.headlineSmallEm;
-    TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle h3em = Theme.of(context).textTheme.headlineSmallEm;
+    final Color bright = Theme.of(context).colorScheme.bright;
+    final Color primary = Theme.of(context).colorScheme.primary;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
+    final Color disabled = Theme.of(context).colorScheme.disabled;
 
     return Card(
       elevation: 4,
-      color: brightColor,
+      color: bright,
       child: InkWell(
+        borderRadius: BorderRadius.circular(12),
         onTap: () {
           _reviewCollection(context);
         },
@@ -93,7 +93,7 @@ class CollectionCard extends StatelessWidget {
                 height: 60,
                 width: 60,
                 child: SvgPicture.asset(
-                  imgPath,
+                  _imgPath,
                 ),
               ),
               Expanded(
@@ -107,7 +107,7 @@ class CollectionCard extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              title,
+                              _title,
                               style: h3?.copyWith(
                                 color: secondary,
                               ),
@@ -116,19 +116,19 @@ class CollectionCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            " ($cardsNumber)",
+                            " ($_cardsNumber)",
                             style: h3?.copyWith(color: secondary),
                           ),
                         ],
                       ),
                       RichText(
                         text: TextSpan(
-                          style: (reviewsToday == 0)
+                          style: (_reviewsToday == 0)
                               ? body?.copyWith(color: disabled)
                               : body,
                           children: [
                             TextSpan(
-                              text: "$reviewsToday",
+                              text: "$_reviewsToday",
                               style: h3em,
                             ),
                             const TextSpan(
@@ -144,7 +144,7 @@ class CollectionCard extends StatelessWidget {
               PopupMenuButton<CollectionAction>(
                 tooltip: "Ver opções",
                 iconColor: primary,
-                color: brightColor,
+                color: bright,
                 onSelected: (CollectionAction result) {
                   switch (result) {
                     case CollectionAction.manageCards:

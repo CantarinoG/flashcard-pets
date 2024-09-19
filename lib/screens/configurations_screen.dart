@@ -17,12 +17,19 @@ class ConfigurationsScreen extends StatelessWidget {
 
   Widget _buildNotificationSettingCard(BuildContext context) {
     //Mocked data:
-    const bool initialValue = true;
+    const bool _initialValue = true;
 
+    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
 
-    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
+    void _switch(bool value) {
+      //...
+    }
+
+    void _selectTime() {
+      //...
+    }
 
     return SizedBox(
       width: double.infinity,
@@ -45,13 +52,13 @@ class ConfigurationsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                Switch(value: initialValue, onChanged: (value) {}),
+                Switch(value: _initialValue, onChanged: _switch),
                 const SizedBox(
                   height: 8,
                 ),
                 ThemedFilledButton(
                   label: "Selecionar Hora",
-                  onPressed: initialValue ? () {} : null,
+                  onPressed: _initialValue ? _selectTime : null,
                 ),
               ],
             ),

@@ -10,10 +10,10 @@ class TextFieldWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final Color brightColor = Theme.of(context).colorScheme.bright;
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
-    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
 
     return Card(
         elevation: 4,

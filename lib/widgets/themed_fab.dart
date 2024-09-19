@@ -7,9 +7,9 @@ class ThemedFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color primaryColor = Theme.of(context).colorScheme.primary;
-    Color secondaryColor = Theme.of(context).colorScheme.secondary;
-    Color backgroundColor = Theme.of(context).colorScheme.surface;
+    final Color primaryColor = Theme.of(context).colorScheme.primary;
+    final Color secondaryColor = Theme.of(context).colorScheme.secondary;
+    final Color backgroundColor = Theme.of(context).colorScheme.surface;
 
     return FloatingActionButton(
       onPressed: _onPressed,

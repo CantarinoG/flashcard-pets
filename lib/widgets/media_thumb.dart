@@ -5,6 +5,8 @@ class MediaThumb extends StatelessWidget {
   String? imgPath;
   MediaThumb({this.imgPath, super.key});
 
+  void _onTap() {}
+
   @override
   Widget build(BuildContext context) {
     final Color primary = Theme.of(context).colorScheme.primary;
@@ -28,10 +30,10 @@ class MediaThumb extends StatelessWidget {
           ? IconButton(
               icon: const Icon(Icons.mic),
               color: bright,
-              onPressed: () {},
+              onPressed: _onTap,
             )
           : InkWell(
-              onTap: () {},
+              onTap: _onTap,
               borderRadius: BorderRadius.circular(12),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),

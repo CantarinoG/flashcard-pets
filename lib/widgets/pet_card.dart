@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class PetCard extends StatelessWidget {
   //Mocked data.
-  final String imgPath = "assets/images/baby_pets/beagle.png";
-  final String name = "Cleitinho";
-  final String breed = "Beagle";
-  final int level = 3;
-  final String skillShort = "+2% ouro";
+  final String _imgPath = "assets/images/baby_pets/beagle.png";
+  final String _name = "Cleitinho";
+  final String _breed = "Beagle";
+  final int _level = 3;
+  final String _skillShort = "+2% ouro";
 
   const PetCard({super.key});
 
@@ -24,17 +24,20 @@ class PetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color brightColor = Theme.of(context).colorScheme.bright;
-    Color secondary = Theme.of(context).colorScheme.secondary;
-    Color disabled = Theme.of(context).colorScheme.disabled;
-    TextStyle? headLineSmallEm = Theme.of(context).textTheme.headlineSmallEm;
-    TextStyle? headLineMedium = Theme.of(context).textTheme.headlineMedium;
-    TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle? headLineMedium =
+        Theme.of(context).textTheme.headlineMedium;
+    final TextStyle headLineSmallEm =
+        Theme.of(context).textTheme.headlineSmallEm;
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final Color brightColor = Theme.of(context).colorScheme.bright;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
+    final Color disabled = Theme.of(context).colorScheme.disabled;
 
     return Card(
       elevation: 4,
       color: brightColor,
       child: InkWell(
+        borderRadius: BorderRadius.circular(12),
         onTap: () {
           _tapPetCard(context);
         },
@@ -55,7 +58,7 @@ class PetCard extends StatelessWidget {
                 ),
                 elevation: 4,
                 child: Image.asset(
-                  imgPath,
+                  _imgPath,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -64,13 +67,13 @@ class PetCard extends StatelessWidget {
               height: 4,
             ),
             Text(
-              name,
+              _name,
               style: headLineMedium?.copyWith(
                 color: secondary,
               ),
             ),
             Text(
-              breed,
+              _breed,
               style: body?.copyWith(
                 color: disabled,
               ),
@@ -83,7 +86,7 @@ class PetCard extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: "$level",
+                    text: "$_level",
                     style: body,
                   ),
                 ],
@@ -97,7 +100,7 @@ class PetCard extends StatelessWidget {
                   color: secondary,
                 ),
                 Text(
-                  " $skillShort",
+                  " $_skillShort",
                   style: body,
                 ),
               ],

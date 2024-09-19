@@ -14,11 +14,10 @@ class PetDescriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color secondary = Theme.of(context).colorScheme.secondary;
-    final Color bright = Theme.of(context).colorScheme.bright;
-
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
+    final Color bright = Theme.of(context).colorScheme.bright;
 
     return SizedBox(
       width: double.infinity,
