@@ -63,154 +63,167 @@ class SelfProfileScreen extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
     return ScreenLayout(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(
-            height: 16,
+      child: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height - 133,
           ),
-          SizedBox(
-            height: 200,
-            width: 200,
-            child: Stack(
-              children: [
-                SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: ClipOval(
-                    child: Image.asset(
-                      _imgPath,
-                      fit: BoxFit
-                          .cover, // Ensures the image fits nicely within the circular shape
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: IconButton.filled(
-                      onPressed: () {
-                        _changeAvatar(context);
-                      },
-                      icon: const Icon(Icons.edit),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            _name,
-            style: h2?.copyWith(color: secondary),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            "@$_nick",
-            style: h3?.copyWith(color: disabled),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          const UserStatsHeader(),
-          SizedBox(
-            width: double.infinity,
-            child: RichText(
-              textAlign: TextAlign.end,
-              text: TextSpan(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
                 children: [
-                  TextSpan(
-                    text: "XP",
-                    style: h4.copyWith(
-                      color: secondary,
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          width: 200,
+                          child: ClipOval(
+                            child: Image.asset(
+                              _imgPath,
+                              fit: BoxFit
+                                  .cover, // Ensures the image fits nicely within the circular shape
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: IconButton.filled(
+                              onPressed: () {
+                                _changeAvatar(context);
+                              },
+                              icon: const Icon(Icons.edit),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  TextSpan(
-                    text: " $_currentXp/$_nextLevelXp",
-                    style: body?.copyWith(
-                      color: secondary,
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    _name,
+                    style: h2?.copyWith(color: secondary),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    "@$_nick",
+                    style: h3?.copyWith(color: disabled),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  const UserStatsHeader(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: RichText(
+                      textAlign: TextAlign.end,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "XP",
+                            style: h4.copyWith(
+                              color: secondary,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " $_currentXp/$_nextLevelXp",
+                            style: body?.copyWith(
+                              color: secondary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                StatisticsDisplay(
-                  "Cartões Revisados",
-                  "$_reviewedCardsNum",
-                  Icons.dashboard,
-                ),
-                StatisticsDisplay(
-                  "Taxa de Acerto",
-                  "$_accuracy%",
-                  Icons.track_changes_outlined,
-                ),
-                StatisticsDisplay(
-                  "Sequência de Dias",
-                  "$_streak",
-                  Icons.local_fire_department,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          ThemedFilledButton(
-            label: "Ver Estatísticas",
-            onPressed: () {
-              _seeStatistic(context);
-            },
-            width: double.infinity,
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Conquistas",
-                style: h3?.copyWith(color: secondary),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      StatisticsDisplay(
+                        "Cartões Revisados",
+                        "$_reviewedCardsNum",
+                        Icons.dashboard,
+                      ),
+                      StatisticsDisplay(
+                        "Taxa de Acerto",
+                        "$_accuracy%",
+                        Icons.track_changes_outlined,
+                      ),
+                      StatisticsDisplay(
+                        "Sequência de Dias",
+                        "$_streak",
+                        Icons.local_fire_department,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  ThemedFilledButton(
+                    label: "Ver Estatísticas",
+                    onPressed: () {
+                      _seeStatistic(context);
+                    },
+                    width: double.infinity,
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: () {
-                  _seeAwards(context);
-                },
-                child: Text(
-                  "Ver todas",
-                  style: bodyEm,
-                ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Conquistas",
+                        style: h3?.copyWith(color: secondary),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _seeAwards(context);
+                        },
+                        child: Text(
+                          "Ver todas",
+                          style: bodyEm,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(child: AwardCardBasic()),
+                      Expanded(child: AwardCardBasic()),
+                      Expanded(child: AwardCardBasic()),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
-          const SizedBox(
-            height: 4,
-          ),
-          const Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(child: AwardCardBasic()),
-                Expanded(child: AwardCardBasic()),
-                Expanded(child: AwardCardBasic()),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

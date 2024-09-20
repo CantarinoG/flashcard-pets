@@ -29,7 +29,6 @@ class ReviewResultsScreen extends StatelessWidget {
       appBar: ThemedAppBar(_collectionName),
       body: ScreenLayout(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const UserStatsHeader(),
             const SizedBox(
@@ -45,73 +44,81 @@ class ReviewResultsScreen extends StatelessWidget {
               height: 16,
             ),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Parabéns! Você revisou todos os cartões de $_collectionName para essa sessão!",
-                    style: body,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    "Ganhos totais:",
-                    style: body,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height - 173),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(
-                        "assets/images/icons/coin.svg",
-                        width: 30,
-                        height: 30,
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
                       Text(
-                        "$_totalGold",
+                        "Parabéns! Você revisou todos os cartões de $_collectionName para essa sessão!",
                         style: body,
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(
-                        width: 32,
+                        height: 16,
                       ),
                       Text(
-                        "XP",
-                        style: h4.copyWith(
-                          color: secondary,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        "$_totalExp",
+                        "Ganhos totais:",
                         style: body,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            "assets/images/icons/coin.svg",
+                            width: 30,
+                            height: 30,
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            "$_totalGold",
+                            style: body,
+                          ),
+                          const SizedBox(
+                            width: 32,
+                          ),
+                          Text(
+                            "XP",
+                            style: h4.copyWith(
+                              color: secondary,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            "$_totalExp",
+                            style: body,
+                          ),
+                        ],
+                      ),
+                      FractionallySizedBox(
+                        widthFactor: 0.7,
+                        child:
+                            Image.asset('assets/images/finished_revision.png'),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      ThemedFilledButton(
+                        label: "Retornar",
+                        onPressed: () {
+                          _finishRevision(context);
+                        },
                       ),
                     ],
                   ),
-                  FractionallySizedBox(
-                    widthFactor: 0.7,
-                    child: Image.asset('assets/images/finished_revision.png'),
-                  ),
-                ],
+                ),
               ),
             ),
-            const SizedBox(
-              height: 8,
-            ),
-            ThemedFilledButton(
-                label: "Retornar",
-                onPressed: () {
-                  _finishRevision(context);
-                }),
           ],
         ),
       ),

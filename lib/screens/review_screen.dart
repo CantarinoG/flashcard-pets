@@ -71,6 +71,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
+
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
 

@@ -6,6 +6,7 @@ class ValueSettingsCard extends StatelessWidget {
   //Mocked data
   final String _title = "Intervalo Máximo de Revisão";
   //final int _initialValue =  1; //Should probably be generic T type once the logic comes in.
+  //Also, make sure I validate it. If a int is expected, text should not be allowed. Better to limit the keyboard as well.
   final String _unit = "dias";
   final String _explanation =
       "Qualquer revisão será agendada para, no máximo, daqui a essa quantidade de dias.";

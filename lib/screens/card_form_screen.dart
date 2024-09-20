@@ -61,103 +61,110 @@ class _CardFormScreenState extends State<CardFormScreen> {
     return Scaffold(
       appBar: const ThemedAppBar("Cartão"),
       body: ScreenLayout(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextFieldWrapper(
-              label: "Conjunto",
-              child: SizedBox(
-                width: double.infinity,
-                child: DropdownButton<String>(
-                  hint: const Text('Seleciona uma opção'),
-                  isExpanded: true,
-                  value: _selectedItem,
-                  items: widget._collections.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                  onChanged: _changeSelectedCollection,
-                  underline: const SizedBox.shrink(),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height - 100,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextFieldWrapper(
+                  label: "Conjunto",
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: DropdownButton<String>(
+                      hint: const Text('Seleciona uma opção'),
+                      isExpanded: true,
+                      value: _selectedItem,
+                      items: widget._collections.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
+                      onChanged: _changeSelectedCollection,
+                      underline: const SizedBox.shrink(),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            const TextFieldWrapper(
-              label: "Frente",
-              child: TextField(
-                autofocus: true,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  errorText: null,
+                const SizedBox(
+                  height: 8,
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            const Expanded(
-              child: TextFieldWrapper(
-                label: "Verso",
-                child: Expanded(
+                const TextFieldWrapper(
+                  label: "Frente",
                   child: TextField(
-                    textInputAction: TextInputAction.newline,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    minLines: null,
-                    expands: true,
-                    scrollPhysics: BouncingScrollPhysics(),
+                    autofocus: true,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       errorText: null,
                     ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            TextFieldWrapper(
-              label: "Mídia(Opcional)",
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ..._buildAudioMediaWidgets(),
-                    ..._buildImgMediaWidgets(),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(horizontal: 2),
-                      decoration: BoxDecoration(
-                        color: primary,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.add),
-                        color: bright,
-                        onPressed: _addMedia,
+                const SizedBox(
+                  height: 8,
+                ),
+                const Expanded(
+                  child: TextFieldWrapper(
+                    label: "Verso",
+                    child: Expanded(
+                      child: TextField(
+                        textInputAction: TextInputAction.newline,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        minLines: null,
+                        expands: true,
+                        scrollPhysics: BouncingScrollPhysics(),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          errorText: null,
+                        ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                const SizedBox(
+                  height: 8,
+                ),
+                TextFieldWrapper(
+                  label: "Mídia(Opcional)",
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        ..._buildAudioMediaWidgets(),
+                        ..._buildImgMediaWidgets(),
+                        Container(
+                          width: 50,
+                          height: 50,
+                          margin: const EdgeInsets.symmetric(horizontal: 2),
+                          decoration: BoxDecoration(
+                            color: primary,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.add),
+                            color: bright,
+                            onPressed: _addMedia,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                ThemedFilledButton(
+                    label: "Cadastrar",
+                    onPressed: () {
+                      _registerCard(context);
+                    }),
+              ],
             ),
-            const SizedBox(
-              height: 8,
-            ),
-            ThemedFilledButton(
-                label: "Cadastrar",
-                onPressed: () {
-                  _registerCard(context);
-                }),
-          ],
+          ),
         ),
       ),
     );

@@ -76,9 +76,11 @@ class ConfigurationsScreen extends StatelessWidget {
     return Scaffold(
       appBar: const ThemedAppBar("Configurações"),
       body: ScreenLayout(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: _settingCards,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: _settingCards,
+          ),
         ),
       ),
     );

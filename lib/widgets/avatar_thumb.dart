@@ -32,7 +32,7 @@ class AvatarThumb extends StatelessWidget {
             : null,
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(60),
         onTap: _onTap,
         child: _isLocked
             ? ClipOval(

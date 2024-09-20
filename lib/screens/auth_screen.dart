@@ -76,107 +76,83 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       appBar: const ThemedAppBar(""),
       body: ScreenLayout(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              _isLogIn ? "Entre na sua conta" : "Crie uma nova conta",
-              style: h1?.copyWith(color: secondary),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Ou ",
-                  style: body,
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                _isLogIn ? "Entre na sua conta" : "Crie uma nova conta",
+                style: h1?.copyWith(color: secondary),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Ou ",
+                    style: body,
                   ),
-                  onPressed: _toggleAuthAction,
-                  child: Text(
-                    _isLogIn ? "crie uma nova conta" : "entre na sua conta",
-                    style: body?.copyWith(
-                      color: primary,
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                    ),
+                    onPressed: _toggleAuthAction,
+                    child: Text(
+                      _isLogIn ? "crie uma nova conta" : "entre na sua conta",
+                      style: body?.copyWith(
+                        color: primary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              if (!_isLogIn)
+                TextFieldWrapper(
+                  label: "Nome",
+                  child: TextField(
+                    controller: _nameController,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      errorText: null,
                     ),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            if (!_isLogIn)
+              if (!_isLogIn)
+                TextFieldWrapper(
+                  label: "Nome de Usuário",
+                  child: TextField(
+                    controller: _usernameController,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      prefixText: "@",
+                      border: InputBorder.none,
+                      errorText: null,
+                    ),
+                  ),
+                ),
               TextFieldWrapper(
-                label: "Nome",
+                label: "Email",
                 child: TextField(
-                  controller: _nameController,
+                  controller: _emailController,
                   textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     errorText: null,
                   ),
                 ),
               ),
-            if (!_isLogIn)
               TextFieldWrapper(
-                label: "Nome de Usuário",
+                label: "Senha",
                 child: TextField(
-                  controller: _usernameController,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    prefixText: "@",
-                    border: InputBorder.none,
-                    errorText: null,
-                  ),
-                ),
-              ),
-            TextFieldWrapper(
-              label: "Email",
-              child: TextField(
-                controller: _emailController,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  errorText: null,
-                ),
-              ),
-            ),
-            TextFieldWrapper(
-              label: "Senha",
-              child: TextField(
-                controller: _passwordController,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: _obscurePassText,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  errorText: null,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassText
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: primary,
-                    ),
-                    onPressed: _togglePassVisibility,
-                  ),
-                ),
-              ),
-            ),
-            if (!_isLogIn)
-              TextFieldWrapper(
-                label: "Confirmar Senha",
-                child: TextField(
-                  controller: _confirmPasswordController,
+                  controller: _passwordController,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.visiblePassword,
-                  obscureText: _obscureConfirmedPassText,
+                  obscureText: _obscurePassText,
                   enableSuggestions: false,
                   autocorrect: false,
                   decoration: InputDecoration(
@@ -184,39 +160,65 @@ class _AuthScreenState extends State<AuthScreen> {
                     errorText: null,
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscureConfirmedPassText
+                        _obscurePassText
                             ? Icons.visibility_off
                             : Icons.visibility,
                         color: primary,
                       ),
-                      onPressed: _toggleConfirmedPassVisibility,
+                      onPressed: _togglePassVisibility,
                     ),
                   ),
                 ),
               ),
-            if (_isLogIn)
-              TextButton(
-                onPressed: _forgotPassword,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    "Esqueceu sua senha?",
-                    style: body?.copyWith(
-                      color: primary,
+              if (!_isLogIn)
+                TextFieldWrapper(
+                  label: "Confirmar Senha",
+                  child: TextField(
+                    controller: _confirmPasswordController,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: _obscureConfirmedPassText,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      errorText: null,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureConfirmedPassText
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: primary,
+                        ),
+                        onPressed: _toggleConfirmedPassVisibility,
+                      ),
                     ),
-                    textAlign: TextAlign.end,
                   ),
                 ),
+              if (_isLogIn)
+                TextButton(
+                  onPressed: _forgotPassword,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      "Esqueceu sua senha?",
+                      style: body?.copyWith(
+                        color: primary,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 8),
+              ThemedFilledButton(
+                label: _isLogIn ? "Entrar" : "Criar",
+                width: double.infinity,
+                onPressed: () {
+                  _confirm(context);
+                },
               ),
-            const SizedBox(height: 8),
-            ThemedFilledButton(
-              label: _isLogIn ? "Entrar" : "Criar",
-              width: double.infinity,
-              onPressed: () {
-                _confirm(context);
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

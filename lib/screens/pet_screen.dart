@@ -58,137 +58,135 @@ class PetScreen extends StatelessWidget {
         ],
       ),
       body: ScreenLayout(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Image.asset(
-                _imgPath,
-                fit: BoxFit
-                    .cover, // Ensures the image fits nicely within the circular shape
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Image.asset(
+                  _imgPath,
+                  fit: BoxFit
+                      .cover, // Ensures the image fits nicely within the circular shape
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _name,
-                  style: h2?.copyWith(
-                    color: secondary,
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _name,
+                    style: h2?.copyWith(
+                      color: secondary,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  IconButton.filled(
+                    onPressed: _changeName,
+                    icon: const Icon(Icons.edit),
+                    color: bright,
+                  )
+                ],
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "Lvl $_level",
+                  style: h3,
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  gradient: LinearGradient(
+                    colors: [
+                      primary,
+                      secondary,
+                      const Color.fromARGB(255, 201, 201, 201),
+                    ],
+                    stops: [
+                      progress / 2,
+                      progress,
+                      progress,
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
-                IconButton.filled(
-                  onPressed: _changeName,
-                  icon: const Icon(Icons.edit),
-                  color: bright,
-                )
-              ],
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                "Lvl $_level",
-                style: h3,
+                child: const SizedBox(height: 8),
               ),
-            ),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                gradient: LinearGradient(
-                  colors: [
-                    primary,
-                    secondary,
-                    const Color.fromARGB(255, 201, 201, 201),
-                  ],
-                  stops: [
-                    progress / 2,
-                    progress,
-                    progress,
-                  ],
-                ),
-              ),
-              child: const SizedBox(height: 8),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: RichText(
-                textAlign: TextAlign.end,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "XP",
-                      style: h4.copyWith(
-                        color: secondary,
+              SizedBox(
+                width: double.infinity,
+                child: RichText(
+                  textAlign: TextAlign.end,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "XP",
+                        style: h4.copyWith(
+                          color: secondary,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: " $_currentXp/$_goalXp",
-                      style: body?.copyWith(
-                        color: secondary,
+                      TextSpan(
+                        text: " $_currentXp/$_goalXp",
+                        style: body?.copyWith(
+                          color: secondary,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            ThemedFilledButton(
-              label: "Alimentar",
-              onPressed: _feed,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    PetDescriptionCard(
-                      iconData: Icons.star,
-                      title: "Habilidade",
-                      content: "$_skillValue$_skillDesc",
-                    ),
-                    PetDescriptionCard(
-                      iconData: Icons.description,
-                      title: "Descrição",
-                      content: _description,
-                    ),
-                    PetDescriptionCard(
-                      iconData: Icons.calendar_month,
-                      title: "Idade",
-                      content: _age,
-                    ),
-                    PetDescriptionCard(
-                      iconData: Icons.pets,
-                      title: "Raça",
-                      content: _breed,
-                    ),
-                    PetDescriptionCard(
-                      iconData: Icons.sentiment_satisfied_outlined,
-                      title: "Gosta de",
-                      content: _likes,
-                    ),
-                    PetDescriptionCard(
-                      iconData: Icons.sentiment_dissatisfied,
-                      title: "Não gosta de",
-                      content: _dislikes,
-                    ),
-                  ],
-                ),
+              const SizedBox(
+                height: 8,
               ),
-            ),
-          ],
+              ThemedFilledButton(
+                label: "Alimentar",
+                onPressed: _feed,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  PetDescriptionCard(
+                    iconData: Icons.star,
+                    title: "Habilidade",
+                    content: "$_skillValue$_skillDesc",
+                  ),
+                  PetDescriptionCard(
+                    iconData: Icons.description,
+                    title: "Descrição",
+                    content: _description,
+                  ),
+                  PetDescriptionCard(
+                    iconData: Icons.calendar_month,
+                    title: "Idade",
+                    content: _age,
+                  ),
+                  PetDescriptionCard(
+                    iconData: Icons.pets,
+                    title: "Raça",
+                    content: _breed,
+                  ),
+                  PetDescriptionCard(
+                    iconData: Icons.sentiment_satisfied_outlined,
+                    title: "Gosta de",
+                    content: _likes,
+                  ),
+                  PetDescriptionCard(
+                    iconData: Icons.sentiment_dissatisfied,
+                    title: "Não gosta de",
+                    content: _dislikes,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
