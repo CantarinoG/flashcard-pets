@@ -2,6 +2,7 @@ import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/pet_description_card.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
+import 'package:flashcard_pets/widgets/stars.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,12 @@ class PetScreen extends StatelessWidget {
   final int _level = 5;
   final int _currentXp = 450;
   final int _goalXp = 500;
+  final int _currentCopies = 2;
+  final int _goalCopies = 4;
   final String _description =
       "Cleitinho é um cachorro muito bacana e fiel. Sempre diposto a ajudar seu dono.";
   final String _age = "Filhote";
+  final String _rarity = "Comum";
   final String _breed = "Beagle";
   final String _likes = "Perserguir esquilos, comer pestiscos.";
   final String _dislikes = "Tomar banho, barulhos.";
@@ -46,6 +50,8 @@ class PetScreen extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
+    final Color star = Theme.of(context).colorScheme.star;
+    final Color starLighter = Theme.of(context).colorScheme.starLighter;
 
     return Scaffold(
       appBar: ThemedAppBar(
@@ -91,6 +97,53 @@ class PetScreen extends StatelessWidget {
                     color: bright,
                   )
                 ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              const Stars(),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  gradient: LinearGradient(
+                    colors: [
+                      starLighter,
+                      star,
+                      const Color.fromARGB(255, 201, 201, 201),
+                    ],
+                    stops: [
+                      progress / 2,
+                      progress,
+                      progress,
+                    ],
+                  ),
+                ),
+                child: const SizedBox(height: 8),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(
+                      Icons.copy,
+                      color: secondary,
+                    ),
+                    Text(
+                      " $_currentCopies/$_goalCopies",
+                      style: body?.copyWith(
+                        color: secondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 8,
               ),
               SizedBox(
                 width: double.infinity,
@@ -154,9 +207,20 @@ class PetScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   PetDescriptionCard(
-                    iconData: Icons.star,
+                    iconData: Icons.auto_awesome,
                     title: "Habilidade",
                     content: "$_skillValue$_skillDesc",
+                  ),
+                  PetDescriptionCard(
+                    iconData: Icons.diamond,
+                    title: "Raridade",
+                    content: _rarity,
+                    isRarity: true,
+                  ),
+                  PetDescriptionCard(
+                    iconData: Icons.pets,
+                    title: "Raça",
+                    content: _breed,
                   ),
                   PetDescriptionCard(
                     iconData: Icons.description,
@@ -167,11 +231,6 @@ class PetScreen extends StatelessWidget {
                     iconData: Icons.calendar_month,
                     title: "Idade",
                     content: _age,
-                  ),
-                  PetDescriptionCard(
-                    iconData: Icons.pets,
-                    title: "Raça",
-                    content: _breed,
                   ),
                   PetDescriptionCard(
                     iconData: Icons.sentiment_satisfied_outlined,

@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 
@@ -5,17 +6,22 @@ class PetDescriptionCard extends StatelessWidget {
   final IconData iconData;
   final String title;
   final String content;
+  final Color? color;
+  final bool isRarity;
 
   const PetDescriptionCard(
       {required this.iconData,
       required this.title,
       required this.content,
+      this.color,
+      this.isRarity = false,
       super.key});
 
   @override
   Widget build(BuildContext context) {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
 
@@ -54,7 +60,7 @@ class PetDescriptionCard extends StatelessWidget {
               ),
               Text(
                 content,
-                style: body,
+                style: isRarity ? bodyEm.copyWith(color: color) : body,
                 textAlign: TextAlign.center,
               ),
             ],
