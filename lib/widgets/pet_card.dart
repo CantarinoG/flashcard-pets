@@ -1,6 +1,7 @@
 import 'package:flashcard_pets/screens/pet_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
+import 'package:flashcard_pets/widgets/stars.dart';
 import 'package:flutter/material.dart';
 
 class PetCard extends StatelessWidget {
@@ -8,6 +9,7 @@ class PetCard extends StatelessWidget {
   final String _imgPath = "assets/images/baby_pets/beagle.png";
   final String _name = "Cleitinho";
   final String _breed = "Beagle";
+  final String _rarity = "Comum";
   final int _level = 3;
   final String _skillShort = "+2% ouro";
 
@@ -26,9 +28,10 @@ class PetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle? headLineMedium =
         Theme.of(context).textTheme.headlineMedium;
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final TextStyle headLineSmallEm =
         Theme.of(context).textTheme.headlineSmallEm;
-    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
     final Color brightColor = Theme.of(context).colorScheme.bright;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color disabled = Theme.of(context).colorScheme.disabled;
@@ -78,6 +81,10 @@ class PetCard extends StatelessWidget {
                 color: disabled,
               ),
             ),
+            const Stars(),
+            const SizedBox(
+              height: 8,
+            ),
             RichText(
               text: TextSpan(
                 text: "Lvl ",
@@ -96,7 +103,23 @@ class PetCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.star,
+                  Icons.diamond,
+                  color: secondary,
+                ),
+                Text(
+                  _rarity,
+                  style: bodyEm,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.auto_awesome,
                   color: secondary,
                 ),
                 Text(

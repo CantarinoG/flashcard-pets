@@ -61,4 +61,6 @@ extension CustomColorScheme on ColorScheme {
       ? AppColors.successColorLight
       : AppColors.successColorDark;
   Color get disabled => AppColors.lightGrayColor;
+  Color get star => AppColors.starColor;
+  Color get starLighter => AppColors.starColorLighter;
 }

@@ -5,6 +5,8 @@ class AppColors {
   static const Color lightGrayColor = Color(0xFF959595);
   static const Color whiteColor = Color.fromARGB(255, 255, 255, 255);
   static const Color blackColor = Color(0xFF000000);
+  static const Color starColor = Color(0xFFDF9E41);
+  static const Color starColorLighter = Color(0xFFE4D74B);
 
   //Light theme colors
   static const Color primaryColorLight = Color(0xFF58CC02);
