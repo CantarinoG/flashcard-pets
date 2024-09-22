@@ -4,15 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class StoreCard extends StatelessWidget {
-  //Mocked data.
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
-  final String _name = "Baú Básico";
-  final String _desc =
-      "Geralmente contém um pet de raridade comum. Pequena chance de conter um pet de raridade incomum.";
-  final int _price = 234;
-  final int _unlockLevel = 34;
-  final bool _isLocked = true;
-  const StoreCard({super.key});
+  //Mocked data
+  final _isLocked = true;
+
+  final String name;
+  final String desc;
+  final String imgPath;
+  final int price;
+  final int unlockLevel;
+  final void Function() onBuy;
+  const StoreCard(
+    this.name,
+    this.desc,
+    this.imgPath,
+    this.price,
+    this.unlockLevel, {
+    required this.onBuy,
+    super.key,
+  });
 
   void _buy() {
     //...
@@ -39,10 +48,10 @@ class StoreCard extends StatelessWidget {
           children: [
             FractionallySizedBox(
               widthFactor: 0.7,
-              child: Image.asset(_imgPath),
+              child: Image.asset(imgPath),
             ),
             Text(
-              _name,
+              name,
               style: h2?.copyWith(
                 color: secondary,
               ),
@@ -51,7 +60,7 @@ class StoreCard extends StatelessWidget {
               height: 8,
             ),
             Text(
-              _desc,
+              desc,
               style: body,
               textAlign: TextAlign.center,
             ),
@@ -67,7 +76,7 @@ class StoreCard extends StatelessWidget {
                   height: 30,
                 ),
                 Text(
-                  "$_price",
+                  "$price",
                   style: h3,
                 ),
                 const SizedBox(
@@ -88,7 +97,7 @@ class StoreCard extends StatelessWidget {
               ),
             if (_isLocked)
               Text(
-                "Libera no nível $_unlockLevel",
+                "Libera no nível $unlockLevel",
                 style: h3?.copyWith(
                   color: warn,
                 ),

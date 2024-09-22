@@ -85,6 +85,10 @@ flutter:
     - assets/images/no_items_placeholder_image.png
     - assets/images/finished_revision.png
     
+    #Chests
+    - assets/images/chests/chest0.png
+    - assets/images/chests/chest1.png
+    - assets/images/chests/chest2.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

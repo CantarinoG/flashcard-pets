@@ -61,7 +61,7 @@ class PetsCollectionFab extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => StoreScreen(),
+        builder: (context) => const StoreScreen(),
       ),
     );
   }
