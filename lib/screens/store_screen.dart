@@ -1,5 +1,5 @@
-import 'package:flashcard_pets/widgets/pet_store_card.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
+import 'package:flashcard_pets/widgets/store_card.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class StoreScreen extends StatelessWidget {
               child: ListView.builder(
                 itemCount: _pets.length,
                 itemBuilder: (context, index) {
-                  return const PetStoreCard();
+                  return const StoreCard();
                 },
               ),
             ),
