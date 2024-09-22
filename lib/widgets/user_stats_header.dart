@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,17 +13,30 @@ class UserStatsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
-    final Color primaryColor = Theme.of(context).colorScheme.primary;
-    final Color secondaryColor = Theme.of(context).colorScheme.secondary;
+    final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
+    final Color primary = Theme.of(context).colorScheme.primary;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
 
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Lvl $_level",
-              style: h3,
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Lvl ',
+                    style: h4.copyWith(
+                      color: secondary,
+                    ),
+                  ),
+                  TextSpan(
+                    text: '$_level',
+                    style: h3,
+                  ),
+                ],
+              ),
             ),
             Row(
               children: [
@@ -44,8 +58,8 @@ class UserStatsHeader extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               gradient: LinearGradient(colors: [
-                primaryColor,
-                secondaryColor,
+                primary,
+                secondary,
                 const Color.fromARGB(255, 201, 201, 201),
               ], stops: [
                 _progress / 2,

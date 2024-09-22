@@ -86,9 +86,21 @@ class UserProfileScreen extends StatelessWidget {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: Text(
-                        "Lvl $_level",
-                        style: h3,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Lvl ',
+                              style: h4.copyWith(
+                                color: secondary,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '$_level',
+                              style: h3,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Container(
