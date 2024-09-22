@@ -62,7 +62,7 @@ class StoreCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SvgPicture.asset(
-                  "assets/images/icons/coin.svg",
+                  "assets/images/custom_icons/coin.svg",
                   width: 30,
                   height: 30,
                 ),
