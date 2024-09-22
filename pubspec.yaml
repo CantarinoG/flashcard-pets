@@ -90,6 +90,40 @@ flutter:
     - assets/images/chests/chest1.png
     - assets/images/chests/chest2.png
 
+    #Awards(Pets)
+    - assets/images/awards/pets/pet_lover_i.png
+    - assets/images/awards/pets/pet_lover_ii.png
+    - assets/images/awards/pets/pet_lover_iii.png
+    - assets/images/awards/pets/seeing_stars_i.png
+    - assets/images/awards/pets/seeing_stars_ii.png
+    - assets/images/awards/pets/seeing_stars_iii.png
+    - assets/images/awards/pets/trainer_i.png
+    - assets/images/awards/pets/trainer_ii.png
+    - assets/images/awards/pets/trainer_iii.png
+
+    #Awards(Reviews)
+    - assets/images/awards/reviews/bullseye_i.png
+    - assets/images/awards/reviews/bullseye_ii.png
+    - assets/images/awards/reviews/bullseye_iii.png
+    - assets/images/awards/reviews/card_collector_i.png
+    - assets/images/awards/reviews/card_collector_ii.png
+    - assets/images/awards/reviews/card_collector_iii.png
+    - assets/images/awards/reviews/reviewer_i.png
+    - assets/images/awards/reviews/reviewer_ii.png
+    - assets/images/awards/reviews/reviewer_iii.png
+    - assets/images/awards/reviews/streak_i.png
+    - assets/images/awards/reviews/streak_ii.png
+    - assets/images/awards/reviews/streak_iii.png
+
+    #Awards(Social)
+    - assets/images/awards/social/competitor.png
+    - assets/images/awards/social/just_a_gift_i.png
+    - assets/images/awards/social/just_a_gift_ii.png
+    - assets/images/awards/social/just_a_gift_iii.png
+    - assets/images/awards/social/popular_i.png
+    - assets/images/awards/social/popular_ii.png
+    - assets/images/awards/social/popular_iii.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 
 class AwardsScreen extends StatelessWidget {
   //Mocked data
-  final List<int> _awardsI = [1, 2, 3, 4, 5];
-  final List<int> _awardsII = [1, 2];
-  final List<int> _awardsIII = [1, 2];
-  final List<int> _awardsIV = [1, 2];
+  final List<int> _awardsFlashcards = [1, 2, 3, 4, 5];
+  final List<int> _awardsPets = [1, 2];
+  final List<int> _awardsSocial = [1, 2];
   AwardsScreen({super.key});
 
   Widget _subScreen(BuildContext context, String title, Widget listView) {
@@ -78,10 +77,6 @@ class AwardsScreen extends StatelessWidget {
                       tabs: const [
                         Tab(
                             icon: Icon(
-                          Icons.psychology,
-                        )),
-                        Tab(
-                            icon: Icon(
                           Icons.dashboard,
                         )),
                         Tab(
@@ -99,19 +94,9 @@ class AwardsScreen extends StatelessWidget {
                         children: [
                           _subScreen(
                             context,
-                            "Revisões",
+                            "Cartões e Revisões",
                             ListView.builder(
-                              itemCount: _awardsI.length,
-                              itemBuilder: (context, index) {
-                                return AwardCard();
-                              },
-                            ),
-                          ),
-                          _subScreen(
-                            context,
-                            "Coleção",
-                            ListView.builder(
-                              itemCount: _awardsII.length,
+                              itemCount: _awardsFlashcards.length,
                               itemBuilder: (context, index) {
                                 return AwardCard();
                               },
@@ -121,7 +106,7 @@ class AwardsScreen extends StatelessWidget {
                             context,
                             "Pets",
                             ListView.builder(
-                              itemCount: _awardsIII.length,
+                              itemCount: _awardsPets.length,
                               itemBuilder: (context, index) {
                                 return AwardCard();
                               },
@@ -131,7 +116,7 @@ class AwardsScreen extends StatelessWidget {
                             context,
                             "Social",
                             ListView.builder(
-                              itemCount: _awardsIV.length,
+                              itemCount: _awardsSocial.length,
                               itemBuilder: (context, index) {
                                 return AwardCard();
                               },
