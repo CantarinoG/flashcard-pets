@@ -72,7 +72,7 @@ class _CollectionMainFabState extends State<CollectionMainFab> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CollectionFormScreen(),
+          builder: (context) => const CollectionFormScreen(),
         ),
       );
     } else {
@@ -94,7 +94,7 @@ class _CollectionMainFabState extends State<CollectionMainFab> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CollectionFormScreen(),
+              builder: (context) => const CollectionFormScreen(),
             ),
           );
         }

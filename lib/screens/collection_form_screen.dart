@@ -1,34 +1,25 @@
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
+import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CollectionFormScreen extends StatefulWidget {
-  final List<String> _subjects = [
-    "Artes",
-    "Ciências",
-    "Educação Física",
-    "Filosofia",
-    "Geografia",
-    "História",
-    "Informática",
-    "Linguagens",
-    "Matemática",
-    "Diversos",
-  ];
-  CollectionFormScreen({super.key});
+  const CollectionFormScreen({super.key});
 
   @override
   State<CollectionFormScreen> createState() => _CollectionFormScreenState();
 }
 
 class _CollectionFormScreenState extends State<CollectionFormScreen> {
-  late String _selectedItem = widget._subjects[0];
+  int _selectedItem = 0;
 
-  void _changeSelectedSubject(String? value) {
+  void _changeSelectedSubject(int? value) {
     setState(() {
-      _selectedItem = value ?? widget._subjects[0];
+      _selectedItem = value ?? 0;
     });
   }
 
@@ -38,6 +29,9 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Map<int, Subject> subjects =
+        Provider.of<IDataProvider<Subject>>(context).retrieveData();
+
     return Scaffold(
       appBar: const ThemedAppBar("Conjunto"),
       body: ScreenLayout(
@@ -64,14 +58,14 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
               label: "Disciplina",
               child: SizedBox(
                 width: double.infinity,
-                child: DropdownButton<String>(
+                child: DropdownButton<int>(
                   hint: const Text('Seleciona uma opção'),
                   isExpanded: true,
                   value: _selectedItem,
-                  items: widget._subjects.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
+                  items: subjects.entries.map((entry) {
+                    return DropdownMenuItem<int>(
+                      value: entry.key,
+                      child: Text(entry.value.name),
                     );
                   }).toList(),
                   onChanged: _changeSelectedSubject,

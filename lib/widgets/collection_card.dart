@@ -1,4 +1,6 @@
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
+import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/screens/collection_cards_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/screens/review_screen.dart';
@@ -6,6 +8,7 @@ import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 enum CollectionAction {
   manageCards,
@@ -18,7 +21,7 @@ class CollectionCard extends StatelessWidget {
   final String _title = "Trigonometria";
   final int _cardsNumber = 26;
   final int _reviewsToday = 12;
-  final String _imgPath = "assets/images/icons/math.svg";
+  final int _subjectCode = 9;
 
   const CollectionCard({super.key});
 
@@ -35,7 +38,7 @@ class CollectionCard extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CollectionFormScreen(),
+        builder: (context) => const CollectionFormScreen(),
       ),
     );
   }
@@ -73,6 +76,9 @@ class CollectionCard extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color disabled = Theme.of(context).colorScheme.disabled;
 
+    final Map<int, Subject> subjects =
+        Provider.of<IDataProvider<Subject>>(context).retrieveData();
+
     return Card(
       elevation: 4,
       color: bright,
@@ -93,7 +99,7 @@ class CollectionCard extends StatelessWidget {
                 height: 60,
                 width: 60,
                 child: SvgPicture.asset(
-                  _imgPath,
+                  subjects[_subjectCode]!.iconPath,
                 ),
               ),
               Expanded(
