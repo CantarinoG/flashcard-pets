@@ -1,5 +1,7 @@
+import 'package:flashcard_pets/data_providers/award_data_provider.dart';
 import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/data_providers/subject_data_provider.dart';
+import 'package:flashcard_pets/models/award.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/screens/navigation_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -16,10 +18,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     IDataProvider<Subject> subjectDataProvider = SubjectDataProvider();
+    IDataProvider<Award> awardDataProvider = AwardDataProvider();
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => subjectDataProvider),
+        ChangeNotifierProvider(create: (_) => awardDataProvider),
       ],
       child: MaterialApp(
         title: 'Flashcard Pets',
