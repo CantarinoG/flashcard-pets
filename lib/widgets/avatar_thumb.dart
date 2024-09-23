@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class AvatarThumb extends StatelessWidget {
   //Mocked data
   final int userAvatarId = 0;
+  final int _colorCode = 0xFF5C9EAD;
   final int avatarId;
   const AvatarThumb(this.avatarId, {super.key});
 
@@ -41,10 +42,16 @@ class AvatarThumb extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(60),
         onTap: _onTap,
-        child: ClipOval(
-          child: Image.asset(
-            avatarImgPath,
-            fit: BoxFit.cover,
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Color(_colorCode),
+          ),
+          child: ClipOval(
+            child: Image.asset(
+              avatarImgPath,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),

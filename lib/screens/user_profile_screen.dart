@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 class UserProfileScreen extends StatelessWidget {
   //Mocked data
   final int _avatarId = 8;
+  final int _colorCode = 0xFF5C9EAD;
   final String _name = "Guilherme Cantarino";
   final String _nick = "CantarinoG";
   final int _level = 5;
@@ -63,10 +64,16 @@ class UserProfileScreen extends StatelessWidget {
                     SizedBox(
                       height: 200,
                       width: 200,
-                      child: ClipOval(
-                        child: Image.asset(
-                          avatarPath,
-                          fit: BoxFit.cover,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(_colorCode),
+                          shape: BoxShape.circle,
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            avatarPath,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),

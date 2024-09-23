@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 class LeaderboardUserCard extends StatelessWidget {
   //Mocked data
+  final int _colorCode = 0xFF5C9EAD;
   final int _position = 1;
   final int _avatarId = 10;
   final String _name = "Guilherme Cantarino";
@@ -73,11 +74,17 @@ class LeaderboardUserCard extends StatelessWidget {
               SizedBox(
                 height: 50,
                 width: 50,
-                child: ClipOval(
-                  child: Image.asset(
-                    avatarPath,
-                    fit: BoxFit
-                        .cover, // Ensures the image fits nicely within the circular shape
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(_colorCode),
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child: Image.asset(
+                      avatarPath,
+                      fit: BoxFit
+                          .cover, // Ensures the image fits nicely within the circular shape
+                    ),
                   ),
                 ),
               ),

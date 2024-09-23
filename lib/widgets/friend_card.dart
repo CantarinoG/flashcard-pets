@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 class FriendCard extends StatelessWidget {
   //Mocked data
   final int _avatarId = 2;
+  final int _colorCode = 0xFF5C9EAD;
   final String _name = "Guilherme Cantarino";
   final String _nick = "CantarinoG";
   final bool _canSendGift = true;
@@ -56,11 +57,17 @@ class FriendCard extends StatelessWidget {
               SizedBox(
                 height: 50,
                 width: 50,
-                child: ClipOval(
-                  child: Image.asset(
-                    avatarPath,
-                    fit: BoxFit
-                        .cover, // Ensures the image fits nicely within the circular shape
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Color(_colorCode),
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child: Image.asset(
+                      avatarPath,
+                      fit: BoxFit
+                          .cover, // Ensures the image fits nicely within the circular shape
+                    ),
                   ),
                 ),
               ),

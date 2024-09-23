@@ -7,15 +7,32 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChangeAvatarScreen extends StatelessWidget {
-  const ChangeAvatarScreen({super.key});
+  final List<int> _availableColors = [
+    0xFF5C9EAD,
+    0xFFFFC1C1,
+    0xFF98FF98,
+    0xFFB39BC8,
+    0xFFF9D342,
+    0xFFFF6F61,
+    0xFFF5E8C7,
+    0xFFB0BEC5,
+  ];
+  ChangeAvatarScreen({super.key});
 
   void _confirm(BuildContext context) {
     Navigator.of(context).pop();
   }
 
+  void _changeBgColor() {
+    //...
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
+
+    final Color secondary = Theme.of(context).colorScheme.secondary;
 
     final Map<int, String> avatars =
         Provider.of<IDataProvider<String>>(context).retrieveData();
@@ -29,6 +46,55 @@ class ChangeAvatarScreen extends StatelessWidget {
             Text(
               "Escolha um avatar da coleção para personalizar seu perfil.",
               style: body,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Text(
+                "Cor de Fundo",
+                style: h3?.copyWith(
+                  color: secondary,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: _availableColors.map((int colorValue) {
+                  return InkWell(
+                    onTap: _changeBgColor,
+                    radius: 15,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                      ),
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Color(colorValue),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Text(
+                "Avatar",
+                style: h3?.copyWith(
+                  color: secondary,
+                ),
+              ),
             ),
             const SizedBox(
               height: 8,
