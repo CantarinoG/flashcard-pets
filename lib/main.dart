@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/data_providers/avatar_data_provider.dart';
 import 'package:flashcard_pets/data_providers/award_data_provider.dart';
 import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/data_providers/subject_data_provider.dart';
@@ -19,11 +20,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     IDataProvider<Subject> subjectDataProvider = SubjectDataProvider();
     IDataProvider<Award> awardDataProvider = AwardDataProvider();
+    IDataProvider<String> avatarDataProvider = AvatarDataProvider();
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => subjectDataProvider),
         ChangeNotifierProvider(create: (_) => awardDataProvider),
+        ChangeNotifierProvider(create: (_) => avatarDataProvider),
       ],
       child: MaterialApp(
         title: 'Flashcard Pets',

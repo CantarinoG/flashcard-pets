@@ -1,14 +1,16 @@
+// ignore_for_file: unused_local_variable
+
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AvatarThumb extends StatelessWidget {
   //Mocked data
-  final bool _isSelected = false;
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
-  final bool _isLocked = false;
-  final int _unlockLevel = 30;
-  const AvatarThumb({super.key});
+  final int userAvatarId = 0;
+  final int avatarId;
+  const AvatarThumb(this.avatarId, {super.key});
 
   void _onTap() {
     //...
@@ -21,12 +23,15 @@ class AvatarThumb extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
 
+    final String avatarImgPath =
+        Provider.of<IDataProvider<String>>(context).retrieveData()[avatarId]!;
+
     return Container(
       height: 50,
       width: 50,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: (_isSelected && !_isLocked)
+        border: (userAvatarId == avatarId)
             ? Border.all(
                 color: secondary,
                 width: 4.0,
@@ -36,44 +41,12 @@ class AvatarThumb extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(60),
         onTap: _onTap,
-        child: _isLocked
-            ? ClipOval(
-                child: Container(
-                  decoration: BoxDecoration(color: bright),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.lock,
-                        color: secondary,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Lvl ',
-                              style: h4.copyWith(
-                                color: secondary,
-                              ),
-                            ),
-                            TextSpan(
-                              text: '$_unlockLevel',
-                              style: h3,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            : ClipOval(
-                child: Image.asset(
-                  _imgPath,
-                  fit: BoxFit.cover,
-                ),
-              ),
+        child: ClipOval(
+          child: Image.asset(
+            avatarImgPath,
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }

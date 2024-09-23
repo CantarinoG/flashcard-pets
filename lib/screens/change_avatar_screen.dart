@@ -1,13 +1,13 @@
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/widgets/avatar_thumb.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChangeAvatarScreen extends StatelessWidget {
-  //Mocked data
-  final List<int> _avatars = [1, 2, 3, 4, 5];
-  ChangeAvatarScreen({super.key});
+  const ChangeAvatarScreen({super.key});
 
   void _confirm(BuildContext context) {
     Navigator.of(context).pop();
@@ -16,6 +16,9 @@ class ChangeAvatarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+
+    final Map<int, String> avatars =
+        Provider.of<IDataProvider<String>>(context).retrieveData();
 
     return Scaffold(
       appBar: const ThemedAppBar("Mudar Avatar"),
@@ -35,8 +38,8 @@ class ChangeAvatarScreen extends StatelessWidget {
                 maxCrossAxisExtent: 120.0,
                 crossAxisSpacing: 20.0,
                 mainAxisSpacing: 20.0,
-                children: _avatars.map((int avatar) {
-                  return const AvatarThumb();
+                children: avatars.keys.map((int id) {
+                  return AvatarThumb(id);
                 }).toList(),
               ),
             )

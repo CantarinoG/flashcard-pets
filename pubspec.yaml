@@ -139,6 +139,7 @@ flutter:
     - assets/images/avatars/male_5.png
     - assets/images/avatars/male_6.png
     - assets/images/avatars/male_7.png
+    - assets/images/avatars/none.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
