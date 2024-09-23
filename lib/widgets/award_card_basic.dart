@@ -17,7 +17,7 @@ class AwardCardBasic extends StatelessWidget {
     TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
 
     final Award award =
-        Provider.of<IDataProvider<Award>>(context).retrieveData()[awardId]!;
+        Provider.of<IDataProvider<Award>>(context).retrieveFromKey(awardId);
 
     return Card(
       elevation: 4,

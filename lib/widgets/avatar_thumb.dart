@@ -24,7 +24,7 @@ class AvatarThumb extends StatelessWidget {
     final Color bright = Theme.of(context).colorScheme.bright;
 
     final String avatarImgPath =
-        Provider.of<IDataProvider<String>>(context).retrieveData()[avatarId]!;
+        Provider.of<IDataProvider<String>>(context).retrieveFromKey(avatarId);
 
     return Container(
       height: 50,

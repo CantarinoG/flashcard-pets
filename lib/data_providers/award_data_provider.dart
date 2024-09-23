@@ -234,4 +234,9 @@ class AwardDataProvider with ChangeNotifier implements IDataProvider<Award> {
   Map<int, Award> retrieveData() {
     return _data;
   }
+
+  @override
+  Award retrieveFromKey(int key) {
+    return _data[key] ?? _data[0]!;
+  }
 }

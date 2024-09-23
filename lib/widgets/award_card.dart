@@ -32,7 +32,7 @@ class AwardCard extends StatelessWidget {
     TextStyle? bodyEm = Theme.of(context).textTheme.bodySmallEm;
 
     final Award award =
-        Provider.of<IDataProvider<Award>>(context).retrieveData()[awardId]!;
+        Provider.of<IDataProvider<Award>>(context).retrieveFromKey(awardId);
     final double progress =
         ((userProgress / award.target) > 1) ? 1 : (userProgress / award.target);
     final bool alreadyUnlocked = userAchievements.contains(awardId);

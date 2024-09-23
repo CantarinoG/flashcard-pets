@@ -24,4 +24,9 @@ class AvatarDataProvider with ChangeNotifier implements IDataProvider<String> {
   Map<int, String> retrieveData() {
     return _data;
   }
+
+  @override
+  String retrieveFromKey(int key) {
+    return _data[key] ?? _data[0]!;
+  }
 }

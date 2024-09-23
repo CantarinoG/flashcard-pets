@@ -22,4 +22,9 @@ class SubjectDataProvider
   Map<int, Subject> retrieveData() {
     return _data;
   }
+
+  @override
+  Subject retrieveFromKey(int key) {
+    return _data[key] ?? _data[0]!;
+  }
 }
