@@ -124,6 +124,22 @@ flutter:
     - assets/images/awards/social/popular_ii.png
     - assets/images/awards/social/popular_iii.png
 
+    #Avatars
+    - assets/images/avatars/female_0.png
+    - assets/images/avatars/female_1.png
+    - assets/images/avatars/female_2.png
+    - assets/images/avatars/female_3.png
+    - assets/images/avatars/female_4.png
+    - assets/images/avatars/female_5.png
+    - assets/images/avatars/male_0.png
+    - assets/images/avatars/male_1.png
+    - assets/images/avatars/male_2.png
+    - assets/images/avatars/male_3.png
+    - assets/images/avatars/male_4.png
+    - assets/images/avatars/male_5.png
+    - assets/images/avatars/male_6.png
+    - assets/images/avatars/male_7.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
