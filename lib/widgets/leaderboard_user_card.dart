@@ -1,12 +1,14 @@
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/screens/user_profile_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LeaderboardUserCard extends StatelessWidget {
   //Mocked data
   final int _position = 1;
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
+  final int _avatarId = 10;
   final String _name = "Guilherme Cantarino";
   final String _nick = "CantarinoG";
   final int _pontos = 1456;
@@ -31,6 +33,9 @@ class LeaderboardUserCard extends StatelessWidget {
     final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final Color brightColor = Theme.of(context).colorScheme.bright;
     final Color secondary = Theme.of(context).colorScheme.secondary;
+
+    final String avatarPath =
+        Provider.of<IDataProvider<String>>(context).retrieveFromKey(_avatarId);
 
     Color positionColor = secondary;
     if (_position == 1) {
@@ -70,7 +75,7 @@ class LeaderboardUserCard extends StatelessWidget {
                 width: 50,
                 child: ClipOval(
                   child: Image.asset(
-                    _imgPath,
+                    avatarPath,
                     fit: BoxFit
                         .cover, // Ensures the image fits nicely within the circular shape
                   ),

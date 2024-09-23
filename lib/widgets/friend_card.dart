@@ -1,11 +1,13 @@
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/screens/user_profile_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class FriendCard extends StatelessWidget {
   //Mocked data
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
+  final int _avatarId = 2;
   final String _name = "Guilherme Cantarino";
   final String _nick = "CantarinoG";
   final bool _canSendGift = true;
@@ -31,6 +33,9 @@ class FriendCard extends StatelessWidget {
     final Color brightColor = Theme.of(context).colorScheme.bright;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
+    final String avatarPath =
+        Provider.of<IDataProvider<String>>(context).retrieveFromKey(_avatarId);
+
     return Card(
       elevation: 4,
       color: brightColor,
@@ -53,7 +58,7 @@ class FriendCard extends StatelessWidget {
                 width: 50,
                 child: ClipOval(
                   child: Image.asset(
-                    _imgPath,
+                    avatarPath,
                     fit: BoxFit
                         .cover, // Ensures the image fits nicely within the circular shape
                   ),

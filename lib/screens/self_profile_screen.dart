@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/dialogs/change_name_dialog.dart';
 import 'package:flashcard_pets/screens/awards_screen.dart';
 import 'package:flashcard_pets/screens/change_avatar_screen.dart';
@@ -12,10 +13,11 @@ import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SelfProfileScreen extends StatelessWidget {
   //Mocked data
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
+  final int _avatarId = 9;
   final String _name = "Guilherme Cantarino";
   final String _nick = "CantarinoG";
   final int _currentXp = 450;
@@ -67,6 +69,9 @@ class SelfProfileScreen extends StatelessWidget {
     final Color disabled = Theme.of(context).disabledColor;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
+    final String avatarPath =
+        Provider.of<IDataProvider<String>>(context).retrieveFromKey(_avatarId);
+
     return ScreenLayout(
       child: SingleChildScrollView(
         child: ConstrainedBox(
@@ -92,7 +97,7 @@ class SelfProfileScreen extends StatelessWidget {
                           width: 200,
                           child: ClipOval(
                             child: Image.asset(
-                              _imgPath,
+                              avatarPath,
                               fit: BoxFit
                                   .cover, // Ensures the image fits nicely within the circular shape
                             ),

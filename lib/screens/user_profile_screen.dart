@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/widgets/award_card_basic.dart';
 import 'package:flashcard_pets/widgets/pet_card_basic.dart';
@@ -8,10 +9,11 @@ import 'package:flashcard_pets/widgets/statistics_display.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserProfileScreen extends StatelessWidget {
   //Mocked data
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
+  final int _avatarId = 8;
   final String _name = "Guilherme Cantarino";
   final String _nick = "CantarinoG";
   final int _level = 5;
@@ -41,6 +43,9 @@ class UserProfileScreen extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
+    final String avatarPath =
+        Provider.of<IDataProvider<String>>(context).retrieveFromKey(_avatarId);
+
     return Scaffold(
       appBar: const ThemedAppBar(""),
       body: ScreenLayout(
@@ -60,7 +65,7 @@ class UserProfileScreen extends StatelessWidget {
                       width: 200,
                       child: ClipOval(
                         child: Image.asset(
-                          _imgPath,
+                          avatarPath,
                           fit: BoxFit.cover,
                         ),
                       ),
