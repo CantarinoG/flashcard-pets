@@ -23,7 +23,12 @@ class SelfProfileScreen extends StatelessWidget {
   final int _reviewedCardsNum = 23;
   final int _accuracy = 84;
   final int _streak = 4;
-  const SelfProfileScreen({super.key});
+  final List<int> _last3Awards = [
+    4,
+    6,
+    13,
+  ];
+  SelfProfileScreen({super.key});
 
   void _changeAvatar(BuildContext context) {
     Navigator.push(
@@ -47,7 +52,7 @@ class SelfProfileScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AwardsScreen(),
+        builder: (context) => const AwardsScreen(),
       ),
     );
   }
@@ -210,13 +215,13 @@ class SelfProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(child: AwardCardBasic()),
-                      Expanded(child: AwardCardBasic()),
-                      Expanded(child: AwardCardBasic()),
+                      Expanded(child: AwardCardBasic(_last3Awards[0])),
+                      Expanded(child: AwardCardBasic(_last3Awards[1])),
+                      Expanded(child: AwardCardBasic(_last3Awards[2])),
                     ],
                   ),
                 ],

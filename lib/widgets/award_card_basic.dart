@@ -1,18 +1,23 @@
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
+import 'package:flashcard_pets/models/award.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AwardCardBasic extends StatelessWidget {
-  //Mocked data
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
-  final String _awardName = "Mestre I";
-  const AwardCardBasic({super.key});
+  final int awardId;
+
+  const AwardCardBasic(this.awardId, {super.key});
 
   @override
   Widget build(BuildContext context) {
     Color brightColor = Theme.of(context).colorScheme.bright;
     Color secondary = Theme.of(context).colorScheme.secondary;
     TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
+
+    final Award award =
+        Provider.of<IDataProvider<Award>>(context).retrieveData()[awardId]!;
 
     return Card(
       elevation: 4,
@@ -26,17 +31,23 @@ class AwardCardBasic extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              _imgPath,
+              award.iconPath,
               width: 60,
               height: 60,
             ),
             const SizedBox(
               height: 4,
             ),
-            Text(
-              _awardName,
-              style: bodyEm.copyWith(
-                color: secondary,
+            SizedBox(
+              height: 40,
+              child: Text(
+                award.title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: bodyEm.copyWith(
+                  color: secondary,
+                ),
               ),
             ),
           ],

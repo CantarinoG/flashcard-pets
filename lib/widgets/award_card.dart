@@ -1,21 +1,20 @@
+import 'package:flashcard_pets/data_providers/i_data_provider.dart';
+import 'package:flashcard_pets/models/award.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class AwardCard extends StatelessWidget {
   //Mocked data
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
-  final String _title = "Mestre dos Flashcards";
-  final String _description = "Revise um total de 100 flashcards.";
-  final int _goalScore = 100;
-  final int _currentScore = 78;
-  late final double _progress = _currentScore / _goalScore;
-  final int _goldReward = 234;
-  final int _xpReward = 234;
-  final bool _isCompleted = false;
-  AwardCard({super.key});
+  final List<int> userAchievements = [1, 4, 6];
+
+  final int awardId;
+  final int userProgress;
+
+  AwardCard(this.awardId, this.userProgress, {super.key});
 
   void _claimAward() {
     //...
@@ -31,6 +30,12 @@ class AwardCard extends StatelessWidget {
     TextStyle? h3em = Theme.of(context).textTheme.headlineSmallEm;
     TextStyle? body = Theme.of(context).textTheme.bodySmall;
     TextStyle? bodyEm = Theme.of(context).textTheme.bodySmallEm;
+
+    final Award award =
+        Provider.of<IDataProvider<Award>>(context).retrieveData()[awardId]!;
+    final double progress =
+        ((userProgress / award.target) > 1) ? 1 : (userProgress / award.target);
+    final bool alreadyUnlocked = userAchievements.contains(awardId);
 
     return Card(
       elevation: 4,
@@ -51,9 +56,8 @@ class AwardCard extends StatelessWidget {
                   width: 50,
                   child: ClipOval(
                     child: Image.asset(
-                      _imgPath,
-                      fit: BoxFit
-                          .cover, // Ensures the image fits nicely within the circular shape
+                      award.iconPath,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -64,14 +68,14 @@ class AwardCard extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        _title,
+                        award.title,
                         style: h3?.copyWith(
                           color: secondary,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        _description,
+                        award.description,
                         style: body,
                         textAlign: TextAlign.center,
                       ),
@@ -92,16 +96,16 @@ class AwardCard extends StatelessWidget {
                     secondary,
                     const Color.fromARGB(255, 201, 201, 201),
                   ], stops: [
-                    _progress / 2,
-                    _progress,
-                    _progress,
+                    progress / 2,
+                    progress,
+                    progress,
                   ])),
               child: const SizedBox(height: 8),
             ),
             SizedBox(
               width: double.infinity,
               child: Text(
-                "$_currentScore/$_goalScore",
+                "$userProgress/${award.target}",
                 style: body?.copyWith(
                   color: secondary,
                 ),
@@ -126,7 +130,7 @@ class AwardCard extends StatelessWidget {
                   width: 30,
                   height: 30,
                 ),
-                Text("$_goldReward"),
+                Text("${award.rewardValue}"),
                 const SizedBox(
                   width: 16,
                 ),
@@ -134,7 +138,7 @@ class AwardCard extends StatelessWidget {
                   "XP ",
                   style: h3em.copyWith(color: secondary),
                 ),
-                Text("$_xpReward"),
+                Text("${award.rewardValue}"),
                 const SizedBox(
                   width: 16,
                 ),
@@ -143,9 +147,18 @@ class AwardCard extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            ThemedFilledButton(
+            if (!alreadyUnlocked)
+              ThemedFilledButton(
                 label: "Resgatar Recompensa",
-                onPressed: _isCompleted ? _claimAward : null),
+                onPressed: (userProgress < award.target) ? null : _claimAward,
+              ),
+            if (alreadyUnlocked)
+              Text(
+                "Concluído!",
+                style: h3?.copyWith(
+                  color: secondary,
+                ),
+              ),
           ],
         ),
       ),

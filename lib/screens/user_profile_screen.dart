@@ -22,7 +22,7 @@ class UserProfileScreen extends StatelessWidget {
   final int _reviewedCardsNum = 23;
   final int _accuracy = 84;
   final int _streak = 4;
-  final List<int> _awards = [1, 1, 1, 1, 1, 1];
+  final List<int> _awards = [1, 2, 3, 4, 5, 6];
   final List<int> _pets = [1, 1, 1, 1, 1, 1];
   UserProfileScreen({super.key});
 
@@ -163,8 +163,8 @@ class UserProfileScreen extends StatelessWidget {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: _awards.map((award) {
-                          return const AwardCardBasic();
+                        children: _awards.map((awardId) {
+                          return AwardCardBasic(awardId);
                         }).toList(),
                       ),
                     ),

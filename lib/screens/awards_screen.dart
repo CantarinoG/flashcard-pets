@@ -6,10 +6,17 @@ import 'package:flutter/material.dart';
 
 class AwardsScreen extends StatelessWidget {
   //Mocked data
-  final List<int> _awardsFlashcards = [1, 2, 3, 4, 5];
-  final List<int> _awardsPets = [1, 2];
-  final List<int> _awardsSocial = [1, 2];
-  AwardsScreen({super.key});
+  final int totalUserReviews = 100;
+  final int userConsecutiveDays = 24;
+  final int totalUserMaxScoreReviews = 78;
+  final int totalUserRegisteredCards = 430;
+  final int totalUserPets = 9;
+  final int highestPetLevel = 23;
+  final int highestPetStar = 2;
+  final int totalUserFriens = 234;
+  final int totalGiftsSent = 34;
+  final int isInRanking = 0;
+  const AwardsScreen({super.key});
 
   Widget _subScreen(BuildContext context, String title, Widget listView) {
     final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
@@ -54,7 +61,7 @@ class AwardsScreen extends StatelessWidget {
             ),
             Expanded(
               child: DefaultTabController(
-                length: 4,
+                length: 3,
                 child: Column(
                   children: [
                     TabBar(
@@ -95,31 +102,53 @@ class AwardsScreen extends StatelessWidget {
                           _subScreen(
                             context,
                             "Cartões e Revisões",
-                            ListView.builder(
-                              itemCount: _awardsFlashcards.length,
-                              itemBuilder: (context, index) {
-                                return AwardCard();
-                              },
+                            ListView(
+                              children: [
+                                AwardCard(0, totalUserReviews),
+                                AwardCard(1, totalUserReviews),
+                                AwardCard(2, totalUserReviews),
+                                AwardCard(3, userConsecutiveDays),
+                                AwardCard(4, userConsecutiveDays),
+                                AwardCard(5, userConsecutiveDays),
+                                AwardCard(6, totalUserMaxScoreReviews),
+                                AwardCard(7, totalUserMaxScoreReviews),
+                                AwardCard(8, totalUserMaxScoreReviews),
+                                AwardCard(9, totalUserRegisteredCards),
+                                AwardCard(10, totalUserRegisteredCards),
+                                AwardCard(11, totalUserRegisteredCards),
+                              ],
                             ),
                           ),
                           _subScreen(
                             context,
                             "Pets",
-                            ListView.builder(
-                              itemCount: _awardsPets.length,
-                              itemBuilder: (context, index) {
-                                return AwardCard();
-                              },
+                            ListView(
+                              children: [
+                                AwardCard(12, totalUserPets),
+                                AwardCard(13, totalUserPets),
+                                AwardCard(14, totalUserPets),
+                                AwardCard(15, highestPetLevel),
+                                AwardCard(16, highestPetLevel),
+                                AwardCard(17, highestPetLevel),
+                                AwardCard(18, highestPetStar),
+                                AwardCard(19, highestPetStar),
+                                AwardCard(20, highestPetStar),
+                              ],
                             ),
                           ),
                           _subScreen(
                             context,
                             "Social",
-                            ListView.builder(
-                              itemCount: _awardsSocial.length,
-                              itemBuilder: (context, index) {
-                                return AwardCard();
-                              },
+                            ListView(
+                              children: [
+                                AwardCard(21, totalUserFriens),
+                                AwardCard(22, totalUserFriens),
+                                AwardCard(23, totalUserFriens),
+                                AwardCard(24, totalGiftsSent),
+                                AwardCard(25, totalGiftsSent),
+                                AwardCard(26, totalGiftsSent),
+                                AwardCard(27, isInRanking),
+                              ],
                             ),
                           ),
                         ],
