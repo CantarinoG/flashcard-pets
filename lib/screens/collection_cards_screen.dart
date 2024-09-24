@@ -11,7 +11,7 @@ class CollectionCardsScreen extends StatelessWidget {
   //Mocked data
   final String _title = "Cálculo I";
   final List<int> _cards = [1, 1, 1, 1];
-  final String? _description =
+  final String _description =
       "Essa coleção é referente à minha disciplina de cálculo I da faculdade.";
   CollectionCardsScreen({super.key});
 
@@ -44,12 +44,12 @@ class CollectionCardsScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            if (_description != null)
+            if (_description.isNotEmpty)
               Text(
                 _description,
                 style: body,
               ),
-            if (_description != null)
+            if (_description.isNotEmpty)
               const SizedBox(
                 height: 8,
               ),

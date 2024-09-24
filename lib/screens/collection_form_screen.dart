@@ -1,6 +1,11 @@
+import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/i_id_provider.dart';
+import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
+import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
@@ -16,7 +21,13 @@ class CollectionFormScreen extends StatefulWidget {
 }
 
 class _CollectionFormScreenState extends State<CollectionFormScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   int _selectedItem = 0;
+
+  String? _error;
+
+  bool _isLoading = false;
 
   void _changeSelectedSubject(int? value) {
     setState(() {
@@ -25,7 +36,75 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
   }
 
   void _register() {
-    //...
+    String name = _nameController.text.trim();
+    String description = _descriptionController.text.trim();
+    int subjectCode = _selectedItem;
+
+    _displayError(null);
+
+    if (name.isEmpty) {
+      _displayError("A coleção precisa ter um nome.");
+      return;
+    }
+
+    final List<int> allowedCodes = Provider.of<IDataProvider<Subject>>(
+      context,
+      listen: false,
+    ).retrieveData().keys.toList();
+    if (!allowedCodes.contains(subjectCode)) {
+      _displayError("Disciplina inválida.");
+      return;
+    }
+
+    final String uniqueId =
+        Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+
+    final Collection newCollection = Collection(
+      uniqueId,
+      name,
+      subjectCode,
+      description,
+    );
+
+    setState(() {
+      _isLoading = true;
+    });
+    Provider.of<IDao<Collection>>(context, listen: false)
+        .insert(newCollection)
+        .then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    }).catchError(
+      (error) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content:
+                  const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
+              backgroundColor: Theme.of(context).colorScheme.bright,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  void _displayError(String? message) {
+    setState(() {
+      _error = message;
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -33,6 +112,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final Color text = Theme.of(context).colorScheme.text;
     final Color disabled = Theme.of(context).disabledColor;
+    final Color error = Theme.of(context).colorScheme.error;
 
     final Map<int, Subject> subjects =
         Provider.of<IDataProvider<Subject>>(context).retrieveData();
@@ -40,90 +120,108 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
     return Scaffold(
       appBar: const ThemedAppBar("Conjunto"),
       body: ScreenLayout(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextFieldWrapper(
-              label: "Nome",
-              child: TextField(
-                autofocus: true,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.text,
-                style: body?.copyWith(
-                  color: text,
-                ),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Meu conjunto",
-                  hintStyle: body?.copyWith(
-                    color: disabled,
+        child: _isLoading
+            ? const Loading()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextFieldWrapper(
+                    label: "Nome",
+                    child: TextField(
+                      controller: _nameController,
+                      autofocus: true,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.text,
+                      style: body?.copyWith(
+                        color: text,
+                      ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Meu conjunto",
+                        hintStyle: body?.copyWith(
+                          color: disabled,
+                        ),
+                        errorText: null,
+                      ),
+                    ),
                   ),
-                  errorText: null,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            TextFieldWrapper(
-              label: "Disciplina",
-              child: SizedBox(
-                width: double.infinity,
-                child: DropdownButton<int>(
-                  hint: const Text('Seleciona uma opção'),
-                  isExpanded: true,
-                  value: _selectedItem,
-                  items: subjects.entries.map((entry) {
-                    return DropdownMenuItem<int>(
-                      value: entry.key,
-                      child: Text(
-                        entry.value.name,
-                        style: body?.copyWith(
-                          color: text,
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  TextFieldWrapper(
+                    label: "Disciplina",
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: DropdownButton<int>(
+                        hint: const Text('Seleciona uma opção'),
+                        isExpanded: true,
+                        value: _selectedItem,
+                        items: subjects.entries.map((entry) {
+                          return DropdownMenuItem<int>(
+                            value: entry.key,
+                            child: Text(
+                              entry.value.name,
+                              style: body?.copyWith(
+                                color: text,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: _changeSelectedSubject,
+                        underline: const SizedBox.shrink(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Expanded(
+                    child: TextFieldWrapper(
+                      label: "Descrição (opcional)",
+                      child: Expanded(
+                        child: TextField(
+                          controller: _descriptionController,
+                          textInputAction: TextInputAction.newline,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          minLines: null,
+                          expands: true,
+                          scrollPhysics: const BouncingScrollPhysics(),
+                          style: body?.copyWith(
+                            color: text,
+                          ),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Esse conjunto é...",
+                            hintStyle: body?.copyWith(
+                              color: disabled,
+                            ),
+                            errorText: null,
+                          ),
                         ),
                       ),
-                    );
-                  }).toList(),
-                  onChanged: _changeSelectedSubject,
-                  underline: const SizedBox.shrink(),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Expanded(
-              child: TextFieldWrapper(
-                label: "Descrição (opcional)",
-                child: Expanded(
-                  child: TextField(
-                    textInputAction: TextInputAction.newline,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    minLines: null,
-                    expands: true,
-                    scrollPhysics: const BouncingScrollPhysics(),
-                    style: body?.copyWith(
-                      color: text,
-                    ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Esse conjunto é...",
-                      hintStyle: body?.copyWith(
-                        color: disabled,
-                      ),
-                      errorText: null,
                     ),
                   ),
-                ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  if (_error != null)
+                    Text(
+                      _error!,
+                      style: body?.copyWith(
+                        color: error,
+                      ),
+                    ),
+                  if (_error != null)
+                    const SizedBox(
+                      height: 8,
+                    ),
+                  ThemedFilledButton(
+                    label: "Cadastrar",
+                    onPressed: _register,
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            ThemedFilledButton(label: "Cadastrar", onPressed: _register),
-          ],
-        ),
       ),
     );
   }
