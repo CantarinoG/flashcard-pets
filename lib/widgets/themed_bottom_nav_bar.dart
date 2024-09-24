@@ -9,14 +9,13 @@ class ThemedBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle? bodyStyle = Theme.of(context).textTheme.bodySmall;
     final Color primaryColor = Theme.of(context).colorScheme.primary;
-    final Color backgroundColor = Theme.of(context).colorScheme.surface;
 
     return BottomNavigationBar(
       currentIndex: _currentIndex,
       onTap: _onItemTapped,
       showUnselectedLabels: false,
-      selectedItemColor: backgroundColor,
-      unselectedItemColor: backgroundColor,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white,
       selectedLabelStyle: bodyStyle,
       unselectedLabelStyle: bodyStyle,
       items: [

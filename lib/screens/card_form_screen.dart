@@ -55,8 +55,9 @@ class _CardFormScreenState extends State<CardFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final Color primary = Theme.of(context).colorScheme.primary;
-    final Color bright = Theme.of(context).colorScheme.bright;
+    final Color text = Theme.of(context).colorScheme.text;
 
     return Scaffold(
       appBar: const ThemedAppBar("Cartão"),
@@ -80,7 +81,12 @@ class _CardFormScreenState extends State<CardFormScreen> {
                       items: widget._collections.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
-                          child: Text(item),
+                          child: Text(
+                            item,
+                            style: body?.copyWith(
+                              color: text,
+                            ),
+                          ),
                         );
                       }).toList(),
                       onChanged: _changeSelectedCollection,
@@ -91,13 +97,16 @@ class _CardFormScreenState extends State<CardFormScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                const TextFieldWrapper(
+                TextFieldWrapper(
                   label: "Frente",
                   child: TextField(
                     autofocus: true,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
+                    style: body?.copyWith(
+                      color: text,
+                    ),
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       errorText: null,
                     ),
@@ -106,7 +115,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                const Expanded(
+                Expanded(
                   child: TextFieldWrapper(
                     label: "Verso",
                     child: Expanded(
@@ -116,8 +125,11 @@ class _CardFormScreenState extends State<CardFormScreen> {
                         maxLines: null,
                         minLines: null,
                         expands: true,
-                        scrollPhysics: BouncingScrollPhysics(),
-                        decoration: InputDecoration(
+                        scrollPhysics: const BouncingScrollPhysics(),
+                        style: body?.copyWith(
+                          color: text,
+                        ),
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           errorText: null,
                         ),
@@ -146,7 +158,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
                           ),
                           child: IconButton(
                             icon: const Icon(Icons.add),
-                            color: bright,
+                            color: Colors.white,
                             onPressed: _addMedia,
                           ),
                         ),

@@ -35,6 +35,7 @@ class PetCard extends StatelessWidget {
     final Color brightColor = Theme.of(context).colorScheme.bright;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color disabled = Theme.of(context).colorScheme.disabled;
+    final Color text = Theme.of(context).colorScheme.text;
 
     return Card(
       elevation: 4,
@@ -107,8 +108,8 @@ class PetCard extends StatelessWidget {
                   color: secondary,
                 ),
                 Text(
-                  _rarity,
-                  style: bodyEm,
+                  " $_rarity",
+                  style: bodyEm.copyWith(color: text),
                 ),
               ],
             ),

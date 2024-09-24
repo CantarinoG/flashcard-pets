@@ -1,5 +1,6 @@
 import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/models/subject.dart';
+import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
@@ -29,6 +30,10 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final Color text = Theme.of(context).colorScheme.text;
+    final Color disabled = Theme.of(context).disabledColor;
+
     final Map<int, Subject> subjects =
         Provider.of<IDataProvider<Subject>>(context).retrieveData();
 
@@ -38,15 +43,21 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const TextFieldWrapper(
+            TextFieldWrapper(
               label: "Nome",
               child: TextField(
                 autofocus: true,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
+                style: body?.copyWith(
+                  color: text,
+                ),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "Meu conjunto",
+                  hintStyle: body?.copyWith(
+                    color: disabled,
+                  ),
                   errorText: null,
                 ),
               ),
@@ -65,7 +76,12 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
                   items: subjects.entries.map((entry) {
                     return DropdownMenuItem<int>(
                       value: entry.key,
-                      child: Text(entry.value.name),
+                      child: Text(
+                        entry.value.name,
+                        style: body?.copyWith(
+                          color: text,
+                        ),
+                      ),
                     );
                   }).toList(),
                   onChanged: _changeSelectedSubject,
@@ -76,7 +92,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
             const SizedBox(
               height: 8,
             ),
-            const Expanded(
+            Expanded(
               child: TextFieldWrapper(
                 label: "Descrição (opcional)",
                 child: Expanded(
@@ -86,10 +102,16 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
                     maxLines: null,
                     minLines: null,
                     expands: true,
-                    scrollPhysics: BouncingScrollPhysics(),
+                    scrollPhysics: const BouncingScrollPhysics(),
+                    style: body?.copyWith(
+                      color: text,
+                    ),
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Esse conjunto é...",
+                      hintStyle: body?.copyWith(
+                        color: disabled,
+                      ),
                       errorText: null,
                     ),
                   ),

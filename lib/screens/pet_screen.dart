@@ -52,6 +52,7 @@ class PetScreen extends StatelessWidget {
     final Color bright = Theme.of(context).colorScheme.bright;
     final Color star = Theme.of(context).colorScheme.star;
     final Color starLighter = Theme.of(context).colorScheme.starLighter;
+    final Color text = Theme.of(context).colorScheme.text;
 
     return Scaffold(
       appBar: ThemedAppBar(
@@ -227,6 +228,7 @@ class PetScreen extends StatelessWidget {
                     iconData: Icons.diamond,
                     title: "Raridade",
                     content: _rarity,
+                    color: text,
                     isRarity: true,
                   ),
                   PetDescriptionCard(

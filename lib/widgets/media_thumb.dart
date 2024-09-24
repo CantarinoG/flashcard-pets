@@ -1,4 +1,3 @@
-import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 
 class MediaThumb extends StatelessWidget {
@@ -10,7 +9,6 @@ class MediaThumb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color primary = Theme.of(context).colorScheme.primary;
-    final Color bright = Theme.of(context).colorScheme.bright;
 
     return Container(
       width: 50,
@@ -29,7 +27,7 @@ class MediaThumb extends StatelessWidget {
       child: (imgPath == null)
           ? IconButton(
               icon: const Icon(Icons.mic),
-              color: bright,
+              color: Colors.white,
               onPressed: _onTap,
             )
           : InkWell(

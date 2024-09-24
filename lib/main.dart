@@ -14,6 +14,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  //Mocked data
+  final bool _isLightMode = true;
   const MyApp({super.key});
 
   @override
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
         title: 'Flashcard Pets',
         theme: AppThemes.lightTheme,
         darkTheme: AppThemes.darkTheme,
-        themeMode: ThemeMode.light,
+        themeMode: _isLightMode ? ThemeMode.light : ThemeMode.dark,
         debugShowCheckedModeBanner: false,
         home: NavigationScreen(),
       ),

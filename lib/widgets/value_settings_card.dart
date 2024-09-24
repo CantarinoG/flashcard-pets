@@ -15,6 +15,7 @@ class ValueSettingsCard extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color disabled = Theme.of(context).disabledColor;
     final Color bright = Theme.of(context).colorScheme.bright;
+    final Color text = Theme.of(context).colorScheme.text;
 
     return Card(
         elevation: 4,
@@ -40,9 +41,15 @@ class ValueSettingsCard extends StatelessWidget {
                 child: TextField(
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
+                  style: body?.copyWith(
+                    color: text,
+                  ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     suffixText: unit,
+                    suffixStyle: body?.copyWith(
+                      color: text,
+                    ),
                     errorText: null,
                   ),
                 ),

@@ -36,7 +36,10 @@ class AppThemes {
       secondary: AppColors.secondaryColorDark,
       surface: AppColors.backgroundColorDark,
     ),
-    textTheme: AppTextStyles.theme,
+    textTheme: AppTextStyles.theme.apply(
+      bodyColor: AppColors.whiteColor,
+      displayColor: AppColors.whiteColor,
+    ),
   );
 }
 
@@ -53,7 +56,7 @@ extension CustomColorScheme on ColorScheme {
       : AppColors.whiteColor;
   Color get bright => brightness == Brightness.light
       ? AppColors.whiteColor
-      : AppColors.blackColor;
+      : const Color.fromARGB(255, 53, 52, 52);
   Color get warning => brightness == Brightness.light
       ? AppColors.warningColorLight
       : AppColors.warningColorDark;

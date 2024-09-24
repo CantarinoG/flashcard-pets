@@ -25,6 +25,7 @@ class AwardCard extends StatelessWidget {
     Color brightColor = Theme.of(context).colorScheme.bright;
     Color primary = Theme.of(context).colorScheme.primary;
     Color secondary = Theme.of(context).colorScheme.secondary;
+    Color text = Theme.of(context).colorScheme.text;
 
     TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     TextStyle? h3em = Theme.of(context).textTheme.headlineSmallEm;
@@ -122,7 +123,9 @@ class AwardCard extends StatelessWidget {
                 ),
                 Text(
                   "Recompensa:",
-                  style: bodyEm,
+                  style: bodyEm.copyWith(
+                    color: text,
+                  ),
                 ),
                 const Expanded(child: SizedBox()),
                 SvgPicture.asset(
@@ -130,7 +133,12 @@ class AwardCard extends StatelessWidget {
                   width: 30,
                   height: 30,
                 ),
-                Text("${award.rewardValue}"),
+                Text(
+                  "${award.rewardValue}",
+                  style: body?.copyWith(
+                    color: text,
+                  ),
+                ),
                 const SizedBox(
                   width: 16,
                 ),
@@ -138,7 +146,12 @@ class AwardCard extends StatelessWidget {
                   "XP ",
                   style: h3em.copyWith(color: secondary),
                 ),
-                Text("${award.rewardValue}"),
+                Text(
+                  "${award.rewardValue}",
+                  style: body?.copyWith(
+                    color: text,
+                  ),
+                ),
                 const SizedBox(
                   width: 16,
                 ),

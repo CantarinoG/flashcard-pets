@@ -9,12 +9,11 @@ class ThemedFab extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color primaryColor = Theme.of(context).colorScheme.primary;
     final Color secondaryColor = Theme.of(context).colorScheme.secondary;
-    final Color backgroundColor = Theme.of(context).colorScheme.surface;
 
     return FloatingActionButton(
       onPressed: _onPressed,
       shape: const CircleBorder(),
-      foregroundColor: backgroundColor,
+      foregroundColor: Colors.white,
       backgroundColor: primaryColor,
       splashColor: secondaryColor,
       child: _fabIcon,

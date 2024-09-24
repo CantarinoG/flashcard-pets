@@ -19,12 +19,22 @@ class ThemedFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primary = Theme.of(context).colorScheme.primary;
+    final Color disabled = Theme.of(context).disabledColor;
     final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
 
     return SizedBox(
       width: width,
       child: FilledButton(
         onPressed: onPressed,
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return disabled;
+            }
+            return primary;
+          }),
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -74,6 +74,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
+    final Color text = Theme.of(context).colorScheme.text;
 
     return Scaffold(
       appBar: ThemedAppBar(widget._collectionName),
@@ -113,7 +114,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               children: [
                                 Text(
                                   widget._frontContent,
-                                  style: bodyEm,
+                                  style: bodyEm.copyWith(
+                                    color: text,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                                 const SizedBox(
