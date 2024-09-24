@@ -78,8 +78,39 @@ flutter:
     - assets/images/custom_icons/gift_icon.svg
     - assets/images/custom_icons/coin.svg
 
-    #Baby pets
+    #Pets
     - assets/images/baby_pets/beagle.png
+    - assets/images/adult_pets/airedale_terrier.png
+    - assets/images/adult_pets/beagle.png
+    - assets/images/adult_pets/bernese_mointain_dog.png
+    - assets/images/adult_pets/cocker_spaniel.png
+    - assets/images/adult_pets/dalmatian.png
+    - assets/images/adult_pets/dogo_argentino.png
+    - assets/images/adult_pets/french_bulldog.png
+    - assets/images/adult_pets/golden_retriever.png
+    - assets/images/adult_pets/labrador_retriever.png
+    - assets/images/adult_pets/mastiff.png
+    - assets/images/adult_pets/poodle.png
+    - assets/images/adult_pets/portuguese_water_dog.png
+    - assets/images/adult_pets/saluki.png
+    - assets/images/adult_pets/shetland_sheepdog.png
+    - assets/images/adult_pets/shiba_inu.png
+    - assets/images/adult_pets/whippet.png
+    - assets/images/baby_pets/airedale_terrier.png
+    - assets/images/baby_pets/bernese_mountain_dog.png
+    - assets/images/baby_pets/cocker_spaniel.png
+    - assets/images/baby_pets/dalmatian.png
+    - assets/images/baby_pets/dogo_argentino.png
+    - assets/images/baby_pets/french_bulldog.png
+    - assets/images/baby_pets/golden_retriever.png
+    - assets/images/baby_pets/labrador_retriever.png
+    - assets/images/baby_pets/mastiff.png
+    - assets/images/baby_pets/poodle.png
+    - assets/images/baby_pets/portuguese_water_dog.png
+    - assets/images/baby_pets/saluki.png
+    - assets/images/baby_pets/shetland_sheepdog.png
+    - assets/images/baby_pets/shiba_inu.png
+    - assets/images/baby_pets/whippet.png
 
     #General images
     - assets/images/no_items_placeholder_image.png
