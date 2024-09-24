@@ -1,4 +1,5 @@
 import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
+import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/screens/collection_cards_screen.dart';
@@ -17,13 +18,12 @@ enum CollectionAction {
 }
 
 class CollectionCard extends StatelessWidget {
+  final Collection collection;
   //Mocked data.
-  final String _title = "Trigonometria";
   final int _cardsNumber = 26;
   final int _reviewsToday = 12;
-  final int _subjectCode = 9;
 
-  const CollectionCard({super.key});
+  const CollectionCard(this.collection, {super.key});
 
   void _manageCards(BuildContext context) {
     Navigator.push(
@@ -99,7 +99,7 @@ class CollectionCard extends StatelessWidget {
                 height: 60,
                 width: 60,
                 child: SvgPicture.asset(
-                  subjects[_subjectCode]!.iconPath,
+                  subjects[collection.subjectCode]!.iconPath,
                 ),
               ),
               Expanded(
@@ -113,7 +113,7 @@ class CollectionCard extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              _title,
+                              collection.name,
                               style: h3?.copyWith(
                                 color: secondary,
                               ),

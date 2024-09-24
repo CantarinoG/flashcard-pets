@@ -17,6 +17,7 @@ class SqfliteDatabaseHelper implements IDatabaseHelper {
       join(dbPath, _databaseName),
       version: 1,
       onOpen: (db) {
+        //db.execute("INSERT INTO Collection (id, name, subjectCode, description) VALUES ('idzinho', 'Cálculo I', 3, 'This is a description.');");
         return db.execute(
             "CREATE TABLE IF NOT EXISTS Collection ( id TEXT PRIMARY KEY, name TEXT NOT NULL, subjectCode INTEGER NOT NULL, description TEXT );");
       },

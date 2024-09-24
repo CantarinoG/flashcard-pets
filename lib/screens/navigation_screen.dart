@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class NavigationScreen extends StatefulWidget {
   final List<Map<String, dynamic>> _navigationData = [
     {
-      "widget": CollectionsMainScreen(),
+      "widget": const CollectionsMainScreen(),
       "appBar": const CollectionMainAppBar(),
       "fab": const CollectionMainFab(),
     },

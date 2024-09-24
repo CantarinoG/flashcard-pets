@@ -1,6 +1,4 @@
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
-import 'package:flashcard_pets/themes/app_text_styles.dart';
-import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +15,7 @@ class AvatarThumb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
-    final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final Color secondary = Theme.of(context).colorScheme.secondary;
-    final Color bright = Theme.of(context).colorScheme.bright;
 
     final String avatarImgPath =
         Provider.of<IDataProvider<String>>(context).retrieveFromKey(avatarId);

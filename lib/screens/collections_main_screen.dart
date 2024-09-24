@@ -1,42 +1,63 @@
 import 'package:flashcard_pets/dialogs/card_or_collection_dialog.dart';
+import 'package:flashcard_pets/models/collection.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/widgets/collection_card.dart';
+import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_fab.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CollectionsMainScreen extends StatelessWidget {
-  //Mocked data
-  final List<int> _collections = [1, 2, 3];
-  CollectionsMainScreen({super.key});
+  const CollectionsMainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ScreenLayout(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const UserStatsHeader(),
-          const SizedBox(
-            height: 16,
-          ),
-          Expanded(
-            child: _collections.isEmpty
-                ? const NoItemsPlaceholder(
-                    "Você ainda não possui conjuntos. Clique em \"+\" no canto inferior direito da tela para adicionar um conjunto.")
-                : ListView.builder(
-                    itemCount: _collections.length,
+    final collectionDao = Provider.of<IDao<Collection>>(context);
+
+    return FutureBuilder<List<Collection>>(
+      future: collectionDao.readAll(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Loading();
+        } else if (snapshot.hasError) {
+          return NoItemsPlaceholder(
+            "Error loading collections: ${snapshot.error}.",
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const NoItemsPlaceholder(
+            "Você ainda não possui conjuntos. Clique em \"+\" no canto inferior direito da tela para adicionar um conjunto.",
+          );
+        } else {
+          final collections = snapshot.data!;
+          return ScreenLayout(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const UserStatsHeader(),
+                const SizedBox(
+                  height: 16,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: collections.length,
                     itemBuilder: (context, index) {
-                      return const CollectionCard();
+                      return CollectionCard(
+                        collections[index],
+                      );
                     },
                   ),
-          ),
-        ],
-      ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }

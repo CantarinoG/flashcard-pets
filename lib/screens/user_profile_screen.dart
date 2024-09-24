@@ -33,10 +33,8 @@ class UserProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
-    final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
     final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final Color disabled = Theme.of(context).disabledColor;
     final Color primary = Theme.of(context).colorScheme.primary;
