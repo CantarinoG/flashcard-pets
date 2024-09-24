@@ -1,4 +1,4 @@
-import 'package:flashcard_pets/data_providers/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/widgets/avatar_thumb.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';

@@ -1,5 +1,5 @@
-import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/models/award.dart';
+import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';

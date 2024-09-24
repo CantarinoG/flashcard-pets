@@ -1,5 +1,5 @@
-import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/dialogs/change_name_dialog.dart';
+import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/screens/awards_screen.dart';
 import 'package:flashcard_pets/screens/change_avatar_screen.dart';
 import 'package:flashcard_pets/screens/configurations_screen.dart';

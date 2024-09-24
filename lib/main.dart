@@ -1,9 +1,9 @@
-import 'package:flashcard_pets/data_providers/avatar_data_provider.dart';
-import 'package:flashcard_pets/data_providers/award_data_provider.dart';
-import 'package:flashcard_pets/data_providers/i_data_provider.dart';
-import 'package:flashcard_pets/data_providers/subject_data_provider.dart';
 import 'package:flashcard_pets/models/award.dart';
 import 'package:flashcard_pets/models/subject.dart';
+import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/award_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/screens/navigation_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';

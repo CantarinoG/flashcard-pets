@@ -1,6 +1,6 @@
-import 'package:flashcard_pets/data_providers/i_data_provider.dart';
 import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/models/subject.dart';
+import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/screens/collection_cards_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/screens/review_screen.dart';

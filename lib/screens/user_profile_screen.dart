@@ -1,6 +1,4 @@
-// ignore_for_file: unused_local_variable
-
-import 'package:flashcard_pets/data_providers/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/widgets/award_card_basic.dart';
 import 'package:flashcard_pets/widgets/pet_card_basic.dart';
