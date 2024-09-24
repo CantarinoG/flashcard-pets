@@ -15,7 +15,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   //Mocked data
-  final bool _isLightMode = true;
+  final bool _isLightMode = false;
   const MyApp({super.key});
 
   @override
