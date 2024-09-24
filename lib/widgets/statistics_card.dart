@@ -2,12 +2,10 @@ import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 
 class StatisticsCard extends StatelessWidget {
-  //Mocked data:
-  final String _title = "Sequência mais longa de revisõe diárias";
-  final int _value = 13;
-  final String _unit = "dias";
-  final IconData _icon = Icons.local_fire_department;
-  const StatisticsCard({super.key});
+  final String title;
+  final int value;
+  final String unit;
+  const StatisticsCard(this.title, this.value, this.unit, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,7 @@ class StatisticsCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              _title,
+              title,
               style: h3?.copyWith(
                 color: secondary,
               ),
@@ -41,19 +39,12 @@ class StatisticsCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "$_value ",
+                  "$value ",
                   style: h1,
                 ),
                 Text(
-                  _unit,
+                  unit,
                   style: body,
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Icon(
-                  _icon,
-                  color: secondary,
                 ),
               ],
             ),

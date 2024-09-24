@@ -1,14 +1,18 @@
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/statistics_card.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
+import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
 
 class StatisticsScreen extends StatelessWidget {
   //Mocked data
-  final List<int> _statsI = [1, 2, 3, 4, 5];
-  final List<int> _statsII = [1, 2];
-  StatisticsScreen({super.key});
+  final int _retrievedValue = 5;
+  const StatisticsScreen({super.key});
+
+  void _filterDate() {
+    //...
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +55,14 @@ class StatisticsScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
+            ThemedFilledButton(
+              label: "Data",
+              leadingIcon: const Icon(Icons.calendar_month),
+              onPressed: _filterDate,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             Expanded(
               child: DefaultTabController(
                 length: 2,
@@ -90,21 +102,97 @@ class StatisticsScreen extends StatelessWidget {
                           subScreen(
                             context,
                             "Cartões e Coleções",
-                            ListView.builder(
-                              itemCount: _statsI.length,
-                              itemBuilder: (context, index) {
-                                return const StatisticsCard();
-                              },
+                            ListView(
+                              children: [
+                                StatisticsCard(
+                                  "Total de Revisões",
+                                  _retrievedValue,
+                                  "revisões",
+                                ),
+                                StatisticsCard(
+                                  "Taxa de Acerto",
+                                  _retrievedValue,
+                                  "%",
+                                ),
+                                StatisticsCard(
+                                  "Sequência Mais Longa de Revisões Diárias",
+                                  _retrievedValue,
+                                  "dias",
+                                ),
+                                StatisticsCard(
+                                  "Tempo Total de Revisão",
+                                  _retrievedValue,
+                                  "segundos",
+                                ),
+                                StatisticsCard(
+                                  "Média de Revisões Diárias",
+                                  _retrievedValue,
+                                  "revisões/dia",
+                                ),
+                                StatisticsCard(
+                                  "Número de Coleções Registradas",
+                                  _retrievedValue,
+                                  "coleções",
+                                ),
+                                StatisticsCard(
+                                  "Número de Cartões Registrados",
+                                  _retrievedValue,
+                                  "cartões",
+                                ),
+                              ],
                             ),
                           ),
                           subScreen(
                             context,
                             "Pets",
-                            ListView.builder(
-                              itemCount: _statsII.length,
-                              itemBuilder: (context, index) {
-                                return const StatisticsCard();
-                              },
+                            ListView(
+                              children: [
+                                StatisticsCard(
+                                  "Ouro Obtido",
+                                  _retrievedValue,
+                                  "unidades",
+                                ),
+                                StatisticsCard(
+                                  "Ouro Gasto",
+                                  _retrievedValue,
+                                  "unidades",
+                                ),
+                                StatisticsCard(
+                                  "Pontos de Experiências Obtidos",
+                                  _retrievedValue,
+                                  "pontos",
+                                ),
+                                StatisticsCard(
+                                  "Pets Obtidos",
+                                  _retrievedValue,
+                                  "pets",
+                                ),
+                                StatisticsCard(
+                                  "Aumento de Nível em Pets",
+                                  _retrievedValue,
+                                  "níveis",
+                                ),
+                                StatisticsCard(
+                                  "Média de Ouro/Pontos de Experiência por Revisão",
+                                  _retrievedValue,
+                                  "unidades/pontos",
+                                ),
+                                StatisticsCard(
+                                  "Amigos Adicionados",
+                                  _retrievedValue,
+                                  "amigos",
+                                ),
+                                StatisticsCard(
+                                  "Presentes Enviados",
+                                  _retrievedValue,
+                                  "presentes",
+                                ),
+                                StatisticsCard(
+                                  "Presentes Recebidos",
+                                  _retrievedValue,
+                                  "presentes",
+                                ),
+                              ],
                             ),
                           ),
                         ],
