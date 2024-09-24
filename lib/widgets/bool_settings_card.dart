@@ -2,13 +2,9 @@ import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 
 class BoolSettingsCard extends StatelessWidget {
-  //Mocked Data
-  final String _title = "Habilitar Efeitos Sonoros";
-  final bool _initialValue = true;
-  final String _explanation =
-      "Habilita ou desabilita os efeitos sonoros disparados ao avaliar a qualidade de uma revisão.";
-  //Should also receive a function to do something with the value inputed.
-  const BoolSettingsCard({super.key});
+  final String title;
+  final String explanation;
+  const BoolSettingsCard(this.title, this.explanation, {super.key});
 
   void _switch(bool value) {
     //...
@@ -34,7 +30,7 @@ class BoolSettingsCard extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                _title,
+                title,
                 style: h3?.copyWith(
                   color: secondary,
                 ),
@@ -42,12 +38,12 @@ class BoolSettingsCard extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              Switch(value: _initialValue, onChanged: _switch),
+              Switch(value: true, onChanged: _switch),
               const SizedBox(
                 height: 8,
               ),
               Text(
-                _explanation,
+                explanation,
                 style: body?.copyWith(
                   color: disabled,
                 ),

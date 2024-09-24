@@ -2,18 +2,17 @@ import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/bool_settings_card.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
+import 'package:flashcard_pets/widgets/themed_fab.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/value_settings_card.dart';
 import 'package:flutter/material.dart';
 
 class ConfigurationsScreen extends StatelessWidget {
-  //Mocked data:
-  late final List<Widget> _settingCards = [
-    const BoolSettingsCard(),
-    const ValueSettingsCard(),
-    const BoolSettingsCard(),
-  ];
-  ConfigurationsScreen({super.key});
+  const ConfigurationsScreen({super.key});
+
+  void _confirm() {
+    //...
+  }
 
   Widget _buildNotificationSettingCard(BuildContext context) {
     //Mocked data:
@@ -68,20 +67,40 @@ class ConfigurationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _settingCards.insert(
-      0,
-      _buildNotificationSettingCard(context),
-    );
-
     return Scaffold(
       appBar: const ThemedAppBar("Configurações"),
       body: ScreenLayout(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: _settingCards,
-          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            _buildNotificationSettingCard(context),
+            const ValueSettingsCard(
+                "Intervalo Máximo de Revisões",
+                "Qualquer revisão será agendada para, no máximo, daqui a essa quantidade de dias.",
+                "dias"),
+            const ValueSettingsCard(
+                "Multiplicador do Intervalo de Revisões",
+                "Serve para aumentar ou diminuir a frequência das revisões. O valor padrão é 1. Para revisões mais frequentes, coloque valores entre 0 e 1. Para revisões menos frequentes, coloque valores maiores que 1.",
+                "*"),
+            const ValueSettingsCard(
+              "Número Máximo de Cartões Diários",
+              "O número máximo de cartões que podem ser agendados para um determinado dia.",
+              "",
+            ),
+            const BoolSettingsCard(
+              "Habilitar Efeitos Sonoros",
+              "Habilita ou desabilita efeitos sonoros no aplicativo.",
+            ),
+            const BoolSettingsCard(
+              "Habilitar Sincronização Automática",
+              "Se estiver logado, os dados do seu perfil são sincronizados automaticamente.",
+            ),
+          ]),
         ),
+      ),
+      floatingActionButton: ThemedFab(
+        _confirm,
+        const Icon(Icons.check),
       ),
     );
   }

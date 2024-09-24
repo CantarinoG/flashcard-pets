@@ -3,14 +3,10 @@ import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flutter/material.dart';
 
 class ValueSettingsCard extends StatelessWidget {
-  //Mocked data
-  final String _title = "Intervalo Máximo de Revisão";
-  //final int _initialValue =  1; //Should probably be generic T type once the logic comes in.
-  //Also, make sure I validate it. If a int is expected, text should not be allowed. Better to limit the keyboard as well.
-  final String _unit = "dias";
-  final String _explanation =
-      "Qualquer revisão será agendada para, no máximo, daqui a essa quantidade de dias.";
-  const ValueSettingsCard({super.key});
+  final String title;
+  final String unit;
+  final String explanation;
+  const ValueSettingsCard(this.title, this.explanation, this.unit, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +27,7 @@ class ValueSettingsCard extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                _title,
+                title,
                 style: h3?.copyWith(
                   color: secondary,
                 ),
@@ -46,7 +42,7 @@ class ValueSettingsCard extends StatelessWidget {
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    suffixText: _unit,
+                    suffixText: unit,
                     errorText: null,
                   ),
                 ),
@@ -55,7 +51,7 @@ class ValueSettingsCard extends StatelessWidget {
                 height: 8,
               ),
               Text(
-                _explanation,
+                explanation,
                 style: body?.copyWith(
                   color: disabled,
                 ),
