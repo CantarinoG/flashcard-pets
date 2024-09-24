@@ -7,6 +7,8 @@ import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/i_id_provider.dart';
+import 'package:flashcard_pets/providers/uuid_provider.dart';
 import 'package:flashcard_pets/screens/navigation_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   //Mocked data
-  final bool _isLightMode = false;
+  final bool _isLightMode = true;
   const MyApp({super.key});
 
   @override
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
     IDataProvider<Award> awardDataProvider = AwardDataProvider();
     IDataProvider<String> avatarDataProvider = AvatarDataProvider();
     IDao<Collection> collectionDaoProvider = CollectionDao();
+    IIdProvider idProvider = UuidProvider();
 
     return MultiProvider(
       providers: [
@@ -34,6 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => awardDataProvider),
         ChangeNotifierProvider(create: (_) => avatarDataProvider),
         ChangeNotifierProvider(create: (_) => collectionDaoProvider),
+        ChangeNotifierProvider(create: (_) => idProvider),
       ],
       child: MaterialApp(
         title: 'Flashcard Pets',
