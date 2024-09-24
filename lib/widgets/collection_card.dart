@@ -2,9 +2,12 @@ import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/screens/collection_cards_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/screens/review_screen.dart';
+import 'package:flashcard_pets/snackbars/error_snackbar.dart';
+import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +20,19 @@ enum CollectionAction {
   deleteCollection,
 }
 
-class CollectionCard extends StatelessWidget {
+class CollectionCard extends StatefulWidget {
   final Collection collection;
+
+  const CollectionCard(this.collection, {super.key});
+
+  @override
+  State<CollectionCard> createState() => _CollectionCardState();
+}
+
+class _CollectionCardState extends State<CollectionCard> {
   //Mocked data.
   final int _cardsNumber = 26;
   final int _reviewsToday = 12;
-
-  const CollectionCard(this.collection, {super.key});
 
   void _manageCards(BuildContext context) {
     Navigator.push(
@@ -44,6 +53,7 @@ class CollectionCard extends StatelessWidget {
   }
 
   void _deleteCollection(BuildContext context) {
+    //TODO: Also delete every card in the collection.
     showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -53,7 +63,34 @@ class CollectionCard extends StatelessWidget {
         );
       },
     ).then((shouldDelete) {
-      //Handle delete logic here
+      if (shouldDelete != null && shouldDelete) {
+        if (mounted) {
+          Provider.of<IDao<Collection>>(context, listen: false)
+              .delete(widget.collection.id)
+              .then((_) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const SuccessSnackbar("Deletado com sucesso!"),
+                  backgroundColor: Theme.of(context).colorScheme.bright,
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            }
+          }).catchError((error) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const ErrorSnackbar(
+                      "Ocorreu algum erro. Tente novamente."),
+                  backgroundColor: Theme.of(context).colorScheme.bright,
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            }
+          });
+        }
+      }
     });
   }
 
@@ -99,7 +136,7 @@ class CollectionCard extends StatelessWidget {
                 height: 60,
                 width: 60,
                 child: SvgPicture.asset(
-                  subjects[collection.subjectCode]!.iconPath,
+                  subjects[widget.collection.subjectCode]!.iconPath,
                 ),
               ),
               Expanded(
@@ -113,7 +150,7 @@ class CollectionCard extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              collection.name,
+                              widget.collection.name,
                               style: h3?.copyWith(
                                 color: secondary,
                               ),

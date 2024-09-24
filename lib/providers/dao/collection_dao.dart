@@ -22,7 +22,7 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
   }
 
   @override
-  Future<Collection?> read(int id) async {
+  Future<Collection?> read(String id) async {
     final database = await databaseHelper.database;
     final maps = await database.query(
       tableName,
@@ -54,7 +54,7 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
   }
 
   @override
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     final database = await databaseHelper.database;
     await database.delete(
       tableName,

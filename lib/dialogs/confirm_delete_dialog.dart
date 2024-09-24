@@ -5,6 +5,12 @@ import 'package:flutter/material.dart';
 class ConfirmDeleteDialog extends StatelessWidget {
   final String _title;
   final String _message;
+
+  /// Dialog to confirm deletion.
+  ///
+  /// Returns true if the user confirmed.
+  /// Returns false if the user declined.
+  /// Retuns null if the user exited.
   const ConfirmDeleteDialog(this._title, this._message, {super.key});
 
   void _cancel(BuildContext context) {

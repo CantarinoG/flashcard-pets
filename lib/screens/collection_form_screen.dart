@@ -80,6 +80,9 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
       }
     }).catchError(
       (error) {
+        setState(() {
+          _isLoading = false;
+        });
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
