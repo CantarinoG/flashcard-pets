@@ -14,11 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CardFormScreen extends StatefulWidget {
+  final String? preSelectedCollectionId;
   //Mocked data
   final List<int> _audioFiles = [1, 2];
   final List<int> _imgFiles = [1];
   final String _imgPath = "assets/images/baby_pets/beagle.png";
-  CardFormScreen({super.key});
+  CardFormScreen({this.preSelectedCollectionId, super.key});
 
   @override
   State<CardFormScreen> createState() => _CardFormScreenState();
@@ -48,7 +49,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
     setState(() {
       _collections = collections;
       if (_collections.isNotEmpty) {
-        _selectedItem = _collections.first.id;
+        _selectedItem = widget.preSelectedCollectionId ?? _collections.first.id;
       }
     });
   }

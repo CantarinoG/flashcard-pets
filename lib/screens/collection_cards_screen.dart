@@ -18,7 +18,9 @@ class CollectionCardsScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CardFormScreen(),
+        builder: (context) => CardFormScreen(
+          preSelectedCollectionId: collection.id,
+        ),
       ),
     );
   }
