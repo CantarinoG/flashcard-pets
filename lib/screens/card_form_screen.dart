@@ -1,6 +1,10 @@
 import 'package:flashcard_pets/models/collection.dart';
+import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/i_id_provider.dart';
+import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
+import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/media_thumb.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
@@ -26,6 +30,8 @@ class _CardFormScreenState extends State<CardFormScreen> {
 
   final TextEditingController _frontController = TextEditingController();
   final TextEditingController _backController = TextEditingController();
+
+  bool _isLoading = false;
 
   String? _error;
 
@@ -56,6 +62,47 @@ class _CardFormScreenState extends State<CardFormScreen> {
     if (!_isDataValidated(front, back, collectionCode)) {
       return;
     }
+
+    final String uniqueId =
+        Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+
+    final Flashcard newFlashcard = Flashcard(
+      uniqueId,
+      collectionCode,
+      front,
+      back,
+      DateTime.now(),
+    );
+
+    setState(() {
+      _isLoading = true;
+    });
+    Provider.of<IDao<Flashcard>>(context, listen: false)
+        .insert(newFlashcard)
+        .then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    }).catchError(
+      (error) {
+        setState(() {
+          _isLoading = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content:
+                  const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
+              backgroundColor: Theme.of(context).colorScheme.bright,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+    );
   }
 
   bool _isDataValidated(String front, String back, String collectionCode) {
@@ -120,135 +167,138 @@ class _CardFormScreenState extends State<CardFormScreen> {
     return Scaffold(
       appBar: const ThemedAppBar("Cartão"),
       body: ScreenLayout(
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height - 100,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextFieldWrapper(
-                  label: "Conjunto",
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: DropdownButton<String>(
-                      hint: const Text('Seleciona uma opção'),
-                      isExpanded: true,
-                      value: _selectedItem,
-                      items: _collections.map((Collection item) {
-                        return DropdownMenuItem<String>(
-                          value: item.id,
-                          child: Text(
-                            item.name,
-                            style: body?.copyWith(
-                              color: text,
-                            ),
+        child: _isLoading
+            ? const Loading()
+            : SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height - 100,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextFieldWrapper(
+                        label: "Conjunto",
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: DropdownButton<String>(
+                            hint: const Text('Seleciona uma opção'),
+                            isExpanded: true,
+                            value: _selectedItem,
+                            items: _collections.map((Collection item) {
+                              return DropdownMenuItem<String>(
+                                value: item.id,
+                                child: Text(
+                                  item.name,
+                                  style: body?.copyWith(
+                                    color: text,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: _changeSelectedCollection,
+                            underline: const SizedBox.shrink(),
                           ),
-                        );
-                      }).toList(),
-                      onChanged: _changeSelectedCollection,
-                      underline: const SizedBox.shrink(),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextFieldWrapper(
-                  label: "Frente",
-                  child: TextField(
-                    controller: _frontController,
-                    autofocus: true,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.text,
-                    style: body?.copyWith(
-                      color: text,
-                    ),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      errorText: null,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Expanded(
-                  child: TextFieldWrapper(
-                    label: "Verso",
-                    child: Expanded(
-                      child: TextField(
-                        controller: _backController,
-                        textInputAction: TextInputAction.newline,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        minLines: null,
-                        expands: true,
-                        scrollPhysics: const BouncingScrollPhysics(),
-                        style: body?.copyWith(
-                          color: text,
-                        ),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          errorText: null,
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextFieldWrapper(
-                  label: "Mídia(Opcional)",
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        ..._buildAudioMediaWidgets(),
-                        ..._buildImgMediaWidgets(),
-                        Container(
-                          width: 50,
-                          height: 50,
-                          margin: const EdgeInsets.symmetric(horizontal: 2),
-                          decoration: BoxDecoration(
-                            color: primary,
-                            borderRadius: BorderRadius.circular(12),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextFieldWrapper(
+                        label: "Frente",
+                        child: TextField(
+                          controller: _frontController,
+                          autofocus: true,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.text,
+                          style: body?.copyWith(
+                            color: text,
                           ),
-                          child: IconButton(
-                            icon: const Icon(Icons.add),
-                            color: Colors.white,
-                            onPressed: _addMedia,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            errorText: null,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Expanded(
+                        child: TextFieldWrapper(
+                          label: "Verso",
+                          child: Expanded(
+                            child: TextField(
+                              controller: _backController,
+                              textInputAction: TextInputAction.newline,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              minLines: null,
+                              expands: true,
+                              scrollPhysics: const BouncingScrollPhysics(),
+                              style: body?.copyWith(
+                                color: text,
+                              ),
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                errorText: null,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextFieldWrapper(
+                        label: "Mídia(Opcional)",
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              ..._buildAudioMediaWidgets(),
+                              ..._buildImgMediaWidgets(),
+                              Container(
+                                width: 50,
+                                height: 50,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 2),
+                                decoration: BoxDecoration(
+                                  color: primary,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: IconButton(
+                                  icon: const Icon(Icons.add),
+                                  color: Colors.white,
+                                  onPressed: _addMedia,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      if (_error != null)
+                        Text(
+                          _error!,
+                          style: body?.copyWith(
+                            color: error,
+                          ),
+                        ),
+                      if (_error != null)
+                        const SizedBox(
+                          height: 8,
+                        ),
+                      ThemedFilledButton(
+                          label: "Cadastrar",
+                          onPressed: () {
+                            _registerCard(context);
+                          }),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                if (_error != null)
-                  Text(
-                    _error!,
-                    style: body?.copyWith(
-                      color: error,
-                    ),
-                  ),
-                if (_error != null)
-                  const SizedBox(
-                    height: 8,
-                  ),
-                ThemedFilledButton(
-                    label: "Cadastrar",
-                    onPressed: () {
-                      _registerCard(context);
-                    }),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
   }
