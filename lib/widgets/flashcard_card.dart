@@ -1,6 +1,7 @@
 import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/screens/review_screen.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/snackbars/success_snackbar.dart';
@@ -77,7 +78,13 @@ class _FlashcardCardState extends State<FlashcardCard> {
   }
 
   void _editCard(BuildContext context) {
-    //...
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CardFormScreen(
+                editingFlashcard: widget.flashcard,
+              )),
+    );
   }
 
   int daysUntil(DateTime targetDate) {

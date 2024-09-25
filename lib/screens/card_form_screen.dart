@@ -15,11 +15,13 @@ import 'package:provider/provider.dart';
 
 class CardFormScreen extends StatefulWidget {
   final String? preSelectedCollectionId;
+  final Flashcard? editingFlashcard;
   //Mocked data
   final List<int> _audioFiles = [1, 2];
   final List<int> _imgFiles = [1];
   final String _imgPath = "assets/images/baby_pets/beagle.png";
-  CardFormScreen({this.preSelectedCollectionId, super.key});
+  CardFormScreen(
+      {this.preSelectedCollectionId, this.editingFlashcard, super.key});
 
   @override
   State<CardFormScreen> createState() => _CardFormScreenState();
@@ -40,6 +42,11 @@ class _CardFormScreenState extends State<CardFormScreen> {
   void initState() {
     super.initState();
     _loadCollections();
+    if (widget.editingFlashcard != null) {
+      _frontController.text = widget.editingFlashcard!.frontContent;
+      _backController.text = widget.editingFlashcard!.backContent;
+      _selectedItem = widget.editingFlashcard!.collectionId;
+    }
   }
 
   Future<void> _loadCollections() async {
@@ -49,9 +56,15 @@ class _CardFormScreenState extends State<CardFormScreen> {
     setState(() {
       _collections = collections;
       if (_collections.isNotEmpty) {
-        _selectedItem = widget.preSelectedCollectionId ?? _collections.first.id;
+        _selectedItem = (widget.editingFlashcard != null)
+            ? widget.editingFlashcard!.collectionId
+            : widget.preSelectedCollectionId ?? _collections.first.id;
       }
     });
+  }
+
+  bool _isBeingEdited() {
+    return widget.editingFlashcard != null;
   }
 
   void _registerCard(BuildContext context) {
@@ -64,46 +77,77 @@ class _CardFormScreenState extends State<CardFormScreen> {
       return;
     }
 
-    final String uniqueId =
-        Provider.of<IIdProvider>(context, listen: false).getUniqueId();
-
-    final Flashcard newFlashcard = Flashcard(
-      uniqueId,
-      collectionCode,
-      front,
-      back,
-      DateTime.now(),
-    );
-
-    setState(() {
-      _isLoading = true;
-    });
-    Provider.of<IDao<Flashcard>>(context, listen: false)
-        .insert(newFlashcard)
-        .then((_) {
+    if (_isBeingEdited()) {
+      widget.editingFlashcard!.collectionId = _selectedItem!;
+      widget.editingFlashcard!.frontContent = front;
+      widget.editingFlashcard!.backContent = back;
       setState(() {
-        _isLoading = false;
+        _isLoading = true;
       });
-      if (mounted) {
+      Provider.of<IDao<Flashcard>>(context, listen: false)
+          .update(widget.editingFlashcard!)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+        if (!mounted) return;
         Navigator.of(context).pop();
-      }
-    }).catchError(
-      (error) {
+      }).catchError((error) {
+        setState(() {
+          _isLoading = false;
+        });
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
+            backgroundColor: Theme.of(context).colorScheme.bright,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      });
+    } else {
+      final String uniqueId =
+          Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+
+      final Flashcard newFlashcard = Flashcard(
+        uniqueId,
+        collectionCode,
+        front,
+        back,
+        DateTime.now(),
+      );
+
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<IDao<Flashcard>>(context, listen: false)
+          .insert(newFlashcard)
+          .then((_) {
         setState(() {
           _isLoading = false;
         });
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content:
-                  const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
-              backgroundColor: Theme.of(context).colorScheme.bright,
-              duration: const Duration(seconds: 2),
-            ),
-          );
+          Navigator.of(context).pop();
         }
-      },
-    );
+      }).catchError(
+        (error) {
+          setState(() {
+            _isLoading = false;
+          });
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
+                backgroundColor: Theme.of(context).colorScheme.bright,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+        },
+      );
+    }
   }
 
   bool _isDataValidated(String front, String back, String collectionCode) {

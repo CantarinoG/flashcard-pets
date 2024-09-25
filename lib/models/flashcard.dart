@@ -1,6 +1,6 @@
 class Flashcard {
   final String id;
-  final String collectionId;
+  String collectionId;
   String frontContent;
   String backContent;
   int repeticoes;
