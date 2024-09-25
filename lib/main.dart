@@ -10,6 +10,7 @@ import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
+import 'package:flashcard_pets/providers/services/sm2_calculator.dart';
 import 'package:flashcard_pets/providers/services/uuid_provider.dart';
 import 'package:flashcard_pets/screens/navigation_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
     IDao<Collection> collectionDaoProvider = CollectionDao();
     IDao<Flashcard> flashcardDaoProvider = FlashcardDao();
     IIdProvider idProvider = UuidProvider();
+    Sm2Calculator sm2Provider = Sm2Calculator();
 
     return MultiProvider(
       providers: [
@@ -42,6 +44,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => collectionDaoProvider),
         ChangeNotifierProvider(create: (_) => flashcardDaoProvider),
         ChangeNotifierProvider(create: (_) => idProvider),
+        ChangeNotifierProvider(create: (_) => sm2Provider),
       ],
       child: MaterialApp(
         title: 'Flashcard Pets',

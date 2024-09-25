@@ -8,6 +8,7 @@ import 'package:flashcard_pets/screens/collection_cards_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/screens/review_screen.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
+import 'package:flashcard_pets/snackbars/info_snackbar.dart';
 import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -108,11 +109,23 @@ class _CollectionCardState extends State<CollectionCard> {
     });
   }
 
-  void _reviewCollection(BuildContext context) {
+  void _reviewCollection(BuildContext context, List<Flashcard> toReviewToday) {
+    if (toReviewToday.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const InfoSnackbar(
+              "Nenhum cartão para revisar nesse conjunto hoje."),
+          backgroundColor: Theme.of(context).colorScheme.bright,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ReviewScreen(),
+        builder: (context) => ReviewScreen(widget.collection, toReviewToday),
       ),
     );
   }
@@ -144,144 +157,147 @@ class _CollectionCardState extends State<CollectionCard> {
     return Card(
       elevation: 4,
       color: bright,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          _reviewCollection(context);
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 16,
-            horizontal: 24,
+      child: SizedBox(
+        height: 80,
+        child: FutureBuilder<List<Flashcard>>(
+          future: flashcardDao.customRead(
+            "collectionId = ?",
+            [widget.collection.id],
           ),
-          child: FutureBuilder<List<Flashcard>>(
-            future: flashcardDao.customRead(
-              "collectionId = ?",
-              [widget.collection.id],
-            ),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Loading();
-              }
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Loading();
+            }
 
-              if (snapshot.hasError) {
-                return const Center(
-                    child: Text(
-                        "Algo errado ocorreu. Tente novamente mais tarde."));
-              }
+            if (snapshot.hasError) {
+              return const Center(
+                  child:
+                      Text("Algo errado ocorreu. Tente novamente mais tarde."));
+            }
 
-              if (!snapshot.hasData) {
-                return const Center(
-                    child: Text(
-                        "Algo errado ocorreu. Tente novamente mais tarde."));
-              }
+            if (!snapshot.hasData) {
+              return const Center(
+                  child:
+                      Text("Algo errado ocorreu. Tente novamente mais tarde."));
+            }
 
-              final List<Flashcard> cards = snapshot.data ?? [];
-              final int cardsNumber = cards.length;
-              final List<Flashcard> toReviewToday = _filterToBeReviewed(cards);
-              final int numToReviewToday = toReviewToday.length;
+            final List<Flashcard> cards = snapshot.data ?? [];
+            final int cardsNumber = cards.length;
+            final List<Flashcard> toReviewToday = _filterToBeReviewed(cards);
+            final int numToReviewToday = toReviewToday.length;
 
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    height: 60,
-                    width: 60,
-                    child: SvgPicture.asset(
-                      subjects[widget.collection.subjectCode]!.iconPath,
+            return InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                _reviewCollection(context, toReviewToday);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 24,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: SvgPicture.asset(
+                        subjects[widget.collection.subjectCode]!.iconPath,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  widget.collection.name,
-                                  style: h3?.copyWith(
-                                    color: secondary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                              Text(
-                                " ($cardsNumber)",
-                                style: h3?.copyWith(color: secondary),
-                              ),
-                            ],
-                          ),
-                          RichText(
-                            text: TextSpan(
-                              style: (numToReviewToday == 0)
-                                  ? body?.copyWith(color: disabled)
-                                  : body,
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                TextSpan(
-                                  text: "$numToReviewToday",
-                                  style: h3em,
+                                Flexible(
+                                  child: Text(
+                                    widget.collection.name,
+                                    style: h3?.copyWith(
+                                      color: secondary,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
-                                const TextSpan(
-                                  text: " Para revisão",
+                                Text(
+                                  " ($cardsNumber)",
+                                  style: h3?.copyWith(color: secondary),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
+                            RichText(
+                              text: TextSpan(
+                                style: (numToReviewToday == 0)
+                                    ? body?.copyWith(color: disabled)
+                                    : body,
+                                children: [
+                                  TextSpan(
+                                    text: "$numToReviewToday",
+                                    style: h3em,
+                                  ),
+                                  const TextSpan(
+                                    text: " Para revisão",
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  PopupMenuButton<CollectionAction>(
-                    tooltip: "Ver opções",
-                    iconColor: primary,
-                    color: bright,
-                    onSelected: (CollectionAction result) {
-                      switch (result) {
-                        case CollectionAction.manageCards:
-                          _manageCards(context);
-                          break;
-                        case CollectionAction.editCollection:
-                          _editCollection(context);
-                          break;
-                        case CollectionAction.deleteCollection:
-                          _deleteCollection(context);
-                          break;
-                      }
-                    },
-                    itemBuilder: (BuildContext context) =>
-                        <PopupMenuEntry<CollectionAction>>[
-                      PopupMenuItem<CollectionAction>(
-                        value: CollectionAction.manageCards,
-                        child: Text(
-                          'Gerenciar Cartões',
-                          style: body,
+                    PopupMenuButton<CollectionAction>(
+                      tooltip: "Ver opções",
+                      iconColor: primary,
+                      color: bright,
+                      onSelected: (CollectionAction result) {
+                        switch (result) {
+                          case CollectionAction.manageCards:
+                            _manageCards(context);
+                            break;
+                          case CollectionAction.editCollection:
+                            _editCollection(context);
+                            break;
+                          case CollectionAction.deleteCollection:
+                            _deleteCollection(context);
+                            break;
+                        }
+                      },
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<CollectionAction>>[
+                        PopupMenuItem<CollectionAction>(
+                          value: CollectionAction.manageCards,
+                          child: Text(
+                            'Gerenciar Cartões',
+                            style: body,
+                          ),
                         ),
-                      ),
-                      PopupMenuItem<CollectionAction>(
-                        value: CollectionAction.editCollection,
-                        child: Text(
-                          'Editar Conjunto',
-                          style: body,
+                        PopupMenuItem<CollectionAction>(
+                          value: CollectionAction.editCollection,
+                          child: Text(
+                            'Editar Conjunto',
+                            style: body,
+                          ),
                         ),
-                      ),
-                      PopupMenuItem<CollectionAction>(
-                        value: CollectionAction.deleteCollection,
-                        child: Text(
-                          'Deletar Conjunto',
-                          style: body,
+                        PopupMenuItem<CollectionAction>(
+                          value: CollectionAction.deleteCollection,
+                          child: Text(
+                            'Deletar Conjunto',
+                            style: body,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
