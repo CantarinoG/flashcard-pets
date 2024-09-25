@@ -1,11 +1,13 @@
 import 'package:flashcard_pets/models/award.dart';
 import 'package:flashcard_pets/models/collection.dart';
+import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/award_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
+import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/i_id_provider.dart';
 import 'package:flashcard_pets/providers/uuid_provider.dart';
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
     IDataProvider<Award> awardDataProvider = AwardDataProvider();
     IDataProvider<String> avatarDataProvider = AvatarDataProvider();
     IDao<Collection> collectionDaoProvider = CollectionDao();
+    IDao<Flashcard> flashcardDaoProvider = FlashcardDao();
     IIdProvider idProvider = UuidProvider();
 
     return MultiProvider(
@@ -37,6 +40,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => awardDataProvider),
         ChangeNotifierProvider(create: (_) => avatarDataProvider),
         ChangeNotifierProvider(create: (_) => collectionDaoProvider),
+        ChangeNotifierProvider(create: (_) => flashcardDaoProvider),
         ChangeNotifierProvider(create: (_) => idProvider),
       ],
       child: MaterialApp(
