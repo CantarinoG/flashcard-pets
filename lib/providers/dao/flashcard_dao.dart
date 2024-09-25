@@ -41,6 +41,18 @@ class FlashcardDao with ChangeNotifier implements IDao<Flashcard> {
     return List.generate(maps.length, (i) => Flashcard.fromMap(maps[i]));
   }
 
+  Future<List<Flashcard>> customQuery(
+      String whereClause, List<dynamic> whereArgs) async {
+    final database = await databaseHelper.database;
+    final maps = await database.query(
+      tableName,
+      where: whereClause,
+      whereArgs: whereArgs,
+    );
+
+    return List.generate(maps.length, (i) => Flashcard.fromMap(maps[i]));
+  }
+
   @override
   Future<void> update(Flashcard item) async {
     final database = await databaseHelper.database;
