@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/screens/review_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +9,10 @@ enum CardActions {
 }
 
 class FlashcardCard extends StatelessWidget {
+  final Flashcard flashcard;
   //Mocked data
-  final String _frontContent = "Como calcular uma derivada?";
-  final String _backContent =
-      "Para calcular uma derivada, basta lorem ipsum lorem ipsum lorem ipsum.";
-  final int _daysToNextRevision = 8;
   final int _mediaAttachedNum = 2;
-  const FlashcardCard({super.key});
+  const FlashcardCard(this.flashcard, {super.key});
 
   void _previewCard(BuildContext context) {
     Navigator.push(
@@ -31,6 +29,13 @@ class FlashcardCard extends StatelessWidget {
 
   void _editCard(BuildContext context) {
     //...
+  }
+
+  int daysUntil(DateTime targetDate) {
+    final DateTime now = DateTime.now();
+    final DateTime today = DateTime(now.year, now.month, now.day);
+    final Duration difference = targetDate.difference(today);
+    return difference.isNegative ? 0 : difference.inDays;
   }
 
   @override
@@ -64,7 +69,7 @@ class FlashcardCard extends StatelessWidget {
                     style: h3?.copyWith(color: secondary),
                   ),
                   Text(
-                    _frontContent,
+                    flashcard.frontContent,
                     style: body,
                     textAlign: TextAlign.center,
                   ),
@@ -76,7 +81,7 @@ class FlashcardCard extends StatelessWidget {
                     style: h3?.copyWith(color: secondary),
                   ),
                   Text(
-                    _backContent,
+                    flashcard.backContent,
                     style: body,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
@@ -96,7 +101,7 @@ class FlashcardCard extends StatelessWidget {
                         width: 4,
                       ),
                       Text(
-                        "$_daysToNextRevision dias",
+                        "${daysUntil(flashcard.revisionDate)} dias",
                         style: body?.copyWith(color: secondary),
                       ),
                       const SizedBox(

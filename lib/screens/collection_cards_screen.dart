@@ -1,3 +1,5 @@
+import 'package:flashcard_pets/models/collection.dart';
+import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/widgets/flashcard_card.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
@@ -8,12 +10,9 @@ import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
 
 class CollectionCardsScreen extends StatelessWidget {
-  //Mocked data
-  final String _title = "Cálculo I";
-  final List<int> _cards = [1, 1, 1, 1];
-  final String _description =
-      "Essa coleção é referente à minha disciplina de cálculo I da faculdade.";
-  CollectionCardsScreen({super.key});
+  final Collection collection;
+  final List<Flashcard> cards;
+  const CollectionCardsScreen(this.collection, this.cards, {super.key});
 
   void _createNewCard(BuildContext context) {
     Navigator.push(
@@ -29,7 +28,7 @@ class CollectionCardsScreen extends StatelessWidget {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
 
     return Scaffold(
-      appBar: ThemedAppBar("$_title (${_cards.length})"),
+      appBar: ThemedAppBar("${collection.name} (${cards.length})"),
       floatingActionButton: ThemedFab(
         () {
           _createNewCard(context);
@@ -44,23 +43,23 @@ class CollectionCardsScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            if (_description.isNotEmpty)
+            if (collection.description.isNotEmpty)
               Text(
-                _description,
+                collection.description,
                 style: body,
               ),
-            if (_description.isNotEmpty)
+            if (collection.description.isNotEmpty)
               const SizedBox(
                 height: 8,
               ),
             Expanded(
-              child: _cards.isEmpty
+              child: cards.isEmpty
                   ? const NoItemsPlaceholder(
                       "Você ainda não possui cartões nesse conjunto. Clique em “+” no canto inferior direito da tela para adicionar um cartão.")
                   : ListView.builder(
-                      itemCount: _cards.length,
+                      itemCount: cards.length,
                       itemBuilder: (context, index) {
-                        return const FlashcardCard();
+                        return FlashcardCard(cards[index]);
                       },
                     ),
             ),

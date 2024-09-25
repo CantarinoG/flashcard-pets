@@ -32,11 +32,11 @@ class CollectionCard extends StatefulWidget {
 }
 
 class _CollectionCardState extends State<CollectionCard> {
-  void _manageCards(BuildContext context) {
+  void _manageCards(BuildContext context, List<Flashcard> cards) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CollectionCardsScreen(),
+        builder: (context) => CollectionCardsScreen(widget.collection, cards),
       ),
     );
   }
@@ -225,7 +225,7 @@ class _CollectionCardState extends State<CollectionCard> {
                     onSelected: (CollectionAction result) {
                       switch (result) {
                         case CollectionAction.manageCards:
-                          _manageCards(context);
+                          _manageCards(context, cards);
                           break;
                         case CollectionAction.editCollection:
                           _editCollection(context);
