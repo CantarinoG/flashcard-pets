@@ -83,7 +83,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const ReviewResultsScreen(),
+          builder: (context) =>
+              ReviewResultsScreen(widget.collection.name, _totalCardsNum),
         ),
       );
     }

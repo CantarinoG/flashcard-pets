@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ReviewResultsScreen extends StatelessWidget {
+  final String collectionName;
+  final int numCards;
   //Mocked data
-  final String _collectionName = "Cálculo I";
-  final int _numCards = 5;
   final int _totalGold = 234;
   final int _totalExp = 234;
-  const ReviewResultsScreen({super.key});
+  const ReviewResultsScreen(this.collectionName, this.numCards, {super.key});
 
   void _finishRevision(BuildContext context) {
     Navigator.of(context).pop();
@@ -26,7 +26,7 @@ class ReviewResultsScreen extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
-      appBar: ThemedAppBar(_collectionName),
+      appBar: ThemedAppBar(collectionName),
       body: ScreenLayout(
         child: Column(
           children: [
@@ -35,7 +35,7 @@ class ReviewResultsScreen extends StatelessWidget {
               height: 16,
             ),
             Text(
-              "$_numCards/$_numCards",
+              "$numCards/$numCards",
               style: h2?.copyWith(
                 color: secondary,
               ),
@@ -52,7 +52,7 @@ class ReviewResultsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Parabéns! Você revisou todos os cartões de $_collectionName para essa sessão!",
+                        "Parabéns! Você revisou todos os cartões de $collectionName para essa sessão!",
                         style: body,
                         textAlign: TextAlign.center,
                       ),
