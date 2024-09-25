@@ -34,7 +34,7 @@ class CollectionCardsScreen extends StatelessWidget {
     final IDao<Flashcard> flashcardDao = Provider.of<IDao<Flashcard>>(context);
 
     return FutureBuilder(
-      future: flashcardDao.customQuery(
+      future: flashcardDao.customRead(
         "collectionId = ?",
         [collection.id],
       ),

@@ -42,7 +42,7 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
   }
 
   @override
-  Future<List<Collection>> customQuery(
+  Future<List<Collection>> customRead(
       String whereClause, List<dynamic> whereArgs) async {
     final database = await databaseHelper.database;
     final maps = await database.query(

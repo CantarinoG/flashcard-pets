@@ -141,7 +141,7 @@ class _CollectionCardState extends State<CollectionCard> {
             horizontal: 24,
           ),
           child: FutureBuilder<List<Flashcard>>(
-            future: flashcardDao.customQuery(
+            future: flashcardDao.customRead(
               "collectionId = ?",
               [widget.collection.id],
             ),

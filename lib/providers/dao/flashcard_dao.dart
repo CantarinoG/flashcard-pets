@@ -42,7 +42,7 @@ class FlashcardDao with ChangeNotifier implements IDao<Flashcard> {
   }
 
   @override
-  Future<List<Flashcard>> customQuery(
+  Future<List<Flashcard>> customRead(
       String whereClause, List<dynamic> whereArgs) async {
     final database = await databaseHelper.database;
     final maps = await database.query(
