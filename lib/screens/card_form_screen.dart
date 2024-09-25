@@ -24,6 +24,11 @@ class _CardFormScreenState extends State<CardFormScreen> {
   List<Collection> _collections = [];
   String? _selectedItem;
 
+  final TextEditingController _frontController = TextEditingController();
+  final TextEditingController _backController = TextEditingController();
+
+  String? _error;
+
   @override
   void initState() {
     super.initState();
@@ -43,7 +48,36 @@ class _CardFormScreenState extends State<CardFormScreen> {
   }
 
   void _registerCard(BuildContext context) {
-    Navigator.of(context).pop();
+    _displayError(null);
+    String front = _frontController.text.trim();
+    String back = _backController.text.trim();
+    String collectionCode = _selectedItem ?? _collections.first.id;
+
+    if (!_isDataValidated(front, back, collectionCode)) {
+      return;
+    }
+  }
+
+  bool _isDataValidated(String front, String back, String collectionCode) {
+    if (front.isEmpty) {
+      _displayError("O cartão precisa ter um conteúdo de frente.");
+      return false;
+    }
+
+    if (back.isEmpty) {
+      _displayError("O cartão precisa ter um conteúdo de verso.");
+      return false;
+    }
+
+    bool isValidCollection =
+        _collections.any((collection) => collection.id == collectionCode);
+
+    if (!isValidCollection) {
+      _displayError("Código de coleção inválido.");
+      return false;
+    }
+
+    return true;
   }
 
   void _changeSelectedCollection(String? value) {
@@ -54,6 +88,12 @@ class _CardFormScreenState extends State<CardFormScreen> {
 
   void _addMedia() {
     //...
+  }
+
+  void _displayError(String? message) {
+    setState(() {
+      _error = message;
+    });
   }
 
   List<Widget> _buildAudioMediaWidgets() {
@@ -75,6 +115,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color text = Theme.of(context).colorScheme.text;
+    final Color error = Theme.of(context).colorScheme.error;
 
     return Scaffold(
       appBar: const ThemedAppBar("Cartão"),
@@ -117,6 +158,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
                 TextFieldWrapper(
                   label: "Frente",
                   child: TextField(
+                    controller: _frontController,
                     autofocus: true,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
@@ -137,6 +179,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
                     label: "Verso",
                     child: Expanded(
                       child: TextField(
+                        controller: _backController,
                         textInputAction: TextInputAction.newline,
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
@@ -186,6 +229,17 @@ class _CardFormScreenState extends State<CardFormScreen> {
                 const SizedBox(
                   height: 8,
                 ),
+                if (_error != null)
+                  Text(
+                    _error!,
+                    style: body?.copyWith(
+                      color: error,
+                    ),
+                  ),
+                if (_error != null)
+                  const SizedBox(
+                    height: 8,
+                  ),
                 ThemedFilledButton(
                     label: "Cadastrar",
                     onPressed: () {
