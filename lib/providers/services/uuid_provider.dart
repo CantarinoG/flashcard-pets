@@ -1,4 +1,4 @@
-import 'package:flashcard_pets/providers/i_id_provider.dart';
+import 'package:flashcard_pets/providers/services/i_id_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 

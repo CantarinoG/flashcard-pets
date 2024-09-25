@@ -2,7 +2,7 @@ import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
-import 'package:flashcard_pets/providers/i_id_provider.dart';
+import 'package:flashcard_pets/providers/services/i_id_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
