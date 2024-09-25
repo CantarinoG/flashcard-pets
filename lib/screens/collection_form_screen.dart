@@ -14,7 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CollectionFormScreen extends StatefulWidget {
-  const CollectionFormScreen({super.key});
+  final Collection? editingCollection;
+  const CollectionFormScreen({this.editingCollection, super.key});
 
   @override
   State<CollectionFormScreen> createState() => _CollectionFormScreenState();
@@ -29,72 +30,27 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
 
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.editingCollection != null) {
+      _nameController.text = widget.editingCollection!.name;
+      _descriptionController.text = widget.editingCollection!.description;
+      _selectedItem = widget.editingCollection!.subjectCode;
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   void _changeSelectedSubject(int? value) {
     setState(() {
       _selectedItem = value ?? 0;
     });
-  }
-
-  void _register() {
-    String name = _nameController.text.trim();
-    String description = _descriptionController.text.trim();
-    int subjectCode = _selectedItem;
-
-    _displayError(null);
-
-    if (name.isEmpty) {
-      _displayError("A coleção precisa ter um nome.");
-      return;
-    }
-
-    final List<int> allowedCodes = Provider.of<IDataProvider<Subject>>(
-      context,
-      listen: false,
-    ).retrieveData().keys.toList();
-    if (!allowedCodes.contains(subjectCode)) {
-      _displayError("Disciplina inválida.");
-      return;
-    }
-
-    final String uniqueId =
-        Provider.of<IIdProvider>(context, listen: false).getUniqueId();
-
-    final Collection newCollection = Collection(
-      uniqueId,
-      name,
-      subjectCode,
-      description,
-    );
-
-    setState(() {
-      _isLoading = true;
-    });
-    Provider.of<IDao<Collection>>(context, listen: false)
-        .insert(newCollection)
-        .then((_) {
-      setState(() {
-        _isLoading = false;
-      });
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
-    }).catchError(
-      (error) {
-        setState(() {
-          _isLoading = false;
-        });
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content:
-                  const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
-              backgroundColor: Theme.of(context).colorScheme.bright,
-              duration: const Duration(seconds: 2),
-            ),
-          );
-        }
-      },
-    );
   }
 
   void _displayError(String? message) {
@@ -103,11 +59,112 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
+  bool _isDataValidated(String name, String description, int subjectCode) {
+    if (name.isEmpty) {
+      _displayError("A coleção precisa ter um nome.");
+      return false;
+    }
+
+    final List<int> allowedCodes = Provider.of<IDataProvider<Subject>>(
+      context,
+      listen: false,
+    ).retrieveData().keys.toList();
+    if (!allowedCodes.contains(subjectCode)) {
+      _displayError("Disciplina inválida.");
+      return false;
+    }
+
+    return true;
+  }
+
+  bool _isBeingEdited() {
+    return widget.editingCollection != null;
+  }
+
+  void _register() {
+    _displayError(null);
+    String name = _nameController.text.trim();
+    String description = _descriptionController.text.trim();
+    int subjectCode = _selectedItem;
+
+    if (!_isDataValidated(name, description, subjectCode)) {
+      return;
+    }
+
+    if (_isBeingEdited()) {
+      widget.editingCollection!.name = name;
+      widget.editingCollection!.subjectCode = subjectCode;
+      widget.editingCollection!.description = description;
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<IDao<Collection>>(context, listen: false)
+          .update(widget.editingCollection!)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      }).catchError(
+        (error) {
+          setState(() {
+            _isLoading = false;
+          });
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
+                backgroundColor: Theme.of(context).colorScheme.bright,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+        },
+      );
+    } else {
+      final String uniqueId =
+          Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+
+      final Collection newCollection = Collection(
+        uniqueId,
+        name,
+        subjectCode,
+        description,
+      );
+
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<IDao<Collection>>(context, listen: false)
+          .insert(newCollection)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      }).catchError(
+        (error) {
+          setState(() {
+            _isLoading = false;
+          });
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                    const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
+                backgroundColor: Theme.of(context).colorScheme.bright,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+        },
+      );
+    }
   }
 
   @override

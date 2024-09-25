@@ -1,10 +1,10 @@
 class Collection {
   final String id;
-  final String name;
-  final int subjectCode;
-  final String description;
+  String name;
+  int subjectCode;
+  String description;
 
-  const Collection(
+  Collection(
     this.id,
     this.name,
     this.subjectCode,

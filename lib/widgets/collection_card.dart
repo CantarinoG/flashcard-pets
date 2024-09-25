@@ -47,7 +47,9 @@ class _CollectionCardState extends State<CollectionCard> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const CollectionFormScreen(),
+        builder: (context) => CollectionFormScreen(
+          editingCollection: widget.collection,
+        ),
       ),
     );
   }
