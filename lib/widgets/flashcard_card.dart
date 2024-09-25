@@ -2,6 +2,7 @@ import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/screens/card_form_screen.dart';
+import 'package:flashcard_pets/screens/preview_card_screen.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -27,12 +28,12 @@ class _FlashcardCardState extends State<FlashcardCard> {
   final int _mediaAttachedNum = 2;
 
   void _previewCard(BuildContext context) {
-    /*Navigator.push(
+    Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ReviewScreen(),
+        builder: (context) => PreviewCardScreen(widget.flashcard),
       ),
-    );*/
+    );
   }
 
   void _deleteCard(BuildContext context) {
