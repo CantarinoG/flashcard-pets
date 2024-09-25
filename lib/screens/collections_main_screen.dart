@@ -78,9 +78,6 @@ class CollectionMainAppBar extends StatelessWidget
 }
 
 class CollectionMainFab extends StatefulWidget {
-  //Mocked data
-  final bool _anyCollections = true;
-
   const CollectionMainFab({super.key});
 
   @override
@@ -88,15 +85,21 @@ class CollectionMainFab extends StatefulWidget {
 }
 
 class _CollectionMainFabState extends State<CollectionMainFab> {
-  void _onTap() {
-    if (!widget._anyCollections) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const CollectionFormScreen(),
-        ),
-      );
+  void _onTap() async {
+    final collectionDao = Provider.of<IDao<Collection>>(context, listen: false);
+    final collections = await collectionDao.readAll();
+
+    if (collections.isEmpty) {
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CollectionFormScreen(),
+          ),
+        );
+      }
     } else {
+      if (!mounted) return;
       showDialog(
         context: context,
         builder: (BuildContext context) {
