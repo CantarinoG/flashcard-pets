@@ -53,7 +53,6 @@ class _CollectionCardState extends State<CollectionCard> {
   }
 
   void _deleteCollection(BuildContext context) {
-    //TODO: Also delete every card in the collection.
     showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -65,24 +64,39 @@ class _CollectionCardState extends State<CollectionCard> {
     ).then((shouldDelete) {
       if (shouldDelete != null && shouldDelete) {
         if (mounted) {
-          Provider.of<IDao<Collection>>(context, listen: false)
-              .delete(widget.collection.id)
-              .then((_) {
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const SuccessSnackbar("Deletado com sucesso!"),
-                  backgroundColor: Theme.of(context).colorScheme.bright,
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-            }
+          Provider.of<IDao<Flashcard>>(context, listen: false).customDelete(
+              "collectionId = ?", [widget.collection.id]).then((_) {
+            if (!mounted) return;
+            Provider.of<IDao<Collection>>(context, listen: false)
+                .delete(widget.collection.id)
+                .then((_) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const SuccessSnackbar("Deletado com sucesso!"),
+                    backgroundColor: Theme.of(context).colorScheme.bright,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
+            }).catchError((error) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const ErrorSnackbar(
+                        "Ocorreu um erro ao deletar o conjunto. Tente novamente."),
+                    backgroundColor: Theme.of(context).colorScheme.bright,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
+            });
           }).catchError((error) {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const ErrorSnackbar(
-                      "Ocorreu algum erro. Tente novamente."),
+                      "Ocorreu um erro ao deletar os cartões. Tente novamente."),
                   backgroundColor: Theme.of(context).colorScheme.bright,
                   duration: const Duration(seconds: 2),
                 ),
