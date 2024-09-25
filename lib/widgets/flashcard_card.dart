@@ -1,18 +1,30 @@
+import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/screens/review_screen.dart';
+import 'package:flashcard_pets/snackbars/error_snackbar.dart';
+import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum CardActions {
   editCard,
   deleteCard,
 }
 
-class FlashcardCard extends StatelessWidget {
+class FlashcardCard extends StatefulWidget {
   final Flashcard flashcard;
+
+  const FlashcardCard(this.flashcard, {super.key});
+
+  @override
+  State<FlashcardCard> createState() => _FlashcardCardState();
+}
+
+class _FlashcardCardState extends State<FlashcardCard> {
   //Mocked data
   final int _mediaAttachedNum = 2;
-  const FlashcardCard(this.flashcard, {super.key});
 
   void _previewCard(BuildContext context) {
     Navigator.push(
@@ -24,7 +36,44 @@ class FlashcardCard extends StatelessWidget {
   }
 
   void _deleteCard(BuildContext context) {
-    //...
+    showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return const ConfirmDeleteDialog(
+          "Deletar Cartão?",
+          "Tem certeza? Essa ação não pode ser desfeita.",
+        );
+      },
+    ).then((shouldDelete) {
+      if (shouldDelete != null && shouldDelete) {
+        if (mounted) {
+          Provider.of<IDao<Flashcard>>(context, listen: false)
+              .delete(widget.flashcard.id)
+              .then((_) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const SuccessSnackbar("Deletado com sucesso!"),
+                  backgroundColor: Theme.of(context).colorScheme.bright,
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            }
+          }).catchError((error) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const ErrorSnackbar(
+                      "Ocorreu algum erro. Tente novamente."),
+                  backgroundColor: Theme.of(context).colorScheme.bright,
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            }
+          });
+        }
+      }
+    });
   }
 
   void _editCard(BuildContext context) {
@@ -69,7 +118,7 @@ class FlashcardCard extends StatelessWidget {
                     style: h3?.copyWith(color: secondary),
                   ),
                   Text(
-                    flashcard.frontContent,
+                    widget.flashcard.frontContent,
                     style: body,
                     textAlign: TextAlign.center,
                   ),
@@ -81,7 +130,7 @@ class FlashcardCard extends StatelessWidget {
                     style: h3?.copyWith(color: secondary),
                   ),
                   Text(
-                    flashcard.backContent,
+                    widget.flashcard.backContent,
                     style: body,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
@@ -101,7 +150,7 @@ class FlashcardCard extends StatelessWidget {
                         width: 4,
                       ),
                       Text(
-                        "${daysUntil(flashcard.revisionDate)} dias",
+                        "${daysUntil(widget.flashcard.revisionDate)} dias",
                         style: body?.copyWith(color: secondary),
                       ),
                       const SizedBox(

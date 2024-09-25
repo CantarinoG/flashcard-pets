@@ -32,11 +32,11 @@ class CollectionCard extends StatefulWidget {
 }
 
 class _CollectionCardState extends State<CollectionCard> {
-  void _manageCards(BuildContext context, List<Flashcard> cards) {
+  void _manageCards(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CollectionCardsScreen(widget.collection, cards),
+        builder: (context) => CollectionCardsScreen(widget.collection),
       ),
     );
   }
@@ -151,11 +151,15 @@ class _CollectionCardState extends State<CollectionCard> {
               }
 
               if (snapshot.hasError) {
-                return Center(child: Text("Error: ${snapshot.error}"));
+                return const Center(
+                    child: Text(
+                        "Algo errado ocorreu. Tente novamente mais tarde."));
               }
 
               if (!snapshot.hasData) {
-                return const Center(child: Text("No data available"));
+                return const Center(
+                    child: Text(
+                        "Algo errado ocorreu. Tente novamente mais tarde."));
               }
 
               final List<Flashcard> cards = snapshot.data ?? [];
@@ -225,7 +229,7 @@ class _CollectionCardState extends State<CollectionCard> {
                     onSelected: (CollectionAction result) {
                       switch (result) {
                         case CollectionAction.manageCards:
-                          _manageCards(context, cards);
+                          _manageCards(context);
                           break;
                         case CollectionAction.editCollection:
                           _editCollection(context);
