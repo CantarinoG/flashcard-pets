@@ -41,6 +41,7 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
     return List.generate(maps.length, (i) => Collection.fromMap(maps[i]));
   }
 
+  @override
   Future<List<Collection>> customQuery(
       String whereClause, List<dynamic> whereArgs) async {
     final database = await databaseHelper.database;
