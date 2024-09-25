@@ -1,3 +1,5 @@
+import 'package:flashcard_pets/models/collection.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/media_thumb.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
@@ -5,14 +7,10 @@ import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CardFormScreen extends StatefulWidget {
   //Mocked data
-  final List<String> _collections = [
-    "AEDs",
-    "Sistemas Operacionais",
-    "Linguagens de Programação",
-  ];
   final List<int> _audioFiles = [1, 2];
   final List<int> _imgFiles = [1];
   final String _imgPath = "assets/images/baby_pets/beagle.png";
@@ -23,7 +21,26 @@ class CardFormScreen extends StatefulWidget {
 }
 
 class _CardFormScreenState extends State<CardFormScreen> {
-  late String _selectedItem = widget._collections[0];
+  List<Collection> _collections = [];
+  String? _selectedItem;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCollections();
+  }
+
+  Future<void> _loadCollections() async {
+    final collectionDao = Provider.of<IDao<Collection>>(context, listen: false);
+    final collections = await collectionDao.readAll();
+
+    setState(() {
+      _collections = collections;
+      if (_collections.isNotEmpty) {
+        _selectedItem = _collections.first.id;
+      }
+    });
+  }
 
   void _registerCard(BuildContext context) {
     Navigator.of(context).pop();
@@ -31,7 +48,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
 
   void _changeSelectedCollection(String? value) {
     setState(() {
-      _selectedItem = value ?? widget._collections[0];
+      _selectedItem = value ?? _collections.first.id;
     });
   }
 
@@ -78,11 +95,11 @@ class _CardFormScreenState extends State<CardFormScreen> {
                       hint: const Text('Seleciona uma opção'),
                       isExpanded: true,
                       value: _selectedItem,
-                      items: widget._collections.map((String item) {
+                      items: _collections.map((Collection item) {
                         return DropdownMenuItem<String>(
-                          value: item,
+                          value: item.id,
                           child: Text(
-                            item,
+                            item.name,
                             style: body?.copyWith(
                               color: text,
                             ),
