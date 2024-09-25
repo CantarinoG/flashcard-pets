@@ -76,4 +76,15 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
     );
     notifyListeners();
   }
+
+  @override
+  Future<void> customDelete(String whereClause, List whereArgs) async {
+    final database = await databaseHelper.database;
+    await database.delete(
+      tableName,
+      where: whereClause,
+      whereArgs: whereArgs,
+    );
+    notifyListeners();
+  }
 }

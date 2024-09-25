@@ -7,4 +7,5 @@ abstract class IDao<T> with ChangeNotifier {
   Future<List<T>> customRead(String whereClause, List<dynamic> whereArgs);
   Future<void> update(T item);
   Future<void> delete(String id);
+  Future<void> customDelete(String whereClause, List<dynamic> whereArgs);
 }
