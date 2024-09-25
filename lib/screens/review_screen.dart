@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/dialogs/evaluation_score_info.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
@@ -89,7 +90,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   void _showInfo() {
-    //...
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const EvaluationScoreInfo();
+      },
+    );
   }
 
   void _changeSliderValue(double value) {
