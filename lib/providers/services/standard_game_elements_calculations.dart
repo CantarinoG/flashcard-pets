@@ -16,7 +16,7 @@ class StandardGameElementsCalculations
       SnackBar(
         content: RewardSnackbar(value),
         backgroundColor: Theme.of(context).colorScheme.bright,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 1),
       ),
     );
     return user;

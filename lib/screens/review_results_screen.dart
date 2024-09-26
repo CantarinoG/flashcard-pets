@@ -9,10 +9,10 @@ import 'package:flutter_svg/svg.dart';
 class ReviewResultsScreen extends StatelessWidget {
   final String collectionName;
   final int numCards;
-  //Mocked data
-  final int _totalGold = 234;
-  final int _totalExp = 234;
-  const ReviewResultsScreen(this.collectionName, this.numCards, {super.key});
+  final int rewardValue;
+  const ReviewResultsScreen(
+      this.collectionName, this.numCards, this.rewardValue,
+      {super.key});
 
   void _finishRevision(BuildContext context) {
     Navigator.of(context).pop();
@@ -79,7 +79,7 @@ class ReviewResultsScreen extends StatelessWidget {
                             width: 4,
                           ),
                           Text(
-                            "$_totalGold",
+                            "$rewardValue",
                             style: body,
                           ),
                           const SizedBox(
@@ -95,7 +95,7 @@ class ReviewResultsScreen extends StatelessWidget {
                             width: 4,
                           ),
                           Text(
-                            "$_totalExp",
+                            "$rewardValue",
                             style: body,
                           ),
                         ],

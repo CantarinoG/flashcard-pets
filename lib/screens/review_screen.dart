@@ -39,6 +39,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   bool _evaluatedReview = false;
   double _sliderValue = 0;
   bool _isLoading = false;
+  int _totalPointsReceived = 0;
 
   void _toggleShowingBack() {
     setState(() {
@@ -52,43 +53,44 @@ class _ReviewScreenState extends State<ReviewScreen> {
     });
   }
 
-  void _evaluateRevision(BuildContext context) {
+  Future<void> _evaluateRevision(BuildContext context) async {
     _displayError(null);
 
     if (_evaluatedReview == false) {
-      //User did not evaluated it.
+      // User did not evaluate it.
       _displayError("Avaliar a sua revisão.");
       return;
     }
 
-    //Give user reward for review
+    // Give user reward for review
     final userDataProvider =
         Provider.of<IJsonDataProvider<User>>(context, listen: false);
     final gameCalcProvider =
         Provider.of<IGameElementsCalculations>(context, listen: false);
     int rewards = gameCalcProvider.calculateRevisionRewards(
         widget.cardsToReview[_currentCardIndex], _sliderValue.round());
-    userDataProvider.readData().then((user) {
-      if ((user == null) || !mounted) return;
-      User updatedUser = gameCalcProvider.addGoldAndXp(user, rewards, context);
-      userDataProvider.writeData(updatedUser);
+    final user = await userDataProvider.readData();
+    if (user == null || !mounted) return;
+    User updatedUser = gameCalcProvider.addGoldAndXp(user, rewards, context);
+    setState(() {
+      _totalPointsReceived += rewards;
     });
+    await userDataProvider.writeData(updatedUser);
 
-    //Save card attributes
+    // Save card attributes
     final updatedFlashcard = Provider.of<Sm2Calculator>(context, listen: false)
         .calculateNewValues(
             widget.cardsToReview[_currentCardIndex], _sliderValue.round());
     setState(() {
       _isLoading = true;
     });
-    Provider.of<IDao<Flashcard>>(context, listen: false)
-        .update(updatedFlashcard)
-        .then((_) {
-      setState(() {
-        _isLoading = false;
-      });
+    await Provider.of<IDao<Flashcard>>(context, listen: false)
+        .update(updatedFlashcard);
+    setState(() {
+      _isLoading = false;
     });
 
+    //Next card or finish revision
     if (_currentCardIndex <= _totalCardsNum - 2) {
       setState(() {
         _currentCardIndex++;
@@ -97,11 +99,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
         _sliderValue = 0;
       });
     } else {
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              ReviewResultsScreen(widget.collection.name, _totalCardsNum),
+          builder: (context) => ReviewResultsScreen(
+              widget.collection.name, _totalCardsNum, _totalPointsReceived),
         ),
       );
     }
