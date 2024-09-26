@@ -13,7 +13,7 @@ class NavigationScreen extends StatefulWidget {
       "fab": const CollectionMainFab(),
     },
     {
-      "widget": PetsCollectionScreen(),
+      "widget": const PetsCollectionScreen(),
       "appBar": const PetsCollectionAppBar(),
       "fab": const PetsCollectionFab(),
     },

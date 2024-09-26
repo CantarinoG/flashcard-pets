@@ -20,7 +20,7 @@ class PetCard extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PetScreen(),
+        builder: (context) => PetScreen(pet),
       ),
     );
   }
@@ -32,11 +32,9 @@ class PetCard extends StatelessWidget {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final TextStyle headLineSmallEm =
         Theme.of(context).textTheme.headlineSmallEm;
-    final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
     final Color brightColor = Theme.of(context).colorScheme.bright;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color disabled = Theme.of(context).colorScheme.disabled;
-    final Color text = Theme.of(context).colorScheme.text;
 
     final petBio = Provider.of<IDataProvider<PetBio>>(context)
         .retrieveFromKey(pet.petBioCode);

@@ -78,12 +78,13 @@ class StoreScreen extends StatelessWidget {
       Pet newPet = Pet(
         uniqueId,
         petGotCode,
+        totalGoldSpent: price,
       );
       Provider.of<IDao<Pet>>(context, listen: false).insert(newPet);
     } else {
-      //User already had this pet.
+      //User already has this pet
     }
-    //tem ainda a questão de que se o pet tiver 5 estrelas, deve dar é xp.
+    //TODO:tem ainda a questão de que se o pet tiver 5 estrelas, deve dar é xp.
   }
 
   @override

@@ -1,5 +1,7 @@
+import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
+import 'package:flashcard_pets/widgets/rarity_text.dart';
 import 'package:flutter/material.dart';
 
 class PetDescriptionCard extends StatelessWidget {
@@ -7,21 +9,20 @@ class PetDescriptionCard extends StatelessWidget {
   final String title;
   final String content;
   final Color? color;
-  final bool isRarity;
+  final PetRarity? rarity;
 
   const PetDescriptionCard(
       {required this.iconData,
       required this.title,
       required this.content,
       this.color,
-      this.isRarity = false,
+      this.rarity,
       super.key});
 
   @override
   Widget build(BuildContext context) {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
-    final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
 
@@ -58,11 +59,13 @@ class PetDescriptionCard extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              Text(
-                content,
-                style: isRarity ? bodyEm.copyWith(color: color) : body,
-                textAlign: TextAlign.center,
-              ),
+              (rarity != null)
+                  ? RarityText(rarity!)
+                  : Text(
+                      content,
+                      style: body,
+                      textAlign: TextAlign.center,
+                    ),
             ],
           ),
         ),

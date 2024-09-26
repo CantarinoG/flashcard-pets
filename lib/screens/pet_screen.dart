@@ -1,3 +1,6 @@
+import 'package:flashcard_pets/models/pet.dart';
+import 'package:flashcard_pets/models/pet_bio.dart';
+import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/pet_description_card.dart';
@@ -6,27 +9,14 @@ import 'package:flashcard_pets/widgets/stars.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PetScreen extends StatelessWidget {
+  final Pet pet;
   //Mocked data
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
-  final String _name = "Cleitinho";
-  final int _stars = 0;
-  final int _level = 5;
-  final int _currentXp = 450;
-  final int _goalXp = 500;
-  final int _currentCopies = 2;
-  final int _goalCopies = 4;
-  final String _description =
-      "Cleitinho é um cachorro muito bacana e fiel. Sempre diposto a ajudar seu dono.";
-  final String _age = "Filhote";
-  final String _rarity = "Comum";
-  final String _breed = "Beagle";
-  final String _likes = "Perserguir esquilos, comer pestiscos.";
-  final String _dislikes = "Tomar banho, barulhos.";
   final int _skillValue = 2;
   final String _skillDesc = "% mais ouro ao revisar cartões.";
-  const PetScreen({super.key});
+  const PetScreen(this.pet, {super.key});
 
   void _sell() {
     //...
@@ -42,8 +32,6 @@ class PetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double progress = _currentXp / _goalXp;
-
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
@@ -54,6 +42,11 @@ class PetScreen extends StatelessWidget {
     final Color star = Theme.of(context).colorScheme.star;
     final Color starLighter = Theme.of(context).colorScheme.starLighter;
     final Color text = Theme.of(context).colorScheme.text;
+
+    final petBio = Provider.of<IDataProvider<PetBio>>(context)
+        .retrieveFromKey(pet.petBioCode);
+
+    final double progress = pet.currentXp / pet.nextLevelXp;
 
     return Scaffold(
       appBar: ThemedAppBar(
@@ -73,7 +66,7 @@ class PetScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: Image.asset(
-                  _imgPath,
+                  (pet.level < 10) ? petBio.babyPic : petBio.adultPic,
                   fit: BoxFit
                       .cover, // Ensures the image fits nicely within the circular shape
                 ),
@@ -85,7 +78,7 @@ class PetScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    _name,
+                    pet.name ?? petBio.breed,
                     style: h2?.copyWith(
                       color: secondary,
                     ),
@@ -103,7 +96,7 @@ class PetScreen extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              Stars(_stars),
+              Stars(pet.stars),
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -136,7 +129,7 @@ class PetScreen extends StatelessWidget {
                       color: secondary,
                     ),
                     Text(
-                      " $_currentCopies/$_goalCopies",
+                      " ${pet.currentCopies}/${pet.nextStarCopies}",
                       style: body?.copyWith(
                         color: secondary,
                       ),
@@ -159,7 +152,7 @@ class PetScreen extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: '$_level',
+                        text: '${pet.level}',
                         style: h3,
                       ),
                     ],
@@ -198,7 +191,7 @@ class PetScreen extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: " $_currentXp/$_goalXp",
+                        text: " ${pet.currentXp}/${pet.nextLevelXp}",
                         style: body?.copyWith(
                           color: secondary,
                         ),
@@ -228,34 +221,34 @@ class PetScreen extends StatelessWidget {
                   PetDescriptionCard(
                     iconData: Icons.diamond,
                     title: "Raridade",
-                    content: _rarity,
+                    content: "",
                     color: text,
-                    isRarity: true,
+                    rarity: petBio.rarity,
                   ),
                   PetDescriptionCard(
                     iconData: Icons.pets,
                     title: "Raça",
-                    content: _breed,
+                    content: petBio.breed,
                   ),
                   PetDescriptionCard(
                     iconData: Icons.description,
                     title: "Descrição",
-                    content: _description,
+                    content: petBio.description,
                   ),
                   PetDescriptionCard(
                     iconData: Icons.calendar_month,
                     title: "Idade",
-                    content: _age,
+                    content: (pet.level < 10) ? "Filhote" : "Adulto",
                   ),
                   PetDescriptionCard(
                     iconData: Icons.sentiment_satisfied_outlined,
                     title: "Gosta de",
-                    content: _likes,
+                    content: petBio.likes,
                   ),
                   PetDescriptionCard(
                     iconData: Icons.sentiment_dissatisfied,
                     title: "Não gosta de",
-                    content: _dislikes,
+                    content: petBio.dislikes,
                   ),
                 ],
               ),
