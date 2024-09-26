@@ -1,7 +1,10 @@
 import 'package:flashcard_pets/dialogs/evaluation_score_info.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
+import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
+import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/providers/services/sm2_calculator.dart';
 import 'package:flashcard_pets/screens/review_results_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
@@ -58,6 +61,20 @@ class _ReviewScreenState extends State<ReviewScreen> {
       return;
     }
 
+    //Give user reward for review
+    final userDataProvider =
+        Provider.of<IJsonDataProvider<User>>(context, listen: false);
+    final gameCalcProvider =
+        Provider.of<IGameElementsCalculations>(context, listen: false);
+    int rewards = gameCalcProvider.calculateRevisionRewards(
+        widget.cardsToReview[_currentCardIndex], _sliderValue.round());
+    userDataProvider.readData().then((user) {
+      if (user == null) return;
+      User updatedUser = gameCalcProvider.addGold(user, rewards);
+      userDataProvider.writeData(updatedUser);
+    });
+
+    //Save card attributes
     final updatedFlashcard = Provider.of<Sm2Calculator>(context, listen: false)
         .calculateNewValues(
             widget.cardsToReview[_currentCardIndex], _sliderValue.round());
