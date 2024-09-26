@@ -1,4 +1,7 @@
+import 'package:flashcard_pets/models/pet.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/screens/store_screen.dart';
+import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/pet_card.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
@@ -6,34 +9,48 @@ import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_fab.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PetsCollectionScreen extends StatelessWidget {
-  //Mocked data
-  final List<int> _collections = [1];
-  PetsCollectionScreen({super.key});
+  const PetsCollectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final petDao = Provider.of<IDao<Pet>>(context);
+
     return ScreenLayout(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const UserStatsHeader(),
-          const SizedBox(
-            height: 16,
-          ),
-          Expanded(
-            child: _collections.isEmpty
-                ? const NoItemsPlaceholder(
-                    "Você ainda não possui nenhum pet. Clique no ícone de compras no canto inferior direito da tela para comprar um pet.")
-                : ListView.builder(
-                    itemCount: _collections.length,
+      child: FutureBuilder<List<Pet>>(
+        future: petDao.readAll(), // The Future you want to resolve
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Loading();
+          } else if (snapshot.hasError) {
+            return const NoItemsPlaceholder(
+                "Algum erro ocorreu. Tente novamente mais tarde.");
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const NoItemsPlaceholder(
+              "Você ainda não possui nenhum pet. Clique no ícone de compras no canto inferior direito da tela para comprar um pet.",
+            );
+          } else {
+            final petList = snapshot.data!;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const UserStatsHeader(),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: petList.length,
                     itemBuilder: (context, index) {
-                      return const PetCard();
+                      final pet = petList[index];
+                      return PetCard(pet); // Passing pet to PetCard
                     },
                   ),
-          ),
-        ],
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
   }

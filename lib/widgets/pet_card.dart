@@ -1,19 +1,20 @@
+import 'package:flashcard_pets/models/pet.dart';
+import 'package:flashcard_pets/models/pet_bio.dart';
+import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/screens/pet_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/stars.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PetCard extends StatelessWidget {
+  final Pet pet;
   //Mocked data.
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
-  final String _name = "Cleitinho";
-  final String _breed = "Beagle";
-  final String _rarity = "Comum";
-  final int _level = 3;
   final String _skillShort = "+2% ouro";
+  final String _rarity = "Common";
 
-  const PetCard({super.key});
+  const PetCard(this.pet, {super.key});
 
   void _tapPetCard(BuildContext context) {
     Navigator.push(
@@ -36,6 +37,9 @@ class PetCard extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color disabled = Theme.of(context).colorScheme.disabled;
     final Color text = Theme.of(context).colorScheme.text;
+
+    final petBio = Provider.of<IDataProvider<PetBio>>(context)
+        .retrieveFromKey(pet.petBioCode);
 
     return Card(
       elevation: 4,
@@ -62,7 +66,7 @@ class PetCard extends StatelessWidget {
                 ),
                 elevation: 4,
                 child: Image.asset(
-                  _imgPath,
+                  (pet.level < 10) ? petBio.babyPic : petBio.adultPic,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -71,13 +75,13 @@ class PetCard extends StatelessWidget {
               height: 4,
             ),
             Text(
-              _name,
+              pet.name ?? petBio.breed,
               style: headLineMedium?.copyWith(
                 color: secondary,
               ),
             ),
             Text(
-              _breed,
+              petBio.breed,
               style: body?.copyWith(
                 color: disabled,
               ),
@@ -94,7 +98,7 @@ class PetCard extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: "$_level",
+                    text: "${pet.level}",
                     style: body,
                   ),
                 ],
