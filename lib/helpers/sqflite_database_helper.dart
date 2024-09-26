@@ -18,6 +18,8 @@ class SqfliteDatabaseHelper implements IDatabaseHelper {
       version: 1,
       onOpen: (db) {
         db.execute(
+            "CREATE TABLE IF NOT EXISTS Pet ( id TEXT PRIMARY KEY, petBioCode INTEGER NOT NULL, name TEXT, stars INTEGER DEFAULT 0, totalCopies INTEGER DEFAULT 0, currentCopies INTEGER DEFAULT 0, nextStarCopies INTEGER DEFAULT 1, totalXp INTEGER DEFAULT 0, currentXp INTEGER DEFAULT 0, nextLevelXp INTEGER DEFAULT 50, level INTEGER DEFAULT 1, totalGoldSpent INTEGER DEFAULT 0);");
+        db.execute(
             "CREATE TABLE IF NOT EXISTS Flashcard ( id TEXT PRIMARY KEY, collectionId TEXT NOT NULL, frontContent TEXT NOT NULL, backContent TEXT NOT NULL, repeticoes INTEGER DEFAULT 0, easeFactor REAL DEFAULT 2.5, interval REAL DEFAULT 0, revisionDate TEXT NOT NULL);");
         return db.execute(
             "CREATE TABLE IF NOT EXISTS Collection ( id TEXT PRIMARY KEY, name TEXT NOT NULL, subjectCode INTEGER NOT NULL, description TEXT );");
