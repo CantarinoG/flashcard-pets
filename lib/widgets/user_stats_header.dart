@@ -7,10 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class UserStatsHeader extends StatelessWidget {
-  //Mocked Data
-  final _level = 10;
-  final _progress = 0.67;
-
   const UserStatsHeader({super.key});
 
   @override
@@ -34,6 +30,12 @@ class UserStatsHeader extends StatelessWidget {
         } else if (snapshot.hasData && snapshot.data != null) {
           final user = snapshot.data!;
 
+          final int currentLevelXp = user.currentLevelXp;
+          final int nextLevelXp = user.nextLevelXp;
+          final double progress = ((currentLevelXp / nextLevelXp) > 1)
+              ? 1
+              : (currentLevelXp / nextLevelXp);
+
           return Column(
             children: [
               Row(
@@ -50,7 +52,7 @@ class UserStatsHeader extends StatelessWidget {
                         ),
                         TextSpan(
                           text:
-                              '$_level', // Use user's level or fallback to mocked data
+                              '${user.level}', // Use user's level or fallback to mocked data
                           style: h3,
                         ),
                       ],
@@ -80,9 +82,9 @@ class UserStatsHeader extends StatelessWidget {
                       secondary,
                       const Color.fromARGB(255, 201, 201, 201),
                     ], stops: [
-                      _progress / 2,
-                      _progress,
-                      _progress,
+                      progress / 2,
+                      progress,
+                      progress,
                     ])),
                 child: const SizedBox(height: 8),
               ),

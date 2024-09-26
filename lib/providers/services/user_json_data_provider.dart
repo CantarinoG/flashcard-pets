@@ -38,6 +38,7 @@ class UserJsonDataProvider
 
   @override
   Future<User?> readData() async {
+    //await deleteData();
     try {
       final file = await _getFilePath();
       if (await file.exists()) {
@@ -51,6 +52,21 @@ class UserJsonDataProvider
     } catch (e) {
       debugPrint("Error reading file: $e");
       return null;
+    }
+  }
+
+  Future<void> deleteData() async {
+    try {
+      final file = await _getFilePath();
+      if (await file.exists()) {
+        await file.delete();
+        notifyListeners();
+        debugPrint("User data deleted successfully.");
+      } else {
+        debugPrint("No user data to delete.");
+      }
+    } catch (e) {
+      debugPrint("Error deleting file: $e");
     }
   }
 }

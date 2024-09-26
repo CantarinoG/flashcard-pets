@@ -54,7 +54,7 @@ class StoreScreen extends StatelessWidget {
                     "Geralmente contém um pet de raridade rara. Pequena chance de conter um pet de raridade épica.",
                     "assets/images/chests/chest2.png",
                     500,
-                    30,
+                    20,
                     onBuy: _buySuperiorChest,
                   ),
                 ],
