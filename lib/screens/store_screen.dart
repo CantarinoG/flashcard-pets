@@ -1,22 +1,89 @@
+import 'dart:math';
+
+import 'package:flashcard_pets/models/pet.dart';
+import 'package:flashcard_pets/models/pet_bio.dart';
+import 'package:flashcard_pets/models/user.dart';
+import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/services/i_id_provider.dart';
+import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/snackbars/error_snackbar.dart';
+import 'package:flashcard_pets/snackbars/pet_got_snackbar.dart';
+import 'package:flashcard_pets/themes/app_themes.dart';
+import 'package:flashcard_pets/widgets/loading.dart';
+import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/store_card.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key});
 
-  void _buyBasicChest() {
-    //...
-  }
+  void _buy(
+    BuildContext context,
+    PetRarity commonDrop,
+    PetRarity rareDrop,
+    User user,
+    int price,
+  ) async {
+    if (user.gold < price) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const ErrorSnackbar(
+              "Você não possui moedas o suficiente para comprar esse baú."),
+          backgroundColor: Theme.of(context).colorScheme.bright,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
 
-  void _buyMediumChest() {
-    //...
-  }
+    final petsBioMap =
+        Provider.of<IDataProvider<PetBio>>(context, listen: false)
+            .retrieveData();
+    final commonDropKeys = petsBioMap.entries
+        .where((entry) => entry.value.rarity == commonDrop)
+        .map((entry) => entry.key)
+        .toList();
+    final rareDropKeys = petsBioMap.entries
+        .where((entry) => entry.value.rarity == rareDrop)
+        .map((entry) => entry.key)
+        .toList();
 
-  void _buySuperiorChest() {
-    //...
+    final random = Random();
+    int randomNumber = random.nextInt(100);
+    final selectedList = randomNumber < 10 ? rareDropKeys : commonDropKeys;
+
+    final int petGotCode = selectedList[random.nextInt(selectedList.length)];
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: PetGotSnackbar(petGotCode),
+        backgroundColor: Theme.of(context).colorScheme.bright,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+
+    final pet = await Provider.of<IDao<Pet>>(context, listen: false).customRead(
+      "petBioCode = ?",
+      [petGotCode],
+    );
+
+    if (pet.isEmpty) {
+      final String uniqueId =
+          Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+      Pet newPet = Pet(
+        uniqueId,
+        petGotCode,
+      );
+      Provider.of<IDao<Pet>>(context, listen: false).insert(newPet);
+    } else {
+      //User already had this pet.
+    }
+    //tem ainda a questão de que se o pet tiver 5 estrelas, deve dar é xp.
   }
 
   @override
@@ -24,43 +91,75 @@ class StoreScreen extends StatelessWidget {
     return Scaffold(
       appBar: const ThemedAppBar("Loja"),
       body: ScreenLayout(
-        child: Column(
-          children: [
-            const UserStatsHeader(),
-            const SizedBox(
-              height: 16,
-            ),
-            Expanded(
-              child: ListView(
+        child: FutureBuilder(
+          future: Provider.of<IJsonDataProvider<User>>(context).readData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Loading();
+            } else if (snapshot.hasError) {
+              return const NoItemsPlaceholder(
+                  "Ocorreu algum erro. Tente novamente mais tarde.");
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return const NoItemsPlaceholder(
+                  "Ocorreu algum erro. Tente novamente mais tarde.");
+            } else if (snapshot.hasData && snapshot.data != null) {
+              final user = snapshot.data!;
+              return Column(
                 children: [
-                  StoreCard(
-                    "Baú Básico",
-                    "Geralmente contém um pet de raridade comum. Pequena chance de conter um pet de raridade incomum.",
-                    "assets/images/chests/chest0.png",
-                    100,
-                    0,
-                    onBuy: _buyBasicChest,
-                  ),
-                  StoreCard(
-                    "Baú Médio",
-                    "Geralmente contém um pet de raridade incomum. Pequena chance de conter um pet de raridade rara.",
-                    "assets/images/chests/chest1.png",
-                    300,
-                    10,
-                    onBuy: _buyMediumChest,
-                  ),
-                  StoreCard(
-                    "Baú Superior",
-                    "Geralmente contém um pet de raridade rara. Pequena chance de conter um pet de raridade épica.",
-                    "assets/images/chests/chest2.png",
-                    500,
-                    20,
-                    onBuy: _buySuperiorChest,
+                  const UserStatsHeader(),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        StoreCard(
+                          "Baú Básico",
+                          "Geralmente contém um pet de raridade comum. Pequena chance de conter um pet de raridade incomum.",
+                          "assets/images/chests/chest0.png",
+                          100,
+                          0,
+                          user.level,
+                          onBuy: () => _buy(
+                            context,
+                            PetRarity.common,
+                            PetRarity.uncommon,
+                            user,
+                            100,
+                          ),
+                        ),
+                        StoreCard(
+                          "Baú Médio",
+                          "Geralmente contém um pet de raridade incomum. Pequena chance de conter um pet de raridade rara.",
+                          "assets/images/chests/chest1.png",
+                          300,
+                          10,
+                          user.level,
+                          onBuy: () => _buy(
+                            context,
+                            PetRarity.uncommon,
+                            PetRarity.rare,
+                            user,
+                            300,
+                          ),
+                        ),
+                        StoreCard(
+                          "Baú Superior",
+                          "Geralmente contém um pet de raridade rara. Pequena chance de conter um pet de raridade épica.",
+                          "assets/images/chests/chest2.png",
+                          500,
+                          20,
+                          user.level,
+                          onBuy: () => _buy(context, PetRarity.rare,
+                              PetRarity.epic, user, 500),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
-              ),
-            ),
-          ],
+              );
+            } else {
+              return Text("Ocorreu um erro. Tente novamente mais tarde.");
+            }
+          },
         ),
       ),
     );

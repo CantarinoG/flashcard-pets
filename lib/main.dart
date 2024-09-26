@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => subjectDataProvider),
         ChangeNotifierProvider(create: (_) => awardDataProvider),
         ChangeNotifierProvider(create: (_) => avatarDataProvider),
-        ChangeNotifierProvider(create: (_) => petDaoProvider),
+        ChangeNotifierProvider(create: (_) => petBioDataProvider),
         ChangeNotifierProvider(create: (_) => collectionDaoProvider),
         ChangeNotifierProvider(create: (_) => flashcardDaoProvider),
         ChangeNotifierProvider(create: (_) => petDaoProvider),

@@ -4,28 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class StoreCard extends StatelessWidget {
-  //Mocked data
-  final _isLocked = true;
-
   final String name;
   final String desc;
   final String imgPath;
   final int price;
   final int unlockLevel;
+  final int userLevel;
   final void Function() onBuy;
   const StoreCard(
     this.name,
     this.desc,
     this.imgPath,
     this.price,
-    this.unlockLevel, {
+    this.unlockLevel,
+    this.userLevel, {
     required this.onBuy,
     super.key,
   });
-
-  void _buy() {
-    //...
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,13 +84,13 @@ class StoreCard extends StatelessWidget {
             ),
             ThemedFilledButton(
               label: "Comprar",
-              onPressed: _isLocked ? null : _buy,
+              onPressed: (userLevel < unlockLevel) ? null : onBuy,
             ),
-            if (_isLocked)
+            if (userLevel < unlockLevel)
               const SizedBox(
                 height: 8,
               ),
-            if (_isLocked)
+            if (userLevel < unlockLevel)
               Text(
                 "Libera no nível $unlockLevel",
                 style: h3?.copyWith(
