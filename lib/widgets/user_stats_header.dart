@@ -1,11 +1,14 @@
+import 'package:flashcard_pets/models/user.dart';
+import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
+import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class UserStatsHeader extends StatelessWidget {
   //Mocked Data
   final _level = 10;
-  final _gold = 200;
   final _progress = 0.67;
 
   const UserStatsHeader({super.key});
@@ -17,58 +20,78 @@ class UserStatsHeader extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RichText(
-              text: TextSpan(
+    return FutureBuilder<User?>(
+      future: Provider.of<IJsonDataProvider<User>>(context).readData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox(
+            width: double.infinity,
+            height: 80,
+            child: Loading(),
+          );
+        } else if (snapshot.hasError) {
+          return const Text("Ocorreu algum erro. Tente novamente mais tarde.");
+        } else if (snapshot.hasData && snapshot.data != null) {
+          final user = snapshot.data!;
+
+          return Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextSpan(
-                    text: 'Lvl ',
-                    style: h4.copyWith(
-                      color: secondary,
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Lvl ',
+                          style: h4.copyWith(
+                            color: secondary,
+                          ),
+                        ),
+                        TextSpan(
+                          text:
+                              '$_level', // Use user's level or fallback to mocked data
+                          style: h3,
+                        ),
+                      ],
                     ),
                   ),
-                  TextSpan(
-                    text: '$_level',
-                    style: h3,
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/images/custom_icons/coin.svg",
+                        width: 30,
+                        height: 30,
+                      ),
+                      Text(
+                        "${user.gold}", // Use user's gold or fallback to mocked data
+                        style: h3,
+                      )
+                    ],
                   ),
                 ],
               ),
-            ),
-            Row(
-              children: [
-                SvgPicture.asset(
-                  "assets/images/custom_icons/coin.svg",
-                  width: 30,
-                  height: 30,
-                ),
-                Text(
-                  "$_gold",
-                  style: h3,
-                )
-              ],
-            ),
-          ],
-        ),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              gradient: LinearGradient(colors: [
-                primary,
-                secondary,
-                const Color.fromARGB(255, 201, 201, 201),
-              ], stops: [
-                _progress / 2,
-                _progress,
-                _progress,
-              ])),
-          child: const SizedBox(height: 8),
-        ),
-      ],
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    gradient: LinearGradient(colors: [
+                      primary,
+                      secondary,
+                      const Color.fromARGB(255, 201, 201, 201),
+                    ], stops: [
+                      _progress / 2,
+                      _progress,
+                      _progress,
+                    ])),
+                child: const SizedBox(height: 8),
+              ),
+            ],
+          );
+        } else {
+          return const Text('No user data available.');
+        }
+      },
     );
   }
 }
