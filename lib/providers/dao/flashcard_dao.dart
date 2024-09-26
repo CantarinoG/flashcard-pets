@@ -1,6 +1,6 @@
+import 'package:flashcard_pets/helpers/sqflite_database_helper.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
-import 'package:flashcard_pets/services/sqflite_database_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 
