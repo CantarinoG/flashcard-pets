@@ -9,9 +9,10 @@ import 'package:flutter_svg/svg.dart';
 class ReviewResultsScreen extends StatelessWidget {
   final String collectionName;
   final int numCards;
-  final int rewardValue;
+  final int goldValue;
+  final int xpValue;
   const ReviewResultsScreen(
-      this.collectionName, this.numCards, this.rewardValue,
+      this.collectionName, this.numCards, this.goldValue, this.xpValue,
       {super.key});
 
   void _finishRevision(BuildContext context) {
@@ -79,7 +80,7 @@ class ReviewResultsScreen extends StatelessWidget {
                             width: 4,
                           ),
                           Text(
-                            "$rewardValue",
+                            "$goldValue",
                             style: body,
                           ),
                           const SizedBox(
@@ -95,7 +96,7 @@ class ReviewResultsScreen extends StatelessWidget {
                             width: 4,
                           ),
                           Text(
-                            "$rewardValue",
+                            "$xpValue",
                             style: body,
                           ),
                         ],

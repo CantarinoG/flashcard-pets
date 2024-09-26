@@ -12,9 +12,9 @@ class StandardGameElementsCalculations
     with ChangeNotifier
     implements IGameElementsCalculations {
   @override
-  User addGoldAndXp(User user, int value, BuildContext context) {
+  User addGoldAndXp(User user, int gold, int xp, BuildContext context) {
     int initialLevel = user.level;
-    user = _addXp(user, value);
+    user = _addXp(user, xp);
     if (user.level > initialLevel) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -24,10 +24,10 @@ class StandardGameElementsCalculations
         ),
       );
     }
-    user.gold += value;
+    user.gold += gold;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: RewardSnackbar(value),
+        content: RewardSnackbar(gold, xp),
         backgroundColor: Theme.of(context).colorScheme.bright,
         duration: const Duration(seconds: 1),
       ),
@@ -35,8 +35,8 @@ class StandardGameElementsCalculations
     return user;
   }
 
-  User _addXp(User user, int value) {
-    user.totalXp += value;
+  User _addXp(User user, int xpValue) {
+    user.totalXp += xpValue;
     int totalXp = user.totalXp;
 
     const int baseXp = 50;
@@ -58,7 +58,8 @@ class StandardGameElementsCalculations
   }
 
   @override
-  int calculateRevisionRewards(Flashcard flashcard, int quality) {
+  int calculateRevisionRewards(
+      Flashcard flashcard, int quality, double multiplier) {
     //TODO: Create the logic to actually calculate based on the card's attributes.
     return 10;
   }

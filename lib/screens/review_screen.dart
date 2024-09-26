@@ -39,7 +39,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
   bool _evaluatedReview = false;
   double _sliderValue = 0;
   bool _isLoading = false;
-  int _totalPointsReceived = 0;
+  int _totalGoldReceived = 0;
+  int _totalXpReceived = 0;
 
   void _toggleShowingBack() {
     setState(() {
@@ -67,13 +68,23 @@ class _ReviewScreenState extends State<ReviewScreen> {
         Provider.of<IJsonDataProvider<User>>(context, listen: false);
     final gameCalcProvider =
         Provider.of<IGameElementsCalculations>(context, listen: false);
-    int rewards = gameCalcProvider.calculateRevisionRewards(
-        widget.cardsToReview[_currentCardIndex], _sliderValue.round());
+    const double goldMultiplier = 1; //Calculate based on pets.
+    const double xpMultiplier = 1; //Calculate based on pets.
+    int goldReward = gameCalcProvider.calculateRevisionRewards(
+        widget.cardsToReview[_currentCardIndex],
+        _sliderValue.round(),
+        goldMultiplier);
+    int xpReward = gameCalcProvider.calculateRevisionRewards(
+        widget.cardsToReview[_currentCardIndex],
+        _sliderValue.round(),
+        xpMultiplier);
     final user = await userDataProvider.readData();
     if (user == null || !mounted) return;
-    User updatedUser = gameCalcProvider.addGoldAndXp(user, rewards, context);
+    User updatedUser =
+        gameCalcProvider.addGoldAndXp(user, goldReward, xpReward, context);
     setState(() {
-      _totalPointsReceived += rewards;
+      _totalGoldReceived += goldReward;
+      _totalXpReceived += xpReward;
     });
     await userDataProvider.writeData(updatedUser);
 
@@ -103,8 +114,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => ReviewResultsScreen(
-              widget.collection.name, _totalCardsNum, _totalPointsReceived),
+          builder: (context) => ReviewResultsScreen(widget.collection.name,
+              _totalCardsNum, _totalGoldReceived, _totalXpReceived),
         ),
       );
     }

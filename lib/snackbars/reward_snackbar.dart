@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RewardSnackbar extends StatelessWidget {
-  final int value;
-  const RewardSnackbar(this.value, {super.key});
+  final int goldValue;
+  final int xpValue;
+  const RewardSnackbar(this.goldValue, this.xpValue, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class RewardSnackbar extends StatelessWidget {
           width: 16,
         ),
         Text(
-          " $value",
+          " $goldValue",
           style: body?.copyWith(color: primary),
         ),
         const SizedBox(
@@ -50,7 +51,7 @@ class RewardSnackbar extends StatelessWidget {
           width: 16,
         ),
         Text(
-          " $value",
+          " $xpValue",
           style: body?.copyWith(
             color: primary,
           ),
