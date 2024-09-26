@@ -1,6 +1,7 @@
 import 'package:flashcard_pets/models/award.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
+import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
@@ -10,6 +11,7 @@ import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
     IDataProvider<String> avatarDataProvider = AvatarDataProvider();
     IDao<Collection> collectionDaoProvider = CollectionDao();
     IDao<Flashcard> flashcardDaoProvider = FlashcardDao();
+    IDao<Pet> petDaoProvider = PetDao();
     IIdProvider idProvider = UuidProvider();
     Sm2Calculator sm2Provider = Sm2Calculator();
     IGameElementsCalculations gameElementCalcProvider =
@@ -51,6 +54,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => avatarDataProvider),
         ChangeNotifierProvider(create: (_) => collectionDaoProvider),
         ChangeNotifierProvider(create: (_) => flashcardDaoProvider),
+        ChangeNotifierProvider(create: (_) => petDaoProvider),
         ChangeNotifierProvider(create: (_) => idProvider),
         ChangeNotifierProvider(create: (_) => sm2Provider),
         ChangeNotifierProvider(create: (_) => userDataProvider),
