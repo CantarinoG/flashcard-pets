@@ -4,6 +4,7 @@ import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/screens/pet_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
+import 'package:flashcard_pets/widgets/rarity_text.dart';
 import 'package:flashcard_pets/widgets/stars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,6 @@ class PetCard extends StatelessWidget {
   final Pet pet;
   //Mocked data.
   final String _skillShort = "+2% ouro";
-  final String _rarity = "Common";
 
   const PetCard(this.pet, {super.key});
 
@@ -86,7 +86,7 @@ class PetCard extends StatelessWidget {
                 color: disabled,
               ),
             ),
-            const Stars(),
+            Stars(pet.stars),
             const SizedBox(
               height: 8,
             ),
@@ -111,10 +111,7 @@ class PetCard extends StatelessWidget {
                   Icons.diamond,
                   color: secondary,
                 ),
-                Text(
-                  " $_rarity",
-                  style: bodyEm.copyWith(color: text),
-                ),
+                RarityText(petBio.rarity),
               ],
             ),
             const SizedBox(

@@ -11,6 +11,7 @@ class PetScreen extends StatelessWidget {
   //Mocked data
   final String _imgPath = "assets/images/baby_pets/beagle.png";
   final String _name = "Cleitinho";
+  final int _stars = 0;
   final int _level = 5;
   final int _currentXp = 450;
   final int _goalXp = 500;
@@ -102,7 +103,7 @@ class PetScreen extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              const Stars(),
+              Stars(_stars),
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
