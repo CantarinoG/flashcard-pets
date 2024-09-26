@@ -69,8 +69,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
     int rewards = gameCalcProvider.calculateRevisionRewards(
         widget.cardsToReview[_currentCardIndex], _sliderValue.round());
     userDataProvider.readData().then((user) {
-      if (user == null) return;
-      User updatedUser = gameCalcProvider.addGold(user, rewards);
+      if ((user == null) || !mounted) return;
+      User updatedUser = gameCalcProvider.addGoldAndXp(user, rewards, context);
       userDataProvider.writeData(updatedUser);
     });
 

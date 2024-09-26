@@ -4,5 +4,5 @@ import 'package:flutter/material.dart';
 
 abstract class IGameElementsCalculations with ChangeNotifier {
   int calculateRevisionRewards(Flashcard flashcard, int quality);
-  User addGold(User user, int gold);
+  User addGoldAndXp(User user, int gold, BuildContext context);
 }
