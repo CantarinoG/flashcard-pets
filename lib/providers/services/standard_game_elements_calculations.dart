@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
+import 'package:flashcard_pets/snackbars/levelup_snackbar.dart';
 import 'package:flashcard_pets/snackbars/reward_snackbar.dart';
-import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ class StandardGameElementsCalculations
     if (user.level > initialLevel) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const SuccessSnackbar("upou carai"),
+          content: LevelupSnackbar(user.level),
           backgroundColor: Theme.of(context).colorScheme.bright,
           duration: const Duration(seconds: 2),
         ),
