@@ -70,6 +70,38 @@ class StandardGameElementsCalculations
     return user;
   }
 
+  Pet addPetXp(Pet pet, int xpValue, BuildContext context) {
+    final int initialLevel = pet.level;
+    pet.totalXp += xpValue;
+    int totalXp = pet.totalXp;
+    const int baseXp = 50;
+    const double levelMultiplier = 1.1;
+    int level = 1;
+    int requiredXpForNextLevel = baseXp;
+
+    while (totalXp >= requiredXpForNextLevel) {
+      totalXp -= requiredXpForNextLevel;
+      level++;
+      requiredXpForNextLevel = (baseXp * pow(levelMultiplier, level)).toInt();
+    }
+
+    pet.level = level;
+    pet.currentXp = totalXp;
+    pet.nextLevelXp = requiredXpForNextLevel;
+
+    if (pet.level > initialLevel) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: PetLevelupSnackbar(pet, true),
+          backgroundColor: Theme.of(context).colorScheme.bright,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+
+    return pet;
+  }
+
   @override
   Pet addPetCopy(Pet pet, int copies, BuildContext context) {
     int initialStars = pet.stars;
@@ -110,6 +142,20 @@ class StandardGameElementsCalculations
   int calculateRevisionRewards(
       Flashcard flashcard, int quality, double multiplier) {
     //TODO: Create the logic to actually calculate based on the card's attributes.
-    return 10;
+    return 10000;
+  }
+
+  @override
+  int calculateTotalXpToLevel(int level) {
+    const int baseXp = 50;
+    const double levelMultiplier = 1.1;
+    int totalXp = 0;
+
+    for (int i = 1; i < level; i++) {
+      int requiredXpForLevel = (baseXp * pow(levelMultiplier, i)).toInt();
+      totalXp += requiredXpForLevel;
+    }
+
+    return totalXp;
   }
 }

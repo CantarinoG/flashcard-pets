@@ -12,4 +12,6 @@ abstract class IGameElementsCalculations with ChangeNotifier {
   User addGoldAndXp(User user, int gold, int xp, BuildContext context,
       {String? optionalMessage});
   Pet addPetCopy(Pet pet, int copies, BuildContext context);
+  Pet addPetXp(Pet pet, int xp, BuildContext context);
+  int calculateTotalXpToLevel(int level);
 }
