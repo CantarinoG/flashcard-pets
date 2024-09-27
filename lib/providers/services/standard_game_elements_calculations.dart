@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/pet.dart';
+import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/snackbars/levelup_snackbar.dart';
@@ -146,6 +147,24 @@ class StandardGameElementsCalculations
     int rewardValue = (quality * (flashcard.interval / 2)).round();
     rewardValue = (rewardValue < quality) ? quality : rewardValue;
     return rewardValue;
+  }
+
+  @override
+  double calculatePetBonus(Pet pet, PetRarity rarity) {
+    final Map<PetRarity, double> rarityMultiplier = {
+      PetRarity.common: 1.0,
+      PetRarity.uncommon: 1.2,
+      PetRarity.rare: 1.5,
+      PetRarity.epic: 2.0,
+    };
+
+    double baseBonus = 0.01;
+    int level = pet.level;
+    int stars = pet.stars;
+    double rarityBonus = rarityMultiplier[rarity]!;
+
+    double bonus = (1 + (level * baseBonus)) * (1 + 0.2 * stars) * rarityBonus;
+    return bonus;
   }
 
   @override
