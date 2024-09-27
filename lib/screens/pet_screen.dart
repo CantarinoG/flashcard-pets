@@ -8,6 +8,8 @@ import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/snackbars/error_snackbar.dart';
+import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
@@ -35,13 +37,13 @@ class _PetScreenState extends State<PetScreen> {
   final int _skillValue = 2;
   final String _skillDesc = "% mais ouro ao revisar cartões.";
 
-  void _sell(Pet pet, PetBio petBio) {
+  void _sell(Pet pet, PetBio petBio) async {
     final Color warning = Theme.of(context).colorScheme.warning;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
 
     final int petValue = (pet.totalGoldSpent * 0.7).round();
-    showDialog(
+    final bool? shouldDelete = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return ConfirmDeleteDialog(
@@ -67,7 +69,7 @@ class _PetScreenState extends State<PetScreen> {
                     width: 30,
                     height: 30,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Text(
@@ -81,6 +83,42 @@ class _PetScreenState extends State<PetScreen> {
         );
       },
     );
+
+    if (shouldDelete != null && shouldDelete) {
+      if (!mounted) return;
+      final userProvider =
+          Provider.of<IJsonDataProvider<User>>(context, listen: false);
+      final user = await userProvider.readData();
+
+      if (user != null) {
+        user.gold += petValue;
+        await userProvider.writeData(user);
+
+        if (!mounted) return;
+        final petDao = Provider.of<IDao<Pet>>(context, listen: false);
+        await petDao.delete(pet.id);
+
+        if (!mounted) return;
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const SuccessSnackbar("Vendido com sucesso!"),
+            backgroundColor: Theme.of(context).colorScheme.bright,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const ErrorSnackbar(
+                "Não foi possível vender o pet, tente novamente mais tarde."),
+            backgroundColor: Theme.of(context).colorScheme.bright,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 
   void _changeName(BuildContext context) {
@@ -96,6 +134,7 @@ class _PetScreenState extends State<PetScreen> {
     ).then((value) {
       if (value != null && value.isNotEmpty) {
         widget.pet.name = value;
+        if (!mounted) return;
         final petDao = Provider.of<IDao<Pet>>(context, listen: false);
         petDao.update(widget.pet);
         setState(() {});
@@ -111,6 +150,7 @@ class _PetScreenState extends State<PetScreen> {
       },
     ).then((value) {
       if (value == null) return;
+      if (!mounted) return;
       final gameElementsCalculator =
           Provider.of<IGameElementsCalculations>(context, listen: false);
       if (!mounted) return;
