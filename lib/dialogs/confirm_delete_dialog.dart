@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 class ConfirmDeleteDialog extends StatelessWidget {
   final String _title;
   final String _message;
+  final String? deleteLabel;
+  final Widget? content;
 
   /// Dialog to confirm deletion.
   ///
   /// Returns true if the user confirmed.
   /// Returns false if the user declined.
   /// Retuns null if the user exited.
-  const ConfirmDeleteDialog(this._title, this._message, {super.key});
+  const ConfirmDeleteDialog(this._title, this._message,
+      {this.deleteLabel = "Deletar", this.content, super.key});
 
   void _cancel(BuildContext context) {
     Navigator.of(context).pop(false);
@@ -37,12 +40,13 @@ class ConfirmDeleteDialog extends StatelessWidget {
           color: secondary,
         ),
       ),
-      content: Text(
-        _message,
-        style: bodyEm.copyWith(
-          color: warning,
-        ),
-      ),
+      content: content ??
+          Text(
+            _message,
+            style: bodyEm.copyWith(
+              color: warning,
+            ),
+          ),
       actions: [
         TextButton(
           onPressed: () {

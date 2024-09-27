@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/dialogs/feed_pet_dialog.dart';
 import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/models/pet.dart';
@@ -17,6 +18,7 @@ import 'package:flashcard_pets/widgets/stars.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class PetScreen extends StatefulWidget {
@@ -33,8 +35,52 @@ class _PetScreenState extends State<PetScreen> {
   final int _skillValue = 2;
   final String _skillDesc = "% mais ouro ao revisar cartões.";
 
-  void _sell() {
-    debugPrint("Aquiii ${widget.pet.totalGoldSpent}");
+  void _sell(Pet pet, PetBio petBio) {
+    final Color warning = Theme.of(context).colorScheme.warning;
+    final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+    final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
+
+    final int petValue = (pet.totalGoldSpent * 0.7).round();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmDeleteDialog(
+          "Vender Pet?",
+          "",
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Tem certeza que deseja vender ${pet.name ?? petBio.breed}? Essa ação não pode ser desfeita.",
+                style: bodyEm.copyWith(
+                  color: warning,
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    "assets/images/custom_icons/coin.svg",
+                    width: 30,
+                    height: 30,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    "$petValue",
+                    style: body,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void _changeName(BuildContext context) {
@@ -103,7 +149,9 @@ class _PetScreenState extends State<PetScreen> {
         "Pets",
         actions: [
           IconButton(
-            onPressed: _sell,
+            onPressed: () {
+              _sell(widget.pet, petBio);
+            },
             icon: const Icon(Icons.attach_money),
           ),
         ],
