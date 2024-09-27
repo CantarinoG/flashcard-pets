@@ -73,6 +73,8 @@ class StoreScreen extends StatelessWidget {
       [petGotCode],
     );
 
+    final gameElementsCalc =
+        Provider.of<IGameElementsCalculations>(context, listen: false);
     if (pet.isEmpty) {
       final String uniqueId =
           Provider.of<IIdProvider>(context, listen: false).getUniqueId();
@@ -83,13 +85,14 @@ class StoreScreen extends StatelessWidget {
       );
       Provider.of<IDao<Pet>>(context, listen: false).insert(newPet);
     } else if (pet[0].stars == 5) {
-      final gameElementsCalc =
-          Provider.of<IGameElementsCalculations>(context, listen: false);
       user = gameElementsCalc.addGoldAndXp(user, 0, price, context,
           optionalMessage:
               "Você já possui esse pet com 5 estrelas. Ele será convertido em pontos de experiência.");
     } else {
       // Handle the case where the pet exists but has less than 5 stars
+      final updatedPet = gameElementsCalc.addPetCopy(pet[0], 1);
+      Provider.of<IDao<Pet>>(context, listen: false).update(updatedPet);
+      //Must display snackbar
     }
 
     user.gold -= price;

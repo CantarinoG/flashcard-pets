@@ -46,8 +46,8 @@ class PetScreen extends StatelessWidget {
     final petBio = Provider.of<IDataProvider<PetBio>>(context)
         .retrieveFromKey(pet.petBioCode);
 
-    final double progress = pet.currentXp / pet.nextLevelXp;
-
+    final double xpProgress = pet.currentXp / pet.nextLevelXp;
+    final double copiesProgress = pet.currentCopies / pet.nextStarCopies;
     return Scaffold(
       appBar: ThemedAppBar(
         "Pets",
@@ -97,46 +97,48 @@ class PetScreen extends StatelessWidget {
                 height: 8,
               ),
               Stars(pet.stars),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  gradient: LinearGradient(
-                    colors: [
-                      starLighter,
-                      star,
-                      const Color.fromARGB(255, 201, 201, 201),
-                    ],
-                    stops: [
-                      progress / 2,
-                      progress,
-                      progress,
+              if (pet.stars < 5) ...[
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    gradient: LinearGradient(
+                      colors: [
+                        starLighter,
+                        star,
+                        const Color.fromARGB(255, 201, 201, 201),
+                      ],
+                      stops: [
+                        copiesProgress / 2,
+                        copiesProgress,
+                        copiesProgress,
+                      ],
+                    ),
+                  ),
+                  child: const SizedBox(height: 8),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.copy,
+                        color: secondary,
+                      ),
+                      Text(
+                        " ${pet.currentCopies}/${pet.nextStarCopies}",
+                        style: body?.copyWith(
+                          color: secondary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                child: const SizedBox(height: 8),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(
-                      Icons.copy,
-                      color: secondary,
-                    ),
-                    Text(
-                      " ${pet.currentCopies}/${pet.nextStarCopies}",
-                      style: body?.copyWith(
-                        color: secondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ],
               const SizedBox(
                 height: 8,
               ),
@@ -170,9 +172,9 @@ class PetScreen extends StatelessWidget {
                       const Color.fromARGB(255, 201, 201, 201),
                     ],
                     stops: [
-                      progress / 2,
-                      progress,
-                      progress,
+                      xpProgress / 2,
+                      xpProgress,
+                      xpProgress,
                     ],
                   ),
                 ),

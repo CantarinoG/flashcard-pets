@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flashcard_pets/models/flashcard.dart';
+import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/snackbars/levelup_snackbar.dart';
@@ -66,6 +67,30 @@ class StandardGameElementsCalculations
     user.nextLevelXp = requiredXpForNextLevel;
 
     return user;
+  }
+
+  @override
+  Pet addPetCopy(Pet pet, int copies) {
+    pet.totalCopies += copies;
+    int totalCopies = pet.totalCopies;
+
+    const int baseCopies = 1;
+    const double starMultiplier = 2;
+    int stars = 0;
+    int requiredCopiesForNextStar = baseCopies;
+
+    while (totalCopies >= requiredCopiesForNextStar && stars < 5) {
+      totalCopies -= requiredCopiesForNextStar;
+      stars++;
+      requiredCopiesForNextStar =
+          (baseCopies * pow(starMultiplier, stars)).toInt();
+    }
+
+    pet.stars = stars;
+    pet.currentCopies = totalCopies;
+    pet.nextStarCopies = requiredCopiesForNextStar;
+
+    return pet;
   }
 
   @override
