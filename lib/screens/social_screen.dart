@@ -1,4 +1,3 @@
-import 'package:flashcard_pets/dialogs/add_friend_dialog.dart';
 import 'package:flashcard_pets/dialogs/notifications_dialog.dart';
 import 'package:flashcard_pets/screens/auth_screen.dart';
 import 'package:flashcard_pets/screens/friends_subscreen.dart';
@@ -212,12 +211,12 @@ class SocialFab extends StatelessWidget {
   const SocialFab({super.key});
 
   void _onTap(BuildContext context) {
-    showDialog(
+    /*showDialog(
       context: context,
       builder: (BuildContext context) {
         return const AddFriendDialog();
       },
-    );
+    );*/
   }
 
   @override

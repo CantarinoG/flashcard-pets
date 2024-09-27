@@ -2,15 +2,39 @@ import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flutter/material.dart';
 
-class AddFriendDialog extends StatelessWidget {
-  const AddFriendDialog({super.key});
+class SingleInputDialog<T> extends StatefulWidget {
+  final String title;
+  final String description;
+  final String label;
+  final String? prefixText;
+  final String actionText;
+  const SingleInputDialog(
+      {this.title = "",
+      this.description = "",
+      this.label = "",
+      this.actionText = "Confirmar",
+      this.prefixText,
+      super.key});
+
+  @override
+  State<SingleInputDialog<T>> createState() => _SingleInputDialogState<T>();
+}
+
+class _SingleInputDialogState<T> extends State<SingleInputDialog<T>> {
+  final TextEditingController _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   void _cancel(BuildContext context) {
     Navigator.of(context).pop();
   }
 
-  void _add(BuildContext context) {
-    Navigator.of(context).pop(true);
+  void _confirm(BuildContext context) {
+    Navigator.of(context).pop(_textController.text.trim());
   }
 
   @override
@@ -22,7 +46,7 @@ class AddFriendDialog extends StatelessWidget {
 
     return AlertDialog(
       title: Text(
-        "Adicionar Amigo",
+        widget.title,
         style: h2?.copyWith(
           color: secondary,
         ),
@@ -31,17 +55,18 @@ class AddFriendDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "Insira o @ da pessoa que deseja adicionar como amigo.",
+            widget.description,
             style: bodyEm,
           ),
           const SizedBox(
             height: 8,
           ),
-          const TextFieldWrapper(
-            label: "Id do Usuário",
+          TextFieldWrapper(
+            label: widget.label,
             child: TextField(
+              controller: _textController,
               decoration: InputDecoration(
-                prefixText: "@",
+                prefixText: widget.prefixText,
                 border: InputBorder.none,
               ),
             ),
@@ -62,10 +87,10 @@ class AddFriendDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            _add(context);
+            _confirm(context);
           },
           child: Text(
-            "Adicionar",
+            widget.actionText,
             style: bodyEm.copyWith(
               color: primary,
             ),

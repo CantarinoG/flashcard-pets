@@ -136,7 +136,7 @@ class StoreScreen extends StatelessWidget {
                             PetRarity.common,
                             PetRarity.uncommon,
                             user,
-                            0,
+                            100,
                           ),
                         ),
                         StoreCard(

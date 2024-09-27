@@ -1,6 +1,8 @@
+import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/pet_description_card.dart';
@@ -11,19 +13,42 @@ import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PetScreen extends StatelessWidget {
+class PetScreen extends StatefulWidget {
   final Pet pet;
+
+  const PetScreen(this.pet, {super.key});
+
+  @override
+  State<PetScreen> createState() => _PetScreenState();
+}
+
+class _PetScreenState extends State<PetScreen> {
   //Mocked data
   final int _skillValue = 2;
   final String _skillDesc = "% mais ouro ao revisar cartões.";
-  const PetScreen(this.pet, {super.key});
 
   void _sell() {
     //...
   }
 
-  void _changeName() {
-    //...
+  void _changeName(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const SingleInputDialog<String>(
+          title: "Mudar o Nome do Pet",
+          description: "Insira o novo nome do pet.",
+          label: "Nome",
+        );
+      },
+    ).then((value) {
+      if (value != null && value.isNotEmpty) {
+        widget.pet.name = value;
+        final petDao = Provider.of<IDao<Pet>>(context, listen: false);
+        petDao.update(widget.pet);
+        setState(() {});
+      }
+    });
   }
 
   void _feed() {
@@ -44,10 +69,11 @@ class PetScreen extends StatelessWidget {
     final Color text = Theme.of(context).colorScheme.text;
 
     final petBio = Provider.of<IDataProvider<PetBio>>(context)
-        .retrieveFromKey(pet.petBioCode);
+        .retrieveFromKey(widget.pet.petBioCode);
 
-    final double xpProgress = pet.currentXp / pet.nextLevelXp;
-    final double copiesProgress = pet.currentCopies / pet.nextStarCopies;
+    final double xpProgress = widget.pet.currentXp / widget.pet.nextLevelXp;
+    final double copiesProgress =
+        widget.pet.currentCopies / widget.pet.nextStarCopies;
     return Scaffold(
       appBar: ThemedAppBar(
         "Pets",
@@ -66,7 +92,7 @@ class PetScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: Image.asset(
-                  (pet.level < 10) ? petBio.babyPic : petBio.adultPic,
+                  (widget.pet.level < 10) ? petBio.babyPic : petBio.adultPic,
                   fit: BoxFit
                       .cover, // Ensures the image fits nicely within the circular shape
                 ),
@@ -78,7 +104,7 @@ class PetScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    pet.name ?? petBio.breed,
+                    widget.pet.name ?? petBio.breed,
                     style: h2?.copyWith(
                       color: secondary,
                     ),
@@ -87,7 +113,9 @@ class PetScreen extends StatelessWidget {
                     width: 4,
                   ),
                   IconButton.filled(
-                    onPressed: _changeName,
+                    onPressed: () {
+                      _changeName(context);
+                    },
                     icon: const Icon(Icons.edit),
                     color: bright,
                   )
@@ -96,8 +124,8 @@ class PetScreen extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              Stars(pet.stars),
-              if (pet.stars < 5) ...[
+              Stars(widget.pet.stars),
+              if (widget.pet.stars < 5) ...[
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -130,7 +158,7 @@ class PetScreen extends StatelessWidget {
                         color: secondary,
                       ),
                       Text(
-                        " ${pet.currentCopies}/${pet.nextStarCopies}",
+                        " ${widget.pet.currentCopies}/${widget.pet.nextStarCopies}",
                         style: body?.copyWith(
                           color: secondary,
                         ),
@@ -154,7 +182,7 @@ class PetScreen extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: '${pet.level}',
+                        text: '${widget.pet.level}',
                         style: h3,
                       ),
                     ],
@@ -193,7 +221,8 @@ class PetScreen extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: " ${pet.currentXp}/${pet.nextLevelXp}",
+                        text:
+                            " ${widget.pet.currentXp}/${widget.pet.nextLevelXp}",
                         style: body?.copyWith(
                           color: secondary,
                         ),
@@ -240,7 +269,7 @@ class PetScreen extends StatelessWidget {
                   PetDescriptionCard(
                     iconData: Icons.calendar_month,
                     title: "Idade",
-                    content: (pet.level < 10) ? "Filhote" : "Adulto",
+                    content: (widget.pet.level < 10) ? "Filhote" : "Adulto",
                   ),
                   PetDescriptionCard(
                     iconData: Icons.sentiment_satisfied_outlined,

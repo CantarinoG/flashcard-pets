@@ -16,7 +16,9 @@ class PetsCollectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final petDao = Provider.of<IDao<Pet>>(context);
+    final petDao = Provider.of<IDao<Pet>>(
+      context,
+    );
 
     return ScreenLayout(
       child: FutureBuilder<List<Pet>>(

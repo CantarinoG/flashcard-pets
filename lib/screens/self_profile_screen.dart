@@ -1,4 +1,3 @@
-import 'package:flashcard_pets/dialogs/change_name_dialog.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/screens/awards_screen.dart';
 import 'package:flashcard_pets/screens/change_avatar_screen.dart';
@@ -266,12 +265,12 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   void _changeName(BuildContext context) {
-    showDialog(
+    /*showDialog(
       context: context,
       builder: (BuildContext context) {
         return const ChangeNameDialog();
       },
-    );
+    );*/
   }
 
   @override
