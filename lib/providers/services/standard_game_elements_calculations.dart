@@ -142,8 +142,10 @@ class StandardGameElementsCalculations
   @override
   int calculateRevisionRewards(
       Flashcard flashcard, int quality, double multiplier) {
-    //TODO: Create the logic to actually calculate based on the card's attributes.
-    return 10000;
+    quality = (quality == 0) ? 1 : quality;
+    int rewardValue = (quality * (flashcard.interval / 2)).round();
+    rewardValue = (rewardValue < quality) ? quality : rewardValue;
+    return rewardValue;
   }
 
   @override
