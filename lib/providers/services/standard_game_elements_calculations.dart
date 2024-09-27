@@ -5,6 +5,7 @@ import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/snackbars/levelup_snackbar.dart';
+import 'package:flashcard_pets/snackbars/pet_levelup_snackbar.dart';
 import 'package:flashcard_pets/snackbars/reward_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,9 @@ class StandardGameElementsCalculations
   }
 
   @override
-  Pet addPetCopy(Pet pet, int copies) {
+  Pet addPetCopy(Pet pet, int copies, BuildContext context) {
+    int initialStars = pet.stars;
+
     pet.totalCopies += copies;
     int totalCopies = pet.totalCopies;
 
@@ -89,6 +92,16 @@ class StandardGameElementsCalculations
     pet.stars = stars;
     pet.currentCopies = totalCopies;
     pet.nextStarCopies = requiredCopiesForNextStar;
+
+    if (pet.stars > initialStars) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: PetLevelupSnackbar(pet, false),
+          backgroundColor: Theme.of(context).colorScheme.bright,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
 
     return pet;
   }

@@ -90,9 +90,8 @@ class StoreScreen extends StatelessWidget {
               "Você já possui esse pet com 5 estrelas. Ele será convertido em pontos de experiência.");
     } else {
       // Handle the case where the pet exists but has less than 5 stars
-      final updatedPet = gameElementsCalc.addPetCopy(pet[0], 1);
+      final updatedPet = gameElementsCalc.addPetCopy(pet[0], 1, context);
       Provider.of<IDao<Pet>>(context, listen: false).update(updatedPet);
-      //Must display snackbar
     }
 
     user.gold -= price;
@@ -137,7 +136,7 @@ class StoreScreen extends StatelessWidget {
                             PetRarity.common,
                             PetRarity.uncommon,
                             user,
-                            100,
+                            0,
                           ),
                         ),
                         StoreCard(
