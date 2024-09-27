@@ -5,6 +5,7 @@ import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
@@ -81,10 +82,19 @@ class StoreScreen extends StatelessWidget {
         totalGoldSpent: price,
       );
       Provider.of<IDao<Pet>>(context, listen: false).insert(newPet);
+    } else if (pet[0].stars == 5) {
+      final gameElementsCalc =
+          Provider.of<IGameElementsCalculations>(context, listen: false);
+      user = gameElementsCalc.addGoldAndXp(user, 0, price, context,
+          optionalMessage:
+              "Você já possui esse pet com 5 estrelas. Ele será convertido em pontos de experiência.");
     } else {
-      //User already has this pet
+      // Handle the case where the pet exists but has less than 5 stars
     }
-    //TODO:tem ainda a questão de que se o pet tiver 5 estrelas, deve dar é xp.
+
+    user.gold -= price;
+    Provider.of<IJsonDataProvider<User>>(context, listen: false)
+        .writeData(user);
   }
 
   @override
@@ -158,7 +168,7 @@ class StoreScreen extends StatelessWidget {
                 ],
               );
             } else {
-              return Text("Ocorreu um erro. Tente novamente mais tarde.");
+              return const Text("Ocorreu um erro. Tente novamente mais tarde.");
             }
           },
         ),

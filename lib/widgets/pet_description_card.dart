@@ -1,5 +1,4 @@
 import 'package:flashcard_pets/models/pet_bio.dart';
-import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/rarity_text.dart';
 import 'package:flutter/material.dart';

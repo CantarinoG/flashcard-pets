@@ -12,22 +12,33 @@ class StandardGameElementsCalculations
     with ChangeNotifier
     implements IGameElementsCalculations {
   @override
-  User addGoldAndXp(User user, int gold, int xp, BuildContext context) {
-    int initialLevel = user.level;
-    user = _addXp(user, xp);
-    if (user.level > initialLevel) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: LevelupSnackbar(user.level),
-          backgroundColor: Theme.of(context).colorScheme.bright,
-          duration: const Duration(seconds: 2),
-        ),
-      );
+  User addGoldAndXp(User user, int gold, int xp, BuildContext context,
+      {String? optionalMessage}) {
+    if (xp > 0) {
+      int initialLevel = user.level;
+      user = _addXp(user, xp);
+      if (user.level > initialLevel) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: LevelupSnackbar(user.level),
+            backgroundColor: Theme.of(context).colorScheme.bright,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     }
-    user.gold += gold;
+
+    if (gold > 0) {
+      user.gold += gold;
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: RewardSnackbar(gold, xp),
+        content: RewardSnackbar(
+          gold,
+          xp,
+          optionalMessage: optionalMessage,
+        ),
         backgroundColor: Theme.of(context).colorScheme.bright,
         duration: const Duration(seconds: 1),
       ),

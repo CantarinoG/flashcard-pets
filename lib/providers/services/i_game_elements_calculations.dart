@@ -8,5 +8,6 @@ abstract class IGameElementsCalculations with ChangeNotifier {
     int quality,
     double multiplier,
   );
-  User addGoldAndXp(User user, int gold, int xp, BuildContext context);
+  User addGoldAndXp(User user, int gold, int xp, BuildContext context,
+      {String? optionalMessage});
 }

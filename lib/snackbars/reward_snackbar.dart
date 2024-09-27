@@ -5,7 +5,9 @@ import 'package:flutter_svg/svg.dart';
 class RewardSnackbar extends StatelessWidget {
   final int goldValue;
   final int xpValue;
-  const RewardSnackbar(this.goldValue, this.xpValue, {super.key});
+  final String? optionalMessage;
+  const RewardSnackbar(this.goldValue, this.xpValue,
+      {super.key, this.optionalMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -14,47 +16,69 @@ class RewardSnackbar extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
-    return Row(
+    return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Obteve:",
-          style: body?.copyWith(
-            color: primary,
+        if (optionalMessage != null)
+          Flexible(
+            child: Text(
+              optionalMessage!,
+              style: body,
+              softWrap: true,
+              overflow: TextOverflow.visible,
+            ),
           ),
-        ),
         const SizedBox(
-          width: 16,
+          height: 16,
         ),
-        SvgPicture.asset(
-          "assets/images/custom_icons/coin.svg",
-          width: 30,
-          height: 30,
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        Text(
-          " $goldValue",
-          style: body?.copyWith(color: primary),
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        Text(
-          "XP",
-          style: h4.copyWith(
-            color: secondary,
-          ),
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        Text(
-          " $xpValue",
-          style: body?.copyWith(
-            color: primary,
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Obteve:",
+              style: body?.copyWith(
+                color: primary,
+              ),
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            if (goldValue > 0) ...[
+              SvgPicture.asset(
+                "assets/images/custom_icons/coin.svg",
+                width: 30,
+                height: 30,
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Text(
+                " $goldValue",
+                style: body?.copyWith(color: primary),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+            ],
+            if (xpValue > 0) ...[
+              Text(
+                "XP",
+                style: h4.copyWith(
+                  color: secondary,
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Text(
+                " $xpValue",
+                style: body?.copyWith(
+                  color: primary,
+                ),
+              ),
+            ],
+          ],
         ),
       ],
     );
