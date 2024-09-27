@@ -70,6 +70,7 @@ class StandardGameElementsCalculations
     return user;
   }
 
+  @override
   Pet addPetXp(Pet pet, int xpValue, BuildContext context) {
     final int initialLevel = pet.level;
     pet.totalXp += xpValue;

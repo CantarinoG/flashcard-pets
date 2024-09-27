@@ -91,6 +91,7 @@ class StoreScreen extends StatelessWidget {
     } else {
       // Handle the case where the pet exists but has less than 5 stars
       final updatedPet = gameElementsCalc.addPetCopy(pet[0], 1, context);
+      updatedPet.totalGoldSpent += price;
       Provider.of<IDao<Pet>>(context, listen: false).update(updatedPet);
     }
 

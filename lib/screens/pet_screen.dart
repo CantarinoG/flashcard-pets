@@ -34,7 +34,7 @@ class _PetScreenState extends State<PetScreen> {
   final String _skillDesc = "% mais ouro ao revisar cartões.";
 
   void _sell() {
-    //...
+    debugPrint("Aquiii ${widget.pet.totalGoldSpent}");
   }
 
   void _changeName(BuildContext context) {

@@ -1,4 +1,6 @@
+import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/user.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
@@ -9,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class FeedPetDialog extends StatefulWidget {
-  final pet;
+  final Pet pet;
   const FeedPetDialog(this.pet, {super.key});
 
   @override
@@ -44,6 +46,8 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
     }
     user.gold -= feedAmount;
     await userProvider.writeData(user);
+    widget.pet.totalGoldSpent += feedAmount;
+    Provider.of<IDao<Pet>>(context, listen: false).update(widget.pet);
     Navigator.of(context).pop(int.parse(_textController.text) * xpPerCoin);
   }
 
