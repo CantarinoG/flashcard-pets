@@ -1,4 +1,6 @@
+import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/widgets/avatar_thumb.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
@@ -23,8 +25,17 @@ class ChangeAvatarScreen extends StatelessWidget {
     Navigator.of(context).pop();
   }
 
-  void _changeBgColor() {
-    //...
+  void _changeBgColor(BuildContext context, int colorValue) async {
+    final IJsonDataProvider<User> userProvider =
+        Provider.of<IJsonDataProvider<User>>(
+      context,
+      listen: false,
+    );
+    final User? user = await userProvider.readData();
+    if (user != null) {
+      user.bgColorCode = colorValue;
+      userProvider.writeData(user);
+    }
   }
 
   @override
@@ -67,7 +78,9 @@ class ChangeAvatarScreen extends StatelessWidget {
               child: Row(
                 children: _availableColors.map((int colorValue) {
                   return InkWell(
-                    onTap: _changeBgColor,
+                    onTap: () {
+                      _changeBgColor(context, colorValue);
+                    },
                     radius: 15,
                     child: Container(
                       margin: const EdgeInsets.symmetric(

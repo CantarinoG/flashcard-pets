@@ -1,4 +1,6 @@
+import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/screens/awards_screen.dart';
 import 'package:flashcard_pets/screens/change_avatar_screen.dart';
 import 'package:flashcard_pets/screens/configurations_screen.dart';
@@ -6,6 +8,8 @@ import 'package:flashcard_pets/screens/statistics_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/award_card_basic.dart';
+import 'package:flashcard_pets/widgets/loading.dart';
+import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/statistics_display.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
@@ -17,7 +21,6 @@ import 'package:provider/provider.dart';
 class SelfProfileScreen extends StatelessWidget {
   //Mocked data
   final int _avatarId = 9;
-  final int _colorCode = 0xFF5C9EAD;
   final String _name = "Guilherme Cantarino";
   final String _nick = "CantarinoG";
   final int _currentXp = 450;
@@ -71,176 +74,195 @@ class SelfProfileScreen extends StatelessWidget {
 
     final String avatarPath =
         Provider.of<IDataProvider<String>>(context).retrieveFromKey(_avatarId);
+    final IJsonDataProvider<User> userProvider =
+        Provider.of<IJsonDataProvider<User>>(
+      context,
+    );
 
-    return ScreenLayout(
-      child: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height - 133,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
+    return FutureBuilder<User?>(
+      future: userProvider.readData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Loading();
+        } else if (snapshot.hasError) {
+          return NoItemsPlaceholder('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData || snapshot.data == null) {
+          return const NoItemsPlaceholder('No user data available');
+        }
+
+        final user = snapshot.data!;
+
+        return ScreenLayout(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height - 133,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  SizedBox(
-                    height: 200,
-                    width: 200,
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          height: 200,
-                          width: 200,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(_colorCode),
-                              shape: BoxShape.circle,
-                            ),
-                            child: ClipOval(
-                              child: Image.asset(
-                                avatarPath,
-                                fit: BoxFit
-                                    .cover, // Ensures the image fits nicely within the circular shape
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      SizedBox(
+                        height: 200,
+                        width: 200,
+                        child: Stack(
+                          children: [
+                            SizedBox(
+                              height: 200,
+                              width: 200,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Color(user.bgColorCode),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: ClipOval(
+                                  child: Image.asset(
+                                    avatarPath,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: IconButton.filled(
-                              onPressed: () {
-                                _changeAvatar(context);
-                              },
-                              icon: const Icon(Icons.edit),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: IconButton.filled(
+                                  onPressed: () {
+                                    _changeAvatar(context);
+                                  },
+                                  icon: const Icon(Icons.edit),
+                                ),
+                              ),
                             ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        _name,
+                        style: h2?.copyWith(color: secondary),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        "@$_nick",
+                        style: h3?.copyWith(color: disabled),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      const UserStatsHeader(),
+                      SizedBox(
+                        width: double.infinity,
+                        child: RichText(
+                          textAlign: TextAlign.end,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "XP",
+                                style: h4.copyWith(
+                                  color: secondary,
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                    " ${user.currentLevelXp}/${user.nextLevelXp}",
+                                style: body?.copyWith(
+                                  color: secondary,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    _name,
-                    style: h2?.copyWith(color: secondary),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    "@$_nick",
-                    style: h3?.copyWith(color: disabled),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  const UserStatsHeader(),
-                  SizedBox(
-                    width: double.infinity,
-                    child: RichText(
-                      textAlign: TextAlign.end,
-                      text: TextSpan(
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          TextSpan(
-                            text: "XP",
-                            style: h4.copyWith(
-                              color: secondary,
-                            ),
+                          StatisticsDisplay(
+                            "Cartões Revisados",
+                            "$_reviewedCardsNum",
+                            Icons.dashboard,
                           ),
-                          TextSpan(
-                            text: " $_currentXp/$_nextLevelXp",
-                            style: body?.copyWith(
-                              color: secondary,
+                          StatisticsDisplay(
+                            "Taxa de Acerto",
+                            "$_accuracy%",
+                            Icons.track_changes_outlined,
+                          ),
+                          StatisticsDisplay(
+                            "Sequência de Dias",
+                            "$_streak",
+                            Icons.local_fire_department,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      ThemedFilledButton(
+                        label: "Ver Estatísticas",
+                        onPressed: () {
+                          _seeStatistic(context);
+                        },
+                        width: double.infinity,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Conquistas",
+                            style: h3?.copyWith(color: secondary),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              _seeAwards(context);
+                            },
+                            child: Text(
+                              "Ver todas",
+                              style: bodyEm,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      StatisticsDisplay(
-                        "Cartões Revisados",
-                        "$_reviewedCardsNum",
-                        Icons.dashboard,
+                      const SizedBox(
+                        height: 4,
                       ),
-                      StatisticsDisplay(
-                        "Taxa de Acerto",
-                        "$_accuracy%",
-                        Icons.track_changes_outlined,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(child: AwardCardBasic(_last3Awards[0])),
+                          Expanded(child: AwardCardBasic(_last3Awards[1])),
+                          Expanded(child: AwardCardBasic(_last3Awards[2])),
+                        ],
                       ),
-                      StatisticsDisplay(
-                        "Sequência de Dias",
-                        "$_streak",
-                        Icons.local_fire_department,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  ThemedFilledButton(
-                    label: "Ver Estatísticas",
-                    onPressed: () {
-                      _seeStatistic(context);
-                    },
-                    width: double.infinity,
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Conquistas",
-                        style: h3?.copyWith(color: secondary),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          _seeAwards(context);
-                        },
-                        child: Text(
-                          "Ver todas",
-                          style: bodyEm,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(child: AwardCardBasic(_last3Awards[0])),
-                      Expanded(child: AwardCardBasic(_last3Awards[1])),
-                      Expanded(child: AwardCardBasic(_last3Awards[2])),
                     ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
