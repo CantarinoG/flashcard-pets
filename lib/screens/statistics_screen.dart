@@ -1,7 +1,6 @@
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/statistics_card.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
-import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +8,6 @@ class StatisticsScreen extends StatelessWidget {
   //Mocked data
   final int _retrievedValue = 5;
   const StatisticsScreen({super.key});
-
-  void _filterDate() {
-    //...
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +49,6 @@ class StatisticsScreen extends StatelessWidget {
             const UserStatsHeader(),
             const SizedBox(
               height: 16,
-            ),
-            ThemedFilledButton(
-              label: "Data",
-              leadingIcon: const Icon(Icons.calendar_month),
-              onPressed: _filterDate,
-            ),
-            const SizedBox(
-              height: 8,
             ),
             Expanded(
               child: DefaultTabController(
