@@ -7,6 +7,7 @@ class User {
   int bgColorCode;
   int avatarCode;
   String name;
+  bool darkMode;
 
   User({
     this.level = 1,
@@ -17,6 +18,7 @@ class User {
     this.bgColorCode = 0xFF5C9EAD,
     this.avatarCode = 0,
     this.name = "Usuário",
+    this.darkMode = false,
   });
 
   static User fromMap(Map<String, dynamic> map) {
@@ -29,6 +31,7 @@ class User {
       bgColorCode: map["bgColorCode"],
       avatarCode: map["avatarCode"],
       name: map["name"],
+      darkMode: map["darkMode"],
     );
   }
 
@@ -42,6 +45,7 @@ class User {
       "bgColorCode": bgColorCode,
       "avatarCode": avatarCode,
       "name": name,
+      "darkMode": darkMode,
     };
   }
 }

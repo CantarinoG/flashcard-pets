@@ -1,6 +1,9 @@
 import 'package:flashcard_pets/dialogs/card_or_collection_dialog.dart';
+import 'package:flashcard_pets/main.dart';
 import 'package:flashcard_pets/models/collection.dart';
+import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/widgets/collection_card.dart';
@@ -16,9 +19,19 @@ import 'package:provider/provider.dart';
 class CollectionsMainScreen extends StatelessWidget {
   const CollectionsMainScreen({super.key});
 
+  void _toggleTheme(BuildContext context) async {
+    final User? user =
+        await Provider.of<IJsonDataProvider<User>>(context).readData();
+    if (user == null) return;
+    MyApp.of(context)
+        .changeTheme(user.darkMode ? ThemeMode.dark : ThemeMode.light);
+  }
+
   @override
   Widget build(BuildContext context) {
     final collectionDao = Provider.of<IDao<Collection>>(context);
+
+    _toggleTheme(context);
 
     return FutureBuilder<List<Collection>>(
       future: collectionDao.readAll(),

@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/main.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
@@ -295,6 +296,18 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     );*/
   }
 
+  void _changeTheme(BuildContext context) async {
+    final IJsonDataProvider<User> provider =
+        Provider.of<IJsonDataProvider<User>>(context, listen: false);
+    final User? user = await provider.readData();
+    if (user != null) {
+      user.darkMode = !user.darkMode;
+      await provider.writeData(user);
+      MyApp.of(context)
+          .changeTheme(user.darkMode ? ThemeMode.dark : ThemeMode.light);
+    }
+  }
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
@@ -317,6 +330,7 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
               case SelfProfileAction.synchronize:
                 break;
               case SelfProfileAction.toggleTheme:
+                _changeTheme(context);
                 break;
               case SelfProfileAction.configurations:
                 _changeSettings(context);
