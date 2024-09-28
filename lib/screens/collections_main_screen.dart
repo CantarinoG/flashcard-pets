@@ -27,11 +27,42 @@ class CollectionsMainScreen extends StatelessWidget {
         .changeTheme(user.darkMode ? ThemeMode.dark : ThemeMode.light);
   }
 
+  void _updateUserStreak(BuildContext context) async {
+    final IJsonDataProvider<User> provider =
+        Provider.of<IJsonDataProvider<User>>(context, listen: false);
+    final User? user = await provider.readData();
+    if (user == null) return;
+    final DateTime? lastOpened = user.lastTimeUsedApp;
+    if (lastOpened == null) {
+      user.lastTimeUsedApp = DateTime.now();
+      await provider.writeData(user);
+    } else {
+      final DateTime now = DateTime.now();
+      final DateTime yesterday = DateTime(now.year, now.month, now.day - 1);
+      final bool openedYesterday = lastOpened.year == yesterday.year &&
+          lastOpened.month == yesterday.month &&
+          lastOpened.day == yesterday.day;
+      final bool openedBeforeYesterday = lastOpened.isBefore(yesterday);
+      if (openedYesterday) {
+        user.streak++;
+        user.lastTimeUsedApp = now;
+        await provider.writeData(user);
+      }
+      if (openedBeforeYesterday) {
+        user.streak = 0;
+        user.lastTimeUsedApp = now;
+        await provider.writeData(user);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final collectionDao = Provider.of<IDao<Collection>>(context);
 
+    print("rebuild");
     _toggleTheme(context);
+    _updateUserStreak(context);
 
     return FutureBuilder<List<Collection>>(
       future: collectionDao.readAll(),

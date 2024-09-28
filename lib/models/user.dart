@@ -8,6 +8,10 @@ class User {
   int avatarCode;
   String name;
   bool darkMode;
+  int totalReviewedCards;
+  int totalRightCardsReviewed;
+  int streak;
+  DateTime? lastTimeUsedApp;
 
   User({
     this.level = 1,
@@ -19,6 +23,10 @@ class User {
     this.avatarCode = 0,
     this.name = "Usuário",
     this.darkMode = false,
+    this.totalReviewedCards = 0,
+    this.totalRightCardsReviewed = 0,
+    this.streak = 1,
+    this.lastTimeUsedApp,
   });
 
   static User fromMap(Map<String, dynamic> map) {
@@ -32,6 +40,12 @@ class User {
       avatarCode: map["avatarCode"],
       name: map["name"],
       darkMode: map["darkMode"],
+      totalReviewedCards: map["totalReviewedCards"],
+      totalRightCardsReviewed: map["totalRightCardsReviewed"],
+      streak: map["streak"],
+      lastTimeUsedApp: map["lastTimeUsedApp"] != null
+          ? DateTime.parse(map["lastTimeUsedApp"])
+          : null,
     );
   }
 
@@ -46,6 +60,10 @@ class User {
       "avatarCode": avatarCode,
       "name": name,
       "darkMode": darkMode,
+      "totalReviewedCards": totalReviewedCards,
+      "totalRightCardsReviewed": totalRightCardsReviewed,
+      "streak": streak,
+      "lastTimeUsedApp": lastTimeUsedApp?.toIso8601String(),
     };
   }
 }

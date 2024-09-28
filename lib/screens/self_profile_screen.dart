@@ -23,9 +23,6 @@ class SelfProfileScreen extends StatelessWidget {
   //Mocked data
   final bool _isUserLoggedIn = false;
   final String _nick = "CantarinoG";
-  final int _reviewedCardsNum = 23;
-  final int _accuracy = 84;
-  final int _streak = 4;
   final List<int> _last3Awards = [
     4,
     6,
@@ -197,17 +194,17 @@ class SelfProfileScreen extends StatelessWidget {
                         children: [
                           StatisticsDisplay(
                             "Cartões Revisados",
-                            "$_reviewedCardsNum",
+                            "${user.totalReviewedCards}",
                             Icons.dashboard,
                           ),
                           StatisticsDisplay(
                             "Taxa de Acerto",
-                            "$_accuracy%",
+                            "${((user.totalRightCardsReviewed / user.totalReviewedCards) * 100).toStringAsFixed(1)}%",
                             Icons.track_changes_outlined,
                           ),
                           StatisticsDisplay(
                             "Sequência de Dias",
-                            "$_streak",
+                            "${user.streak}",
                             Icons.local_fire_department,
                           ),
                         ],
