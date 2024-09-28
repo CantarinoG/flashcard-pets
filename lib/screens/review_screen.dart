@@ -1,6 +1,8 @@
 import 'package:flashcard_pets/dialogs/evaluation_score_info.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
+import 'package:flashcard_pets/models/pet.dart';
+import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
@@ -68,8 +70,13 @@ class _ReviewScreenState extends State<ReviewScreen> {
         Provider.of<IJsonDataProvider<User>>(context, listen: false);
     final gameCalcProvider =
         Provider.of<IGameElementsCalculations>(context, listen: false);
-    const double goldMultiplier = 1; //Calculate based on pets.
-    const double xpMultiplier = 1; //Calculate based on pets.
+    final List<Pet> petList =
+        await Provider.of<IDao<Pet>>(context, listen: false).readAll();
+    final double goldMultiplier =
+        gameCalcProvider.calculateTotalPetBonuses(petList, PetSkill.moreGold);
+    final double xpMultiplier =
+        gameCalcProvider.calculateTotalPetBonuses(petList, PetSkill.moreXp);
+
     int goldReward = gameCalcProvider.calculateRevisionRewards(
         widget.cardsToReview[_currentCardIndex],
         _sliderValue.round(),

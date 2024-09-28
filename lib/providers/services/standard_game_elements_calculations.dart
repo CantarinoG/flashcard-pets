@@ -147,7 +147,7 @@ class StandardGameElementsCalculations
     quality = (quality == 0) ? 1 : quality;
     int rewardValue = (quality * (flashcard.interval / 2)).round();
     rewardValue = (rewardValue < quality) ? quality : rewardValue;
-    return rewardValue;
+    return (rewardValue * multiplier).round();
   }
 
   @override
