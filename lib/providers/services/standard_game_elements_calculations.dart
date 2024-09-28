@@ -4,6 +4,7 @@ import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
+import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/snackbars/levelup_snackbar.dart';
 import 'package:flashcard_pets/snackbars/pet_levelup_snackbar.dart';
@@ -190,5 +191,20 @@ class StandardGameElementsCalculations
       PetSkill.moreXp: "XP",
     };
     return map[skill]!;
+  }
+
+  @override
+  double calculateTotalPetBonuses(List<Pet> pets, PetSkill skill) {
+    final PetBioDataProvider petBioProvider = PetBioDataProvider();
+
+    double totalBonus = 0;
+    for (int i = 0; i < pets.length; i++) {
+      final petBio = petBioProvider.retrieveFromKey(pets[i].petBioCode);
+      if (petBio.skill != skill) continue;
+      totalBonus += (calculatePetBonus(pets[i], petBio.rarity) - 1);
+    }
+
+    debugPrint(totalBonus.toString());
+    return totalBonus + 1;
   }
 }
