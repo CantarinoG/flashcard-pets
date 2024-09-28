@@ -203,8 +203,6 @@ class StandardGameElementsCalculations
       if (petBio.skill != skill) continue;
       totalBonus += (calculatePetBonus(pets[i], petBio.rarity) - 1);
     }
-
-    debugPrint(totalBonus.toString());
     return totalBonus + 1;
   }
 }

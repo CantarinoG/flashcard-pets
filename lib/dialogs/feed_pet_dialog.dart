@@ -1,4 +1,5 @@
 import 'package:flashcard_pets/models/pet.dart';
+import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
@@ -22,8 +23,25 @@ class FeedPetDialog extends StatefulWidget {
 }
 
 class _FeedPetDialog<T> extends State<FeedPetDialog> {
-  //Mocked data
-  final int xpPerCoin = 3;
+  int xpPerCoin = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPetXpMultiplier();
+  }
+
+  Future<void> _loadPetXpMultiplier() async {
+    final gameCalcProvider =
+        Provider.of<IGameElementsCalculations>(context, listen: false);
+    final List<Pet> petList =
+        await Provider.of<IDao<Pet>>(context, listen: false).readAll();
+    final double petXpMultiplier = gameCalcProvider.calculateTotalPetBonuses(
+        petList, PetSkill.cheaperUpgrade);
+    setState(() {
+      xpPerCoin = (3 * petXpMultiplier).round();
+    });
+  }
 
   final TextEditingController _textController = TextEditingController();
 

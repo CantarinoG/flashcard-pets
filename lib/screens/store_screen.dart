@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
@@ -56,7 +55,18 @@ class StoreScreen extends StatelessWidget {
 
     final random = Random();
     int randomNumber = random.nextInt(100);
-    final selectedList = randomNumber < 10 ? rareDropKeys : commonDropKeys;
+
+    final gameCalcProvider =
+        Provider.of<IGameElementsCalculations>(context, listen: false);
+    final List<Pet> petList =
+        await Provider.of<IDao<Pet>>(context, listen: false).readAll();
+    final double rarePetMultiplier =
+        gameCalcProvider.calculateTotalPetBonuses(petList, PetSkill.betterPets);
+
+    int chance = (10 * rarePetMultiplier).round();
+    chance = (chance > 80) ? 80 : chance;
+
+    final selectedList = randomNumber < chance ? rareDropKeys : commonDropKeys;
 
     final int petGotCode = selectedList[random.nextInt(selectedList.length)];
 
@@ -137,7 +147,7 @@ class StoreScreen extends StatelessWidget {
                             PetRarity.common,
                             PetRarity.uncommon,
                             user,
-                            100,
+                            0,
                           ),
                         ),
                         StoreCard(
