@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/main.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
@@ -285,12 +286,27 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   void _changeName(BuildContext context) {
-    /*showDialog(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const ChangeNameDialog();
+        return const SingleInputDialog<String>(
+          title: "Mudar o Nome de Usuário",
+          description: "Insira o novo nome.",
+          label: "Nome",
+        );
       },
-    );*/
+    ).then((value) async {
+      if (value != null && value.isNotEmpty) {
+        IJsonDataProvider<User> provider = Provider.of<IJsonDataProvider<User>>(
+          context,
+          listen: false,
+        );
+        User? user = await provider.readData();
+        if (user == null) return;
+        user.name = value;
+        provider.writeData(user);
+      }
+    });
   }
 
   void _changeTheme(BuildContext context) async {
