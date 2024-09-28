@@ -20,7 +20,6 @@ import 'package:provider/provider.dart';
 
 class SelfProfileScreen extends StatelessWidget {
   //Mocked data
-  final int _avatarId = 9;
   final String _name = "Guilherme Cantarino";
   final String _nick = "CantarinoG";
   final int _currentXp = 450;
@@ -72,8 +71,6 @@ class SelfProfileScreen extends StatelessWidget {
     final Color disabled = Theme.of(context).disabledColor;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
-    final String avatarPath =
-        Provider.of<IDataProvider<String>>(context).retrieveFromKey(_avatarId);
     final IJsonDataProvider<User> userProvider =
         Provider.of<IJsonDataProvider<User>>(
       context,
@@ -91,6 +88,9 @@ class SelfProfileScreen extends StatelessWidget {
         }
 
         final user = snapshot.data!;
+
+        final String avatarPath = Provider.of<IDataProvider<String>>(context)
+            .retrieveFromKey(user.avatarCode);
 
         return ScreenLayout(
           child: SingleChildScrollView(

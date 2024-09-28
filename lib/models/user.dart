@@ -5,6 +5,7 @@ class User {
   int currentLevelXp;
   int nextLevelXp;
   int bgColorCode;
+  int avatarCode;
 
   User({
     this.level = 1,
@@ -13,6 +14,7 @@ class User {
     this.currentLevelXp = 0,
     this.nextLevelXp = 50,
     this.bgColorCode = 0xFF5C9EAD,
+    this.avatarCode = 0,
   });
 
   static User fromMap(Map<String, dynamic> map) {
@@ -23,6 +25,7 @@ class User {
       currentLevelXp: map["currentLevelXp"],
       nextLevelXp: map["nextLevelXp"],
       bgColorCode: map["bgColorCode"],
+      avatarCode: map["avatarCode"],
     );
   }
 
@@ -34,6 +37,7 @@ class User {
       "currentLevelXp": currentLevelXp,
       "nextLevelXp": nextLevelXp,
       "bgColorCode": bgColorCode,
+      "avatarCode": avatarCode,
     };
   }
 }

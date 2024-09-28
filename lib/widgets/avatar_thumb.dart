@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AvatarThumb extends StatelessWidget {
-  //Mocked data
-  final int userAvatarId = 0;
   final int avatarId;
   const AvatarThumb(this.avatarId, {super.key});
 
-  void _onTap() {
-    //...
+  void _onTap(BuildContext context, User user, int avatarCode) async {
+    user.avatarCode = avatarCode;
+    await Provider.of<IJsonDataProvider<User>>(context, listen: false)
+        .writeData(user);
   }
 
   @override
@@ -38,6 +38,7 @@ class AvatarThumb extends StatelessWidget {
         }
 
         final user = snapshot.data!;
+        final int userAvatarId = user.avatarCode;
 
         return Container(
           height: 50,
@@ -53,7 +54,9 @@ class AvatarThumb extends StatelessWidget {
           ),
           child: InkWell(
             borderRadius: BorderRadius.circular(60),
-            onTap: _onTap,
+            onTap: () {
+              _onTap(context, user, avatarId);
+            },
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
