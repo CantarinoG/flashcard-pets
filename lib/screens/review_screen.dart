@@ -90,6 +90,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
     User updatedUser =
         gameCalcProvider.addGoldAndXp(user, goldReward, xpReward, context);
     updatedUser.totalReviewedCards++;
+    updatedUser.totalGoldEarned += goldReward;
+    updatedUser.totalGoldFromRevisions += goldReward;
+    updatedUser.totalXpFromRevisions += xpReward;
     if (_sliderValue.round() >= 3) {
       updatedUser.totalRightCardsReviewed++;
     }

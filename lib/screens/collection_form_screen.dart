@@ -1,8 +1,10 @@
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/subject.dart';
+import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
+import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
@@ -81,7 +83,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
     return widget.editingCollection != null;
   }
 
-  void _register() {
+  Future<void> _register() async {
     _displayError(null);
     String name = _nameController.text.trim();
     String description = _descriptionController.text.trim();
@@ -91,79 +93,61 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
       return;
     }
 
-    if (_isBeingEdited()) {
-      widget.editingCollection!.name = name;
-      widget.editingCollection!.subjectCode = subjectCode;
-      widget.editingCollection!.description = description;
-      setState(() {
-        _isLoading = true;
-      });
-      Provider.of<IDao<Collection>>(context, listen: false)
-          .update(widget.editingCollection!)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
-      }).catchError(
-        (error) {
-          setState(() {
-            _isLoading = false;
-          });
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content:
-                    const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
-                backgroundColor: Theme.of(context).colorScheme.bright,
-                duration: const Duration(seconds: 2),
-              ),
-            );
-          }
-        },
-      );
-    } else {
-      final String uniqueId =
-          Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+    setState(() {
+      _isLoading = true;
+    });
 
-      final Collection newCollection = Collection(
-        uniqueId,
-        name,
-        subjectCode,
-        description,
-      );
+    try {
+      if (_isBeingEdited()) {
+        widget.editingCollection!.name = name;
+        widget.editingCollection!.subjectCode = subjectCode;
+        widget.editingCollection!.description = description;
+        await Provider.of<IDao<Collection>>(context, listen: false)
+            .update(widget.editingCollection!);
+      } else {
+        final String uniqueId =
+            Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+
+        final Collection newCollection = Collection(
+          uniqueId,
+          name,
+          subjectCode,
+          description,
+        );
+
+        await Provider.of<IDao<Collection>>(context, listen: false)
+            .insert(newCollection);
+
+        final IJsonDataProvider<User> userProvider =
+            Provider.of<IJsonDataProvider<User>>(context, listen: false);
+        final User? user = await userProvider.readData();
+        if (user != null) {
+          user.createdCollections++;
+          userProvider.writeData(user);
+        }
+      }
 
       setState(() {
-        _isLoading = true;
+        _isLoading = false;
       });
-      Provider.of<IDao<Collection>>(context, listen: false)
-          .insert(newCollection)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
-      }).catchError(
-        (error) {
-          setState(() {
-            _isLoading = false;
-          });
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content:
-                    const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
-                backgroundColor: Theme.of(context).colorScheme.bright,
-                duration: const Duration(seconds: 2),
-              ),
-            );
-          }
-        },
-      );
+
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
+            backgroundColor: Theme.of(context).colorScheme.bright,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
 

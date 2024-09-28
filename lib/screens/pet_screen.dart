@@ -89,6 +89,7 @@ class _PetScreenState extends State<PetScreen> {
 
       if (user != null) {
         user.gold += petValue;
+        user.totalGoldEarned += petValue;
         await userProvider.writeData(user);
 
         if (!mounted) return;

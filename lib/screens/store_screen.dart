@@ -106,6 +106,7 @@ class StoreScreen extends StatelessWidget {
     }
 
     user.gold -= price;
+    user.totalGoldSpent += price;
     Provider.of<IJsonDataProvider<User>>(context, listen: false)
         .writeData(user);
   }
@@ -147,7 +148,7 @@ class StoreScreen extends StatelessWidget {
                             PetRarity.common,
                             PetRarity.uncommon,
                             user,
-                            0,
+                            100,
                           ),
                         ),
                         StoreCard(

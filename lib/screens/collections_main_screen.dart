@@ -32,9 +32,13 @@ class CollectionsMainScreen extends StatelessWidget {
         Provider.of<IJsonDataProvider<User>>(context, listen: false);
     final User? user = await provider.readData();
     if (user == null) return;
+
     final DateTime? lastOpened = user.lastTimeUsedApp;
     if (lastOpened == null) {
       user.lastTimeUsedApp = DateTime.now();
+      await provider.writeData(user);
+    } else if (user.dayCreated == null) {
+      user.dayCreated = DateTime.now();
       await provider.writeData(user);
     } else {
       final DateTime now = DateTime.now();
@@ -45,6 +49,9 @@ class CollectionsMainScreen extends StatelessWidget {
       final bool openedBeforeYesterday = lastOpened.isBefore(yesterday);
       if (openedYesterday) {
         user.streak++;
+        if (user.streak > user.highestStreak) {
+          user.highestStreak = user.streak;
+        }
         user.lastTimeUsedApp = now;
         await provider.writeData(user);
       }
@@ -60,7 +67,7 @@ class CollectionsMainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final collectionDao = Provider.of<IDao<Collection>>(context);
 
-    print("rebuild");
+    debugPrint("rebuild");
     _toggleTheme(context);
     _updateUserStreak(context);
 

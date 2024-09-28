@@ -65,6 +65,8 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
       feedAmount = user.gold;
     }
     user.gold -= feedAmount;
+    user.totalGoldSpent += feedAmount;
+    user.totalPetXp += int.parse(_textController.text) * xpPerCoin;
     await userProvider.writeData(user);
     widget.pet.totalGoldSpent += feedAmount;
     Provider.of<IDao<Pet>>(context, listen: false).update(widget.pet);
@@ -156,7 +158,7 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
                   children: [
                     TextSpan(
                       text:
-                          "A cada moeda, o pet é alimentado e ganha ${xpPerCoin}",
+                          "A cada moeda, o pet é alimentado e ganha $xpPerCoin",
                       style: bodyEm.copyWith(
                         color: text,
                       ),

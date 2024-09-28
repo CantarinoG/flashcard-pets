@@ -1,7 +1,9 @@
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
+import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
+import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
@@ -67,7 +69,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
     return widget.editingFlashcard != null;
   }
 
-  void _registerCard(BuildContext context) {
+  Future<void> _registerCard(BuildContext context) async {
     _displayError(null);
     String front = _frontController.text.trim();
     String back = _backController.text.trim();
@@ -77,26 +79,53 @@ class _CardFormScreenState extends State<CardFormScreen> {
       return;
     }
 
-    if (_isBeingEdited()) {
-      widget.editingFlashcard!.collectionId = _selectedItem!;
-      widget.editingFlashcard!.frontContent = front;
-      widget.editingFlashcard!.backContent = back;
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      if (_isBeingEdited()) {
+        widget.editingFlashcard!.collectionId = _selectedItem!;
+        widget.editingFlashcard!.frontContent = front;
+        widget.editingFlashcard!.backContent = back;
+        await Provider.of<IDao<Flashcard>>(context, listen: false)
+            .update(widget.editingFlashcard!);
+      } else {
+        final String uniqueId =
+            Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+
+        final Flashcard newFlashcard = Flashcard(
+          uniqueId,
+          collectionCode,
+          front,
+          back,
+          DateTime.now(),
+        );
+
+        await Provider.of<IDao<Flashcard>>(context, listen: false)
+            .insert(newFlashcard);
+
+        final IJsonDataProvider<User> userProvider =
+            Provider.of<IJsonDataProvider<User>>(context, listen: false);
+        final User? user = await userProvider.readData();
+        if (user != null) {
+          user.createdCards++;
+          userProvider.writeData(user);
+        }
+      }
+
       setState(() {
-        _isLoading = true;
+        _isLoading = false;
       });
-      Provider.of<IDao<Flashcard>>(context, listen: false)
-          .update(widget.editingFlashcard!)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-        if (!mounted) return;
+
+      if (mounted) {
         Navigator.of(context).pop();
-      }).catchError((error) {
-        setState(() {
-          _isLoading = false;
-        });
-        if (!mounted) return;
+      }
+    } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content:
@@ -105,48 +134,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
             duration: const Duration(seconds: 2),
           ),
         );
-      });
-    } else {
-      final String uniqueId =
-          Provider.of<IIdProvider>(context, listen: false).getUniqueId();
-
-      final Flashcard newFlashcard = Flashcard(
-        uniqueId,
-        collectionCode,
-        front,
-        back,
-        DateTime.now(),
-      );
-
-      setState(() {
-        _isLoading = true;
-      });
-      Provider.of<IDao<Flashcard>>(context, listen: false)
-          .insert(newFlashcard)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
-      }).catchError(
-        (error) {
-          setState(() {
-            _isLoading = false;
-          });
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content:
-                    const ErrorSnackbar("Ocorreu algum erro. Tente novamente."),
-                backgroundColor: Theme.of(context).colorScheme.bright,
-                duration: const Duration(seconds: 2),
-              ),
-            );
-          }
-        },
-      );
+      }
     }
   }
 

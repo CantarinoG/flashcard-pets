@@ -1,13 +1,43 @@
+import 'package:flashcard_pets/models/pet.dart';
+import 'package:flashcard_pets/models/user.dart';
+import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/widgets/loading.dart';
+import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/statistics_card.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StatisticsScreen extends StatelessWidget {
-  //Mocked data
-  final int _retrievedValue = 5;
   const StatisticsScreen({super.key});
+
+  Widget subScreen(BuildContext context, String title, Widget listView) {
+    final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
+    final Color secondary = Theme.of(context).colorScheme.secondary;
+
+    return Column(
+      children: [
+        const SizedBox(
+          height: 8,
+        ),
+        Text(
+          title,
+          style: h2?.copyWith(
+            color: secondary,
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Expanded(
+          child: listView,
+        )
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,181 +45,192 @@ class StatisticsScreen extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
-    Widget subScreen(BuildContext context, String title, Widget listView) {
-      final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
-      final Color secondary = Theme.of(context).colorScheme.secondary;
-
-      return Column(
-        children: [
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            title,
-            style: h2?.copyWith(
-              color: secondary,
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Expanded(
-            child: listView,
-          )
-        ],
-      );
-    }
+    final IJsonDataProvider<User> userProvider =
+        Provider.of<IJsonDataProvider<User>>(context);
+    final IDao<Pet> petProvider = Provider.of<IDao<Pet>>(context);
 
     return Scaffold(
       appBar: const ThemedAppBar("Estatísticas"),
       body: ScreenLayout(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const UserStatsHeader(),
-            const SizedBox(
-              height: 16,
-            ),
-            Expanded(
-              child: DefaultTabController(
-                length: 2,
-                child: Column(
-                  children: [
-                    TabBar(
-                      labelColor: secondary,
-                      unselectedLabelColor: primary,
-                      labelStyle: h3,
-                      unselectedLabelStyle: h3,
-                      indicatorColor: secondary,
-                      overlayColor: WidgetStateProperty.resolveWith<Color?>(
-                        (Set<WidgetState> states) {
-                          if (states.contains(WidgetState.hovered)) {
-                            return primary.withOpacity(0.05);
-                          }
-                          if (states.contains(WidgetState.pressed)) {
-                            return secondary;
-                          }
-                          return null;
-                        },
-                      ),
-                      tabs: const [
-                        Tab(
-                            icon: Icon(
-                          Icons.dashboard,
-                        )),
-                        Tab(
-                            icon: Icon(
-                          Icons.pets,
-                        )),
+        child: FutureBuilder<List<dynamic>>(
+          future: Future.wait([
+            userProvider.readData(),
+            petProvider.readAll(),
+          ]),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Loading();
+            } else if (snapshot.hasError) {
+              return NoItemsPlaceholder('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data![0] == null) {
+              return const NoItemsPlaceholder('No user data available');
+            }
+
+            final user = snapshot.data![0] as User;
+            final pets = snapshot.data![1] as List<Pet>;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const UserStatsHeader(),
+                const SizedBox(
+                  height: 16,
+                ),
+                Expanded(
+                  child: DefaultTabController(
+                    length: 2,
+                    child: Column(
+                      children: [
+                        TabBar(
+                          labelColor: secondary,
+                          unselectedLabelColor: primary,
+                          labelStyle: h3,
+                          unselectedLabelStyle: h3,
+                          indicatorColor: secondary,
+                          overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                            (Set<WidgetState> states) {
+                              if (states.contains(WidgetState.hovered)) {
+                                return primary.withOpacity(0.05);
+                              }
+                              if (states.contains(WidgetState.pressed)) {
+                                return secondary;
+                              }
+                              return null;
+                            },
+                          ),
+                          tabs: const [
+                            Tab(
+                                icon: Icon(
+                              Icons.dashboard,
+                            )),
+                            Tab(
+                                icon: Icon(
+                              Icons.pets,
+                            )),
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              subScreen(
+                                context,
+                                "Cartões e Coleções",
+                                ListView(
+                                  children: [
+                                    StatisticsCard(
+                                      "Total de Revisões",
+                                      user.totalReviewedCards,
+                                      "revisões",
+                                    ),
+                                    StatisticsCard(
+                                      "Taxa de Acerto",
+                                      (user.totalRightCardsReviewed /
+                                          user.totalReviewedCards *
+                                          100),
+                                      "%",
+                                    ),
+                                    StatisticsCard(
+                                      "Sequência Atual de Revisões Diárias",
+                                      user.streak,
+                                      "dias",
+                                    ),
+                                    StatisticsCard(
+                                      "Sequência Mais Longa de Revisões Diárias",
+                                      user.highestStreak,
+                                      "dias",
+                                    ),
+                                    StatisticsCard(
+                                      "Média de Revisões Diárias",
+                                      (user.totalReviewedCards /
+                                          (DateTime.now()
+                                                  .difference(user.dayCreated!)
+                                                  .inDays +
+                                              1)),
+                                      "revisões/dia",
+                                    ),
+                                    StatisticsCard(
+                                      "Número de Coleções Registradas",
+                                      user.createdCollections,
+                                      "coleções",
+                                    ),
+                                    StatisticsCard(
+                                      "Número de Cartões Registrados",
+                                      user.createdCards,
+                                      "cartões",
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              subScreen(
+                                context,
+                                "Pets",
+                                ListView(
+                                  children: [
+                                    StatisticsCard(
+                                      "Ouro Obtido",
+                                      user.totalGoldEarned,
+                                      "unidades",
+                                    ),
+                                    StatisticsCard(
+                                      "Ouro Gasto",
+                                      user.totalGoldSpent,
+                                      "unidades",
+                                    ),
+                                    StatisticsCard(
+                                      "Pontos de Experiências Obtidos",
+                                      user.totalXp,
+                                      "pontos",
+                                    ),
+                                    StatisticsCard(
+                                      "Pets Obtidos",
+                                      pets.length,
+                                      "pets",
+                                    ),
+                                    StatisticsCard(
+                                      "Aumento de Nível em Pets",
+                                      pets.fold(
+                                          0, (sum, pet) => sum + pet.level),
+                                      "níveis",
+                                    ),
+                                    StatisticsCard(
+                                      "Média de Ouro por Revisão",
+                                      (user.totalGoldFromRevisions /
+                                          user.totalReviewedCards),
+                                      "unidades",
+                                    ),
+                                    StatisticsCard(
+                                      "Média de Pontos de Experiência por Revisão",
+                                      (user.totalXp / user.totalReviewedCards),
+                                      "pontos",
+                                    ),
+                                    /* StatisticsCard(
+                                      "Amigos Adicionados",
+                                      0, // TODO
+                                      "amigos",
+                                    ),
+                                    StatisticsCard(
+                                      "Presentes Enviados",
+                                      0, // TODO
+                                      "presentes",
+                                    ),
+                                    StatisticsCard(
+                                      "Presentes Recebidos",
+                                      0, // TODO
+                                      "presentes",
+                                    ),*/
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          subScreen(
-                            context,
-                            "Cartões e Coleções",
-                            ListView(
-                              children: [
-                                StatisticsCard(
-                                  "Total de Revisões",
-                                  _retrievedValue,
-                                  "revisões",
-                                ),
-                                StatisticsCard(
-                                  "Taxa de Acerto",
-                                  _retrievedValue,
-                                  "%",
-                                ),
-                                StatisticsCard(
-                                  "Sequência Mais Longa de Revisões Diárias",
-                                  _retrievedValue,
-                                  "dias",
-                                ),
-                                StatisticsCard(
-                                  "Tempo Total de Revisão",
-                                  _retrievedValue,
-                                  "segundos",
-                                ),
-                                StatisticsCard(
-                                  "Média de Revisões Diárias",
-                                  _retrievedValue,
-                                  "revisões/dia",
-                                ),
-                                StatisticsCard(
-                                  "Número de Coleções Registradas",
-                                  _retrievedValue,
-                                  "coleções",
-                                ),
-                                StatisticsCard(
-                                  "Número de Cartões Registrados",
-                                  _retrievedValue,
-                                  "cartões",
-                                ),
-                              ],
-                            ),
-                          ),
-                          subScreen(
-                            context,
-                            "Pets",
-                            ListView(
-                              children: [
-                                StatisticsCard(
-                                  "Ouro Obtido",
-                                  _retrievedValue,
-                                  "unidades",
-                                ),
-                                StatisticsCard(
-                                  "Ouro Gasto",
-                                  _retrievedValue,
-                                  "unidades",
-                                ),
-                                StatisticsCard(
-                                  "Pontos de Experiências Obtidos",
-                                  _retrievedValue,
-                                  "pontos",
-                                ),
-                                StatisticsCard(
-                                  "Pets Obtidos",
-                                  _retrievedValue,
-                                  "pets",
-                                ),
-                                StatisticsCard(
-                                  "Aumento de Nível em Pets",
-                                  _retrievedValue,
-                                  "níveis",
-                                ),
-                                StatisticsCard(
-                                  "Média de Ouro/Pontos de Experiência por Revisão",
-                                  _retrievedValue,
-                                  "unidades/pontos",
-                                ),
-                                StatisticsCard(
-                                  "Amigos Adicionados",
-                                  _retrievedValue,
-                                  "amigos",
-                                ),
-                                StatisticsCard(
-                                  "Presentes Enviados",
-                                  _retrievedValue,
-                                  "presentes",
-                                ),
-                                StatisticsCard(
-                                  "Presentes Recebidos",
-                                  _retrievedValue,
-                                  "presentes",
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );

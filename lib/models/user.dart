@@ -12,6 +12,15 @@ class User {
   int totalRightCardsReviewed;
   int streak;
   DateTime? lastTimeUsedApp;
+  int highestStreak;
+  DateTime? dayCreated;
+  int createdCollections;
+  int createdCards;
+  int totalGoldEarned;
+  int totalGoldSpent;
+  int totalPetXp;
+  int totalGoldFromRevisions;
+  int totalXpFromRevisions;
 
   User({
     this.level = 1,
@@ -27,6 +36,15 @@ class User {
     this.totalRightCardsReviewed = 0,
     this.streak = 1,
     this.lastTimeUsedApp,
+    this.highestStreak = 1,
+    this.dayCreated,
+    this.createdCollections = 0,
+    this.createdCards = 0,
+    this.totalGoldEarned = 0,
+    this.totalGoldSpent = 0,
+    this.totalPetXp = 0,
+    this.totalGoldFromRevisions = 0,
+    this.totalXpFromRevisions = 0,
   });
 
   static User fromMap(Map<String, dynamic> map) {
@@ -46,6 +64,16 @@ class User {
       lastTimeUsedApp: map["lastTimeUsedApp"] != null
           ? DateTime.parse(map["lastTimeUsedApp"])
           : null,
+      highestStreak: map["highestStreak"],
+      dayCreated:
+          map["dayCreated"] != null ? DateTime.parse(map["dayCreated"]) : null,
+      createdCollections: map["createdCollections"],
+      createdCards: map["createdCards"],
+      totalGoldEarned: map["totalGoldEarned"],
+      totalGoldSpent: map["totalGoldSpent"],
+      totalPetXp: map["totalPetXp"],
+      totalGoldFromRevisions: map["totalGoldFromRevisions"],
+      totalXpFromRevisions: map["totalXpFromRevisions"],
     );
   }
 
@@ -64,6 +92,15 @@ class User {
       "totalRightCardsReviewed": totalRightCardsReviewed,
       "streak": streak,
       "lastTimeUsedApp": lastTimeUsedApp?.toIso8601String(),
+      "highestStreak": highestStreak,
+      "dayCreated": dayCreated?.toIso8601String(),
+      "createdCollections": createdCollections,
+      "createdCards": createdCards,
+      "totalGoldEarned": totalGoldEarned,
+      "totalGoldSpent": totalGoldSpent,
+      "totalPetXp": totalPetXp,
+      "totalGoldFromRevisions": totalGoldFromRevisions,
+      "totalXpFromRevisions": totalXpFromRevisions,
     };
   }
 }

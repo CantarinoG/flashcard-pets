@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class StatisticsCard extends StatelessWidget {
   final String title;
-  final int value;
+  final num value;
   final String unit;
   const StatisticsCard(this.title, this.value, this.unit, {super.key});
 
