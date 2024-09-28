@@ -45,6 +45,7 @@ class _PetScreenState extends State<PetScreen> {
         return ConfirmDeleteDialog(
           "Vender Pet?",
           "",
+          deleteLabel: "Vender",
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

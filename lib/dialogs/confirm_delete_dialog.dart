@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ConfirmDeleteDialog extends StatelessWidget {
   final String _title;
   final String _message;
-  final String? deleteLabel;
+  final String deleteLabel;
   final Widget? content;
 
   /// Dialog to confirm deletion.
@@ -64,7 +64,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
             _delete(context);
           },
           child: Text(
-            "Excluir",
+            deleteLabel,
             style: bodyEm.copyWith(color: error),
           ),
         ),
