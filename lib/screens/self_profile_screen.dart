@@ -20,10 +20,8 @@ import 'package:provider/provider.dart';
 
 class SelfProfileScreen extends StatelessWidget {
   //Mocked data
-  final String _name = "Guilherme Cantarino";
+  final bool _isUserLoggedIn = false;
   final String _nick = "CantarinoG";
-  final int _currentXp = 450;
-  final int _nextLevelXp = 520;
   final int _reviewedCardsNum = 23;
   final int _accuracy = 84;
   final int _streak = 4;
@@ -147,18 +145,20 @@ class SelfProfileScreen extends StatelessWidget {
                         height: 4,
                       ),
                       Text(
-                        _name,
+                        user.name,
                         style: h2?.copyWith(color: secondary),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        "@$_nick",
-                        style: h3?.copyWith(color: disabled),
-                      ),
+                      if (_isUserLoggedIn) ...[
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          "@$_nick",
+                          style: h3?.copyWith(color: disabled),
+                        ),
+                      ],
                       const SizedBox(
                         height: 4,
                       ),
