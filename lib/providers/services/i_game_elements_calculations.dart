@@ -16,4 +16,5 @@ abstract class IGameElementsCalculations with ChangeNotifier {
   Pet addPetXp(Pet pet, int xp, BuildContext context);
   int calculateTotalXpToLevel(int level);
   double calculatePetBonus(Pet pet, PetRarity rarity);
+  String petSkillToString(PetSkill skill);
 }

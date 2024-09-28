@@ -180,4 +180,15 @@ class StandardGameElementsCalculations
 
     return totalXp;
   }
+
+  @override
+  String petSkillToString(PetSkill skill) {
+    final map = {
+      PetSkill.betterPets: "chance de pets raros",
+      PetSkill.cheaperUpgrade: "XP de pet",
+      PetSkill.moreGold: "ouro",
+      PetSkill.moreXp: "XP",
+    };
+    return map[skill]!;
+  }
 }

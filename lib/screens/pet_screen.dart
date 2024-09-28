@@ -33,10 +33,6 @@ class PetScreen extends StatefulWidget {
 }
 
 class _PetScreenState extends State<PetScreen> {
-  //Mocked data
-  final int _skillValue = 2;
-  final String _skillDesc = "% mais ouro ao revisar cartões.";
-
   void _sell(Pet pet, PetBio petBio) async {
     final Color warning = Theme.of(context).colorScheme.warning;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
@@ -180,6 +176,12 @@ class _PetScreenState extends State<PetScreen> {
 
     final petBio = Provider.of<IDataProvider<PetBio>>(context)
         .retrieveFromKey(widget.pet.petBioCode);
+    final gameElementCalcProvider =
+        Provider.of<IGameElementsCalculations>(context);
+    final double petBonusValue =
+        gameElementCalcProvider.calculatePetBonus(widget.pet, petBio.rarity);
+    final String petBonusDescription =
+        "+${((petBonusValue - 1) * 100).round()}% ${gameElementCalcProvider.petSkillToString(petBio.skill)}";
 
     final double xpProgress = widget.pet.currentXp / widget.pet.nextLevelXp;
     final double copiesProgress =
@@ -358,7 +360,7 @@ class _PetScreenState extends State<PetScreen> {
                       PetDescriptionCard(
                         iconData: Icons.auto_awesome,
                         title: "Habilidade",
-                        content: "$_skillValue$_skillDesc",
+                        content: " $petBonusDescription",
                       ),
                       PetDescriptionCard(
                         iconData: Icons.diamond,

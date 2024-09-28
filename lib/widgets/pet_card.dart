@@ -1,6 +1,7 @@
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/screens/pet_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -11,8 +12,6 @@ import 'package:provider/provider.dart';
 
 class PetCard extends StatelessWidget {
   final Pet pet;
-  //Mocked data.
-  final String _skillShort = "+2% ouro";
 
   const PetCard(this.pet, {super.key});
 
@@ -38,6 +37,12 @@ class PetCard extends StatelessWidget {
 
     final petBio = Provider.of<IDataProvider<PetBio>>(context)
         .retrieveFromKey(pet.petBioCode);
+    final gameElementCalcProvider =
+        Provider.of<IGameElementsCalculations>(context);
+    final double petBonusValue =
+        gameElementCalcProvider.calculatePetBonus(pet, petBio.rarity);
+    final String petBonusDescription =
+        "+${((petBonusValue - 1) * 100).round()}% ${gameElementCalcProvider.petSkillToString(petBio.skill)}";
 
     return Card(
       elevation: 4,
@@ -123,7 +128,7 @@ class PetCard extends StatelessWidget {
                   color: secondary,
                 ),
                 Text(
-                  " $_skillShort",
+                  " $petBonusDescription",
                   style: body,
                 ),
               ],

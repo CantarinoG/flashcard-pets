@@ -22,7 +22,6 @@ class FeedPetDialog extends StatefulWidget {
 }
 
 class _FeedPetDialog<T> extends State<FeedPetDialog> {
-  //TODO: Calculate pet bonuses
   //Mocked data
   final int xpPerCoin = 3;
 
