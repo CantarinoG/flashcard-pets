@@ -22,6 +22,9 @@ class User {
   int totalGoldFromRevisions;
   int totalXpFromRevisions;
   int totalMaxQualityRevisions;
+  double reviewMultiplier;
+  int maxReviewInterval;
+  bool userSoundEffects;
   List<int> awards;
 
   User({
@@ -48,6 +51,9 @@ class User {
     this.totalGoldFromRevisions = 0,
     this.totalXpFromRevisions = 0,
     this.totalMaxQualityRevisions = 0,
+    this.reviewMultiplier = 1,
+    this.maxReviewInterval = 365,
+    this.userSoundEffects = true,
     this.awards = const [],
   });
 
@@ -79,6 +85,9 @@ class User {
       totalGoldFromRevisions: map["totalGoldFromRevisions"],
       totalXpFromRevisions: map["totalXpFromRevisions"],
       totalMaxQualityRevisions: map["totalMaxQualityRevisions"],
+      reviewMultiplier: map["reviewMultiplier"],
+      maxReviewInterval: map["maxReviewInterval"],
+      userSoundEffects: map["userSoundEffects"],
       awards: List<int>.from(map["awards"] ?? []),
     );
   }
@@ -109,6 +118,9 @@ class User {
       "totalXpFromRevisions": totalXpFromRevisions,
       "totalMaxQualityRevisions": totalMaxQualityRevisions,
       "awards": awards,
+      "reviewMultiplier": reviewMultiplier,
+      "maxReviewInterval": maxReviewInterval,
+      "userSoundEffects": userSoundEffects,
     };
   }
 }

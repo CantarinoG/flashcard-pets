@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class Sm2Calculator with ChangeNotifier implements ISrsCalculator {
   @override
-  Flashcard calculateNewValues(Flashcard flashcard, int quality) {
+  Flashcard calculateNewValues(Flashcard flashcard, int quality,
+      int maxReviewInterval, double reviewMultiplier) {
     double easinessFactor = flashcard.easeFactor;
     double interval = flashcard.interval;
     int repetitions = flashcard.repeticoes;
@@ -29,11 +30,17 @@ class Sm2Calculator with ChangeNotifier implements ISrsCalculator {
       easinessFactor = 1.3;
     }
 
+    interval = interval * reviewMultiplier;
+
+    if (interval > maxReviewInterval) {
+      interval = maxReviewInterval.toDouble();
+    }
+
     flashcard.interval = interval;
     flashcard.easeFactor = easinessFactor;
     flashcard.repeticoes = repetitions;
     flashcard.revisionDate =
-        flashcard.revisionDate.add(Duration(days: interval.floor()));
+        flashcard.revisionDate.add(Duration(days: interval.ceil()));
 
     return flashcard;
   }

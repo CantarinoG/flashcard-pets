@@ -2,11 +2,12 @@ import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flutter/material.dart';
 
-class ValueSettingsCard extends StatelessWidget {
+class ValueSettingsCard<T> extends StatelessWidget {
   final String title;
-  final String unit;
   final String explanation;
-  const ValueSettingsCard(this.title, this.explanation, this.unit, {super.key});
+  final Widget textField;
+  const ValueSettingsCard(this.title, this.explanation, this.textField,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,6 @@ class ValueSettingsCard extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color disabled = Theme.of(context).disabledColor;
     final Color bright = Theme.of(context).colorScheme.bright;
-    final Color text = Theme.of(context).colorScheme.text;
 
     return Card(
         elevation: 4,
@@ -38,21 +38,7 @@ class ValueSettingsCard extends StatelessWidget {
               ),
               TextFieldWrapper(
                 hasOutline: true,
-                child: TextField(
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-                  style: body?.copyWith(
-                    color: text,
-                  ),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    suffixText: unit,
-                    suffixStyle: body?.copyWith(
-                      color: text,
-                    ),
-                    errorText: null,
-                  ),
-                ),
+                child: textField,
               ),
               const SizedBox(
                 height: 8,

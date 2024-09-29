@@ -291,7 +291,7 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ConfigurationsScreen(),
+        builder: (context) => ConfigurationsScreen(),
       ),
     );
   }

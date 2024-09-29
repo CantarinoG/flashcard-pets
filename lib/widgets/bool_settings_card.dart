@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 class BoolSettingsCard extends StatelessWidget {
   final String title;
   final String explanation;
-  const BoolSettingsCard(this.title, this.explanation, {super.key});
+  final Widget switchWidget;
+  const BoolSettingsCard(this.title, this.explanation, this.switchWidget,
+      {super.key});
 
   void _switch(bool value) {
     //...
@@ -38,7 +40,7 @@ class BoolSettingsCard extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              Switch(value: true, onChanged: _switch),
+              switchWidget,
               const SizedBox(
                 height: 8,
               ),

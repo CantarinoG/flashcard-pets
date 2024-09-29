@@ -108,7 +108,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
     // Save card attributes
     final updatedFlashcard = Provider.of<Sm2Calculator>(context, listen: false)
         .calculateNewValues(
-            widget.cardsToReview[_currentCardIndex], _sliderValue.round());
+            widget.cardsToReview[_currentCardIndex],
+            _sliderValue.round(),
+            updatedUser.maxReviewInterval,
+            updatedUser.reviewMultiplier);
     setState(() {
       _isLoading = true;
     });
