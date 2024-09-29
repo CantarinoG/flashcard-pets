@@ -244,23 +244,26 @@ class SelfProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: last3Awards.isEmpty
-                            ? [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 60.0),
-                                  child: Text(
-                                    "Não conquistou nenhuma conquista ainda.",
-                                    style: body,
-                                  ),
-                                )
-                              ]
-                            : last3Awards.map((awardCode) {
-                                return AwardCardBasic(awardCode);
-                              }).toList(),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: last3Awards.isEmpty
+                              ? [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 60.0),
+                                    child: Text(
+                                      "Não conquistou nenhuma conquista ainda.",
+                                      style: body,
+                                    ),
+                                  )
+                                ]
+                              : last3Awards.map((awardCode) {
+                                  return AwardCardBasic(awardCode);
+                                }).toList(),
+                        ),
                       ),
                     ],
                   ),
