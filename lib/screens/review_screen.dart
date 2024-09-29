@@ -96,6 +96,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
     if (_sliderValue.round() >= 3) {
       updatedUser.totalRightCardsReviewed++;
     }
+    if (_sliderValue.round() == 5) {
+      updatedUser.totalMaxQualityRevisions++;
+    }
     setState(() {
       _totalGoldReceived += goldReward;
       _totalXpReceived += xpReward;

@@ -24,12 +24,7 @@ class SelfProfileScreen extends StatelessWidget {
   //Mocked data
   final bool _isUserLoggedIn = false;
   final String _nick = "CantarinoG";
-  final List<int> _last3Awards = [
-    4,
-    6,
-    13,
-  ];
-  SelfProfileScreen({super.key});
+  const SelfProfileScreen({super.key});
 
   void _changeAvatar(BuildContext context) {
     Navigator.push(
@@ -88,6 +83,10 @@ class SelfProfileScreen extends StatelessWidget {
 
         final String avatarPath = Provider.of<IDataProvider<String>>(context)
             .retrieveFromKey(user.avatarCode);
+
+        final List<int> last3Awards = user.awards.length > 3
+            ? user.awards.sublist(user.awards.length - 3)
+            : user.awards;
 
         return ScreenLayout(
           child: SingleChildScrollView(
@@ -248,11 +247,20 @@ class SelfProfileScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(child: AwardCardBasic(_last3Awards[0])),
-                          Expanded(child: AwardCardBasic(_last3Awards[1])),
-                          Expanded(child: AwardCardBasic(_last3Awards[2])),
-                        ],
+                        children: last3Awards.isEmpty
+                            ? [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 60.0),
+                                  child: Text(
+                                    "Não conquistou nenhuma conquista ainda.",
+                                    style: body,
+                                  ),
+                                )
+                              ]
+                            : last3Awards.map((awardCode) {
+                                return AwardCardBasic(awardCode);
+                              }).toList(),
                       ),
                     ],
                   ),

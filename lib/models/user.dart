@@ -21,6 +21,8 @@ class User {
   int totalPetXp;
   int totalGoldFromRevisions;
   int totalXpFromRevisions;
+  int totalMaxQualityRevisions;
+  List<int> awards;
 
   User({
     this.level = 1,
@@ -45,6 +47,8 @@ class User {
     this.totalPetXp = 0,
     this.totalGoldFromRevisions = 0,
     this.totalXpFromRevisions = 0,
+    this.totalMaxQualityRevisions = 0,
+    this.awards = const [],
   });
 
   static User fromMap(Map<String, dynamic> map) {
@@ -74,6 +78,8 @@ class User {
       totalPetXp: map["totalPetXp"],
       totalGoldFromRevisions: map["totalGoldFromRevisions"],
       totalXpFromRevisions: map["totalXpFromRevisions"],
+      totalMaxQualityRevisions: map["totalMaxQualityRevisions"],
+      awards: List<int>.from(map["awards"] ?? []),
     );
   }
 
@@ -101,6 +107,8 @@ class User {
       "totalPetXp": totalPetXp,
       "totalGoldFromRevisions": totalGoldFromRevisions,
       "totalXpFromRevisions": totalXpFromRevisions,
+      "totalMaxQualityRevisions": totalMaxQualityRevisions,
+      "awards": awards,
     };
   }
 }
