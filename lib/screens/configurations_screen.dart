@@ -114,10 +114,13 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
     super.dispose();
   }
 
-  void _confirm(User user) {
+  void _confirm() async {
     int? maxReviewInterval = int.tryParse(maxReviewController.text);
     double? reviewMultiplier = double.tryParse(reviewMultiplierController.text);
-    print(maxReviewController.text);
+
+    final user = await Provider.of<UserJsonDataProvider>(context, listen: false)
+        .readData();
+    if (user == null) return;
 
     if (maxReviewInterval != null && maxReviewInterval > 0) {
       user.maxReviewInterval = maxReviewInterval;
@@ -263,31 +266,33 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
     final UserJsonDataProvider userProvider =
         Provider.of<UserJsonDataProvider>(context);
 
-    return FutureBuilder<User?>(
-      future: userProvider.readData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SizedBox();
-        }
+    return Scaffold(
+      appBar: const ThemedAppBar("Configurações"),
+      body: FutureBuilder<User?>(
+        future: userProvider.readData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        if (snapshot.hasError) {
-          return NoItemsPlaceholder('Error: ${snapshot.error}');
-        }
+          if (snapshot.hasError) {
+            return Center(
+                child: NoItemsPlaceholder('Error: ${snapshot.error}'));
+          }
 
-        final user = snapshot.data;
-        if (user == null) {
-          return const NoItemsPlaceholder('User data not found');
-        }
+          final user = snapshot.data;
+          if (user == null) {
+            return const Center(
+                child: NoItemsPlaceholder('User data not found'));
+          }
 
-        // Initialize controllers with user data
-        maxReviewController =
-            TextEditingController(text: user.maxReviewInterval.toString());
-        reviewMultiplierController =
-            TextEditingController(text: user.reviewMultiplier.toString());
+          // Initialize controllers with user data
+          maxReviewController =
+              TextEditingController(text: user.maxReviewInterval.toString());
+          reviewMultiplierController =
+              TextEditingController(text: user.reviewMultiplier.toString());
 
-        return Scaffold(
-          appBar: const ThemedAppBar("Configurações"),
-          body: ScreenLayout(
+          return ScreenLayout(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -353,15 +358,13 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
                 ],
               ),
             ),
-          ),
-          floatingActionButton: ThemedFab(
-            () {
-              _confirm(user);
-            },
-            const Icon(Icons.save),
-          ),
-        );
-      },
+          );
+        },
+      ),
+      floatingActionButton: ThemedFab(
+        _confirm,
+        const Icon(Icons.save),
+      ),
     );
   }
 }
