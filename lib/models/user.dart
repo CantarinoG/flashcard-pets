@@ -26,6 +26,7 @@ class User {
   int maxReviewInterval;
   bool userSoundEffects;
   List<int> awards;
+  DateTime? notificationTime;
 
   User({
     this.level = 1,
@@ -55,6 +56,7 @@ class User {
     this.maxReviewInterval = 365,
     this.userSoundEffects = true,
     this.awards = const [],
+    this.notificationTime,
   });
 
   static User fromMap(Map<String, dynamic> map) {
@@ -89,6 +91,9 @@ class User {
       maxReviewInterval: map["maxReviewInterval"],
       userSoundEffects: map["userSoundEffects"],
       awards: List<int>.from(map["awards"] ?? []),
+      notificationTime: map["notificationTime"] != null
+          ? DateTime.parse(map["notificationTime"])
+          : null,
     );
   }
 
@@ -121,6 +126,7 @@ class User {
       "reviewMultiplier": reviewMultiplier,
       "maxReviewInterval": maxReviewInterval,
       "userSoundEffects": userSoundEffects,
+      "notificationTime": notificationTime?.toIso8601String(),
     };
   }
 }

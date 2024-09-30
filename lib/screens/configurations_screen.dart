@@ -90,10 +90,19 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
         .writeData(user);
   }
 
-  Widget _buildNotificationSettingCard(BuildContext context) {
-    //Mocked data:
-    const bool _initialValue = true;
+  void _toggleNotifications(bool value, User user) {
+    if (value) {
+      user.notificationTime = DateTime(DateTime.now().year,
+          DateTime.now().month, DateTime.now().day, 8, 0); // 8 am
+    } else {
+      user.notificationTime = null;
+    }
+    Provider.of<IJsonDataProvider<User>>(context, listen: false)
+        .writeData(user);
+  }
 
+  Widget _buildNotificationSettingCard(
+      BuildContext context, bool value, void Function(bool)? onChanged) {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
@@ -127,13 +136,13 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                Switch(value: _initialValue, onChanged: _switch),
+                Switch(value: value, onChanged: onChanged),
                 const SizedBox(
                   height: 8,
                 ),
                 ThemedFilledButton(
                   label: "Selecionar Hora",
-                  onPressed: _initialValue ? _selectTime : null,
+                  onPressed: value ? _selectTime : null,
                 ),
               ],
             ),
@@ -178,7 +187,13 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildNotificationSettingCard(context),
+                  _buildNotificationSettingCard(
+                    context,
+                    user.notificationTime == null ? false : true,
+                    (value) {
+                      _toggleNotifications(value, user);
+                    },
+                  ),
                   ValueSettingsCard(
                     "Intervalo Máximo de Revisões",
                     "Qualquer revisão será agendada para, no máximo, daqui a essa quantidade de dias.",
