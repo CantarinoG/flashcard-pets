@@ -12,8 +12,13 @@ import 'package:flashcard_pets/widgets/themed_fab.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/value_settings_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class ConfigurationsScreen extends StatefulWidget {
   ConfigurationsScreen({super.key});
@@ -25,12 +30,81 @@ class ConfigurationsScreen extends StatefulWidget {
 class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
   late TextEditingController maxReviewController;
   late TextEditingController reviewMultiplierController;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
     super.initState();
     maxReviewController = TextEditingController();
     reviewMultiplierController = TextEditingController();
+
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    _initalizeTZ();
+    _requestPermissions();
+  }
+
+  Future<void> _requestPermissions() async {
+    if (await Permission.scheduleExactAlarm.isDenied) {
+      await Permission.scheduleExactAlarm.request();
+    }
+    AndroidFlutterLocalNotificationsPlugin plugin =
+        AndroidFlutterLocalNotificationsPlugin();
+    plugin.requestExactAlarmsPermission();
+  }
+
+  Future<void> _initalizeTZ() async {
+    tz.initializeTimeZones();
+    final timeZoneName = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(timeZoneName));
+  }
+
+  Future<void> _scheduleDailyNotification(TimeOfDay time) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        "cantarino.flashcard.pets", "Flashcard Pets",
+        importance: Importance.max, priority: Priority.high, showWhen: false);
+    var platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      0,
+      "Flashcard Pets",
+      "Já fez suas revisões hoje?",
+      _nextInstanceOfTime(time),
+      platformChannelSpecifics,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+
+    print("shceduled");
+  }
+
+  tz.TZDateTime _nextInstanceOfTime(TimeOfDay time) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+        tz.local, now.year, now.month, now.day, time.hour, time.minute);
+    /*if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(Duration(days: 1));
+    }*/
+    print("Scheduled Date: $scheduledDate");
+    return scheduledDate;
+  }
+
+  Future<void> _cancelNotification() async {
+    await flutterLocalNotificationsPlugin.cancel(0);
+  }
+
+  Future<void> _changeNotificationTime(TimeOfDay newTime) async {
+    // Cancel the existing notification
+    await flutterLocalNotificationsPlugin.cancel(0);
+    // Schedule a new notification with the updated time
+    await _scheduleDailyNotification(newTime);
   }
 
   @override
@@ -95,8 +169,11 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
     if (value) {
       user.notificationTime = DateTime(DateTime.now().year,
           DateTime.now().month, DateTime.now().day, 8, 0); // 8 am
+      _scheduleDailyNotification(
+          TimeOfDay.fromDateTime(user.notificationTime!));
     } else {
       user.notificationTime = null;
+      _cancelNotification();
     }
     Provider.of<IJsonDataProvider<User>>(context, listen: false)
         .writeData(user);
@@ -126,6 +203,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
             pickedTime.minute,
           );
           user.notificationTime = newDate;
+          _changeNotificationTime(TimeOfDay.fromDateTime(newDate));
           if (!mounted) return;
           Provider.of<IJsonDataProvider<User>>(context, listen: false)
               .writeData(user);

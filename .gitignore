@@ -41,7 +41,6 @@ app.*.map.json
 /android/app/release
 
 # Platforms not supported(for now)
-/android/
 /ios/
 /linux/
 /macos/
