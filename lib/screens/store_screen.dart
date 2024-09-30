@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
@@ -42,8 +42,7 @@ class StoreScreen extends StatelessWidget {
     }
 
     final petsBioMap =
-        Provider.of<IDataProvider<PetBio>>(context, listen: false)
-            .retrieveData();
+        Provider.of<PetBioDataProvider>(context, listen: false).retrieveData();
     final commonDropKeys = petsBioMap.entries
         .where((entry) => entry.value.rarity == commonDrop)
         .map((entry) => entry.key)

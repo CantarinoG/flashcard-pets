@@ -1,5 +1,5 @@
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class AvatarThumb extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
     final String avatarImgPath =
-        Provider.of<IDataProvider<String>>(context).retrieveFromKey(avatarId);
+        Provider.of<AvatarDataProvider>(context).retrieveFromKey(avatarId);
     final IJsonDataProvider<User> userProvider =
         Provider.of<IJsonDataProvider<User>>(
       context,

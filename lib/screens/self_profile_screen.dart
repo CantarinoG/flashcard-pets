@@ -1,7 +1,7 @@
 import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/main.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/screens/awards_screen.dart';
 import 'package:flashcard_pets/screens/change_avatar_screen.dart';
@@ -81,7 +81,7 @@ class SelfProfileScreen extends StatelessWidget {
 
         final user = snapshot.data!;
 
-        final String avatarPath = Provider.of<IDataProvider<String>>(context)
+        final String avatarPath = Provider.of<AvatarDataProvider>(context)
             .retrieveFromKey(user.avatarCode);
 
         final List<int> last3Awards = user.awards.length > 3

@@ -1,5 +1,5 @@
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/widgets/avatar_thumb.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
@@ -46,7 +46,7 @@ class ChangeAvatarScreen extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
     final Map<int, String> avatars =
-        Provider.of<IDataProvider<String>>(context).retrieveData();
+        Provider.of<AvatarDataProvider>(context).retrieveData();
 
     return Scaffold(
       appBar: const ThemedAppBar("Mudar Avatar"),

@@ -1,8 +1,7 @@
 import 'package:flashcard_pets/models/award.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flutter/material.dart';
 
-class AwardDataProvider with ChangeNotifier implements IDataProvider<Award> {
+class AwardDataProvider with ChangeNotifier {
   final Map<int, Award> _data = {
     0: Award(
       AwardCategory.cards,
@@ -230,12 +229,10 @@ class AwardDataProvider with ChangeNotifier implements IDataProvider<Award> {
     ),
   };
 
-  @override
   Map<int, Award> retrieveData() {
     return _data;
   }
 
-  @override
   Award retrieveFromKey(int key) {
     return _data[key] ?? _data[0]!;
   }

@@ -1,13 +1,9 @@
-import 'package:flashcard_pets/models/award.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/pet.dart';
-import 'package:flashcard_pets/models/pet_bio.dart';
-import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/award_data_provider.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
@@ -51,10 +47,10 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    IDataProvider<Subject> subjectDataProvider = SubjectDataProvider();
-    IDataProvider<Award> awardDataProvider = AwardDataProvider();
-    IDataProvider<String> avatarDataProvider = AvatarDataProvider();
-    IDataProvider<PetBio> petBioDataProvider = PetBioDataProvider();
+    SubjectDataProvider subjectDataProvider = SubjectDataProvider();
+    AwardDataProvider awardDataProvider = AwardDataProvider();
+    AvatarDataProvider avatarDataProvider = AvatarDataProvider();
+    PetBioDataProvider petBioDataProvider = PetBioDataProvider();
     IDao<Collection> collectionDaoProvider = CollectionDao();
     IDao<Flashcard> flashcardDaoProvider = FlashcardDao();
     IDao<Pet> petDaoProvider = PetDao();

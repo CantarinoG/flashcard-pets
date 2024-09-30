@@ -1,5 +1,5 @@
 import 'package:flashcard_pets/models/pet_bio.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/widgets/rarity_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class PetGotSnackbar extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
 
     final PetBio petBio =
-        Provider.of<IDataProvider<PetBio>>(context).retrieveFromKey(petBioCode);
+        Provider.of<PetBioDataProvider>(context).retrieveFromKey(petBioCode);
 
     return Column(
       mainAxisSize: MainAxisSize.min,

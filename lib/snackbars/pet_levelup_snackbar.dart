@@ -1,6 +1,6 @@
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class PetLevelupSnackbar extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color star = Theme.of(context).colorScheme.star;
 
-    final PetBio petBio = Provider.of<IDataProvider<PetBio>>(context)
+    final PetBio petBio = Provider.of<PetBioDataProvider>(context)
         .retrieveFromKey(pet.petBioCode);
 
     return Column(

@@ -4,7 +4,7 @@ import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
@@ -176,7 +176,7 @@ class _PetScreenState extends State<PetScreen> {
     final Color text = Theme.of(context).colorScheme.text;
     final Color warning = Theme.of(context).colorScheme.warning;
 
-    final petBio = Provider.of<IDataProvider<PetBio>>(context)
+    final petBio = Provider.of<PetBioDataProvider>(context)
         .retrieveFromKey(widget.pet.petBioCode);
     final gameElementCalcProvider =
         Provider.of<IGameElementsCalculations>(context);

@@ -1,7 +1,6 @@
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flutter/material.dart';
 
-class AvatarDataProvider with ChangeNotifier implements IDataProvider<String> {
+class AvatarDataProvider with ChangeNotifier {
   final Map<int, String> _data = {
     0: "assets/images/avatars/none.png",
     1: "assets/images/avatars/female_0.png",
@@ -20,12 +19,10 @@ class AvatarDataProvider with ChangeNotifier implements IDataProvider<String> {
     14: "assets/images/avatars/male_7.png",
   };
 
-  @override
   Map<int, String> retrieveData() {
     return _data;
   }
 
-  @override
   String retrieveFromKey(int key) {
     return _data[key] ?? _data[0]!;
   }

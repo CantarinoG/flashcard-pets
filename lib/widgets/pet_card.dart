@@ -1,6 +1,6 @@
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/screens/pet_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
@@ -35,7 +35,7 @@ class PetCard extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color disabled = Theme.of(context).colorScheme.disabled;
 
-    final petBio = Provider.of<IDataProvider<PetBio>>(context)
+    final petBio = Provider.of<PetBioDataProvider>(context)
         .retrieveFromKey(pet.petBioCode);
     final gameElementCalcProvider =
         Provider.of<IGameElementsCalculations>(context);

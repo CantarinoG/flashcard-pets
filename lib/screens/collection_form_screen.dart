@@ -1,7 +1,7 @@
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
@@ -67,7 +67,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
       return false;
     }
 
-    final List<int> allowedCodes = Provider.of<IDataProvider<Subject>>(
+    final List<int> allowedCodes = Provider.of<SubjectDataProvider>(
       context,
       listen: false,
     ).retrieveData().keys.toList();
@@ -159,7 +159,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
     final Color error = Theme.of(context).colorScheme.error;
 
     final Map<int, Subject> subjects =
-        Provider.of<IDataProvider<Subject>>(context).retrieveData();
+        Provider.of<SubjectDataProvider>(context).retrieveData();
 
     return Scaffold(
       appBar: const ThemedAppBar("Conjunto"),

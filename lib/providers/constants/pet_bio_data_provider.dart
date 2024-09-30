@@ -1,8 +1,7 @@
 import 'package:flashcard_pets/models/pet_bio.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
 import 'package:flutter/material.dart';
 
-class PetBioDataProvider with ChangeNotifier implements IDataProvider<PetBio> {
+class PetBioDataProvider with ChangeNotifier {
   final Map<int, PetBio> _data = {
     0: const PetBio(
       "Labrador Retriever",
@@ -166,12 +165,10 @@ class PetBioDataProvider with ChangeNotifier implements IDataProvider<PetBio> {
     ),
   };
 
-  @override
   Map<int, PetBio> retrieveData() {
     return _data;
   }
 
-  @override
   PetBio retrieveFromKey(int key) {
     return _data[key] ?? _data[0]!;
   }

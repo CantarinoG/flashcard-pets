@@ -1,6 +1,6 @@
 import 'package:flashcard_pets/models/award.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/award_data_provider.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
@@ -44,7 +44,7 @@ class AwardCard extends StatelessWidget {
         Provider.of<IJsonDataProvider<User>>(context);
 
     final Award award =
-        Provider.of<IDataProvider<Award>>(context).retrieveFromKey(awardId);
+        Provider.of<AwardDataProvider>(context).retrieveFromKey(awardId);
 
     return FutureBuilder<User?>(
       future: userProvider.readData(),

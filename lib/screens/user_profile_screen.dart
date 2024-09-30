@@ -1,4 +1,4 @@
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/widgets/award_card_basic.dart';
 import 'package:flashcard_pets/widgets/pet_card_basic.dart';
@@ -41,7 +41,7 @@ class UserProfileScreen extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
     final String avatarPath =
-        Provider.of<IDataProvider<String>>(context).retrieveFromKey(_avatarId);
+        Provider.of<AvatarDataProvider>(context).retrieveFromKey(_avatarId);
 
     return Scaffold(
       appBar: const ThemedAppBar(""),

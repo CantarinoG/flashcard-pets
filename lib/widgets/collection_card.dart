@@ -2,7 +2,7 @@ import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/subject.dart';
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/screens/collection_cards_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
@@ -150,7 +150,7 @@ class _CollectionCardState extends State<CollectionCard> {
     final Color disabled = Theme.of(context).colorScheme.disabled;
 
     final Map<int, Subject> subjects =
-        Provider.of<IDataProvider<Subject>>(context).retrieveData();
+        Provider.of<SubjectDataProvider>(context).retrieveData();
 
     final flashcardDao = Provider.of<IDao<Flashcard>>(context);
 

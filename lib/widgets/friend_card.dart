@@ -1,4 +1,4 @@
-import 'package:flashcard_pets/providers/constants/i_data_provider.dart';
+import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/screens/user_profile_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class FriendCard extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
     final String avatarPath =
-        Provider.of<IDataProvider<String>>(context).retrieveFromKey(_avatarId);
+        Provider.of<AvatarDataProvider>(context).retrieveFromKey(_avatarId);
 
     return Card(
       elevation: 4,
