@@ -1,3 +1,4 @@
+import 'package:flashcard_pets/dialogs/add_media_dialog.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/user.dart';
@@ -167,8 +168,13 @@ class _CardFormScreenState extends State<CardFormScreen> {
     });
   }
 
-  void _addMedia() {
-    //...
+  void _addMedia(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AddMediaDialog();
+      },
+    );
   }
 
   void _displayError(String? message) {
@@ -303,7 +309,9 @@ class _CardFormScreenState extends State<CardFormScreen> {
                                 child: IconButton(
                                   icon: const Icon(Icons.add),
                                   color: Colors.white,
-                                  onPressed: _addMedia,
+                                  onPressed: () {
+                                    _addMedia(context);
+                                  },
                                 ),
                               ),
                             ],
