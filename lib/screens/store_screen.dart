@@ -118,7 +118,7 @@ class StoreScreen extends StatelessWidget {
           future: Provider.of<UserJsonDataProvider>(context).readData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Loading();
+              return const SizedBox();
             } else if (snapshot.hasError) {
               return const NoItemsPlaceholder(
                   "Ocorreu algum erro. Tente novamente mais tarde.");

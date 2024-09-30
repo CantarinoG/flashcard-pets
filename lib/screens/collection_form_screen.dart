@@ -165,7 +165,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
       appBar: const ThemedAppBar("Conjunto"),
       body: ScreenLayout(
         child: _isLoading
-            ? const Loading()
+            ? const SizedBox()
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

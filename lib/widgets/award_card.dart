@@ -50,7 +50,7 @@ class AwardCard extends StatelessWidget {
       future: userProvider.readData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Loading();
+          return const SizedBox();
         } else if (snapshot.hasError) {
           return NoItemsPlaceholder('Error: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data == null) {

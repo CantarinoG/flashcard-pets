@@ -25,7 +25,7 @@ class PetsCollectionScreen extends StatelessWidget {
         future: petDao.readAll(), // The Future you want to resolve
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Loading();
+            return const SizedBox();
           } else if (snapshot.hasError) {
             return const NoItemsPlaceholder(
                 "Algum erro ocorreu. Tente novamente mais tarde.");

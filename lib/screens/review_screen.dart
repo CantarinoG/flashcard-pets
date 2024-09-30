@@ -188,7 +188,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       appBar: ThemedAppBar(widget.collection.name),
       body: ScreenLayout(
         child: _isLoading
-            ? const Loading()
+            ? const SizedBox()
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

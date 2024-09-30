@@ -167,7 +167,7 @@ class _CollectionCardState extends State<CollectionCard> {
           ),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Loading();
+              return const SizedBox();
             }
 
             if (snapshot.hasError) {

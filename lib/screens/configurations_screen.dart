@@ -267,7 +267,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
       future: userProvider.readData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Loading();
+          return const SizedBox();
         }
 
         if (snapshot.hasError) {

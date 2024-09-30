@@ -40,7 +40,7 @@ class CollectionCardsScreen extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(body: Loading());
+          return const Scaffold(body: SizedBox());
         }
 
         if (snapshot.hasError) {

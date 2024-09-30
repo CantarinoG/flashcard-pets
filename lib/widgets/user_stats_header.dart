@@ -23,7 +23,7 @@ class UserStatsHeader extends StatelessWidget {
           return const SizedBox(
             width: double.infinity,
             height: 80,
-            child: Loading(),
+            child: const SizedBox(),
           );
         } else if (snapshot.hasError) {
           return const Text("Ocorreu algum erro. Tente novamente mais tarde.");

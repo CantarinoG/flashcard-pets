@@ -75,7 +75,7 @@ class CollectionsMainScreen extends StatelessWidget {
       future: collectionDao.readAll(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Loading();
+          return const SizedBox();
         } else if (snapshot.hasError) {
           return NoItemsPlaceholder(
             "Error loading collections: ${snapshot.error}.",

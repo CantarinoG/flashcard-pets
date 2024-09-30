@@ -202,7 +202,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
       appBar: const ThemedAppBar("Cartão"),
       body: ScreenLayout(
         child: _isLoading
-            ? const Loading()
+            ? const SizedBox()
             : SingleChildScrollView(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
