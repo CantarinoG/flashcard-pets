@@ -1,6 +1,3 @@
-import 'package:flashcard_pets/models/collection.dart';
-import 'package:flashcard_pets/models/flashcard.dart';
-import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/award_data_provider.dart';
@@ -8,7 +5,6 @@ import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
@@ -51,14 +47,17 @@ class MyAppState extends State<MyApp> {
     AwardDataProvider awardDataProvider = AwardDataProvider();
     AvatarDataProvider avatarDataProvider = AvatarDataProvider();
     PetBioDataProvider petBioDataProvider = PetBioDataProvider();
-    IDao<Collection> collectionDaoProvider = CollectionDao();
-    IDao<Flashcard> flashcardDaoProvider = FlashcardDao();
-    IDao<Pet> petDaoProvider = PetDao();
+
+    CollectionDao collectionDaoProvider = CollectionDao();
+    FlashcardDao flashcardDaoProvider = FlashcardDao();
+    PetDao petDaoProvider = PetDao();
+
+    IJsonDataProvider<User> userDataProvider = UserJsonDataProvider();
+
     IIdProvider idProvider = UuidProvider();
     Sm2Calculator sm2Provider = Sm2Calculator();
     IGameElementsCalculations gameElementCalcProvider =
         StandardGameElementsCalculations();
-    IJsonDataProvider<User> userDataProvider = UserJsonDataProvider();
 
     return MultiProvider(
       providers: [

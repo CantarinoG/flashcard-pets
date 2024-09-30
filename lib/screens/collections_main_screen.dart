@@ -2,7 +2,7 @@ import 'package:flashcard_pets/dialogs/card_or_collection_dialog.dart';
 import 'package:flashcard_pets/main.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
@@ -65,7 +65,7 @@ class CollectionsMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final collectionDao = Provider.of<IDao<Collection>>(context);
+    final collectionDao = Provider.of<CollectionDao>(context);
 
     debugPrint("rebuild");
     _toggleTheme(context);
@@ -137,7 +137,7 @@ class CollectionMainFab extends StatefulWidget {
 
 class _CollectionMainFabState extends State<CollectionMainFab> {
   void _onTap() async {
-    final collectionDao = Provider.of<IDao<Collection>>(context, listen: false);
+    final collectionDao = Provider.of<CollectionDao>(context, listen: false);
     final collections = await collectionDao.readAll();
 
     if (collections.isEmpty) {

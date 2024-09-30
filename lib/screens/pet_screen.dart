@@ -5,7 +5,7 @@ import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
@@ -93,7 +93,7 @@ class _PetScreenState extends State<PetScreen> {
         await userProvider.writeData(user);
 
         if (!mounted) return;
-        final petDao = Provider.of<IDao<Pet>>(context, listen: false);
+        final petDao = Provider.of<PetDao>(context, listen: false);
         await petDao.delete(pet.id);
 
         if (!mounted) return;
@@ -133,7 +133,7 @@ class _PetScreenState extends State<PetScreen> {
       if (value != null && value.isNotEmpty) {
         widget.pet.name = value;
         if (!mounted) return;
-        final petDao = Provider.of<IDao<Pet>>(context, listen: false);
+        final petDao = Provider.of<PetDao>(context, listen: false);
         petDao.update(widget.pet);
         setState(() {});
       }
@@ -154,7 +154,7 @@ class _PetScreenState extends State<PetScreen> {
       if (!mounted) return;
       final updatedPet =
           gameElementsCalculator.addPetXp(widget.pet, value, context);
-      final petDao = Provider.of<IDao<Pet>>(context, listen: false);
+      final petDao = Provider.of<PetDao>(context, listen: false);
       petDao.update(updatedPet);
 
       setState(() {});

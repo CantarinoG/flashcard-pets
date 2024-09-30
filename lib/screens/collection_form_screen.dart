@@ -2,7 +2,7 @@ import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
@@ -102,7 +102,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
         widget.editingCollection!.name = name;
         widget.editingCollection!.subjectCode = subjectCode;
         widget.editingCollection!.description = description;
-        await Provider.of<IDao<Collection>>(context, listen: false)
+        await Provider.of<CollectionDao>(context, listen: false)
             .update(widget.editingCollection!);
       } else {
         final String uniqueId =
@@ -115,7 +115,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
           description,
         );
 
-        await Provider.of<IDao<Collection>>(context, listen: false)
+        await Provider.of<CollectionDao>(context, listen: false)
             .insert(newCollection);
 
         final IJsonDataProvider<User> userProvider =

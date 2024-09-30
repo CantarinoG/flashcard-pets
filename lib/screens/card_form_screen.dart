@@ -1,7 +1,8 @@
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/collection_dao.dart';
+import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
@@ -52,7 +53,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
   }
 
   Future<void> _loadCollections() async {
-    final collectionDao = Provider.of<IDao<Collection>>(context, listen: false);
+    final collectionDao = Provider.of<CollectionDao>(context, listen: false);
     final collections = await collectionDao.readAll();
 
     setState(() {
@@ -88,7 +89,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
         widget.editingFlashcard!.collectionId = _selectedItem!;
         widget.editingFlashcard!.frontContent = front;
         widget.editingFlashcard!.backContent = back;
-        await Provider.of<IDao<Flashcard>>(context, listen: false)
+        await Provider.of<FlashcardDao>(context, listen: false)
             .update(widget.editingFlashcard!);
       } else {
         final String uniqueId =
@@ -102,7 +103,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
           DateTime.now(),
         );
 
-        await Provider.of<IDao<Flashcard>>(context, listen: false)
+        await Provider.of<FlashcardDao>(context, listen: false)
             .insert(newFlashcard);
 
         final IJsonDataProvider<User> userProvider =

@@ -3,7 +3,7 @@ import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_id_provider.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
@@ -58,7 +58,7 @@ class StoreScreen extends StatelessWidget {
     final gameCalcProvider =
         Provider.of<IGameElementsCalculations>(context, listen: false);
     final List<Pet> petList =
-        await Provider.of<IDao<Pet>>(context, listen: false).readAll();
+        await Provider.of<PetDao>(context, listen: false).readAll();
     final double rarePetMultiplier =
         gameCalcProvider.calculateTotalPetBonuses(petList, PetSkill.betterPets);
 
@@ -77,7 +77,7 @@ class StoreScreen extends StatelessWidget {
       ),
     );
 
-    final pet = await Provider.of<IDao<Pet>>(context, listen: false).customRead(
+    final pet = await Provider.of<PetDao>(context, listen: false).customRead(
       "petBioCode = ?",
       [petGotCode],
     );
@@ -92,7 +92,7 @@ class StoreScreen extends StatelessWidget {
         petGotCode,
         totalGoldSpent: price,
       );
-      Provider.of<IDao<Pet>>(context, listen: false).insert(newPet);
+      Provider.of<PetDao>(context, listen: false).insert(newPet);
     } else if (pet[0].stars == 5) {
       user = gameElementsCalc.addGoldAndXp(user, 0, price, context,
           optionalMessage:
@@ -101,7 +101,7 @@ class StoreScreen extends StatelessWidget {
       // Handle the case where the pet exists but has less than 5 stars
       final updatedPet = gameElementsCalc.addPetCopy(pet[0], 1, context);
       updatedPet.totalGoldSpent += price;
-      Provider.of<IDao<Pet>>(context, listen: false).update(updatedPet);
+      Provider.of<PetDao>(context, listen: false).update(updatedPet);
     }
 
     user.gold -= price;

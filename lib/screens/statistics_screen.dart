@@ -1,6 +1,6 @@
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
@@ -47,7 +47,7 @@ class StatisticsScreen extends StatelessWidget {
 
     final IJsonDataProvider<User> userProvider =
         Provider.of<IJsonDataProvider<User>>(context);
-    final IDao<Pet> petProvider = Provider.of<IDao<Pet>>(context);
+    final PetDao petProvider = Provider.of<PetDao>(context);
 
     return Scaffold(
       appBar: const ThemedAppBar("Estatísticas"),

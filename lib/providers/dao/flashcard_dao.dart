@@ -1,16 +1,14 @@
 import 'package:flashcard_pets/helpers/sqflite_database_helper.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 
-class FlashcardDao with ChangeNotifier implements IDao<Flashcard> {
+class FlashcardDao with ChangeNotifier {
   final String tableName = "Flashcard";
   final SqfliteDatabaseHelper databaseHelper = SqfliteDatabaseHelper.instance;
 
   FlashcardDao();
 
-  @override
   Future<void> insert(Flashcard item) async {
     final database = await databaseHelper.database;
     await database.insert(
@@ -21,7 +19,6 @@ class FlashcardDao with ChangeNotifier implements IDao<Flashcard> {
     notifyListeners();
   }
 
-  @override
   Future<Flashcard?> read(String id) async {
     final database = await databaseHelper.database;
     final maps = await database.query(
@@ -34,14 +31,12 @@ class FlashcardDao with ChangeNotifier implements IDao<Flashcard> {
     return Flashcard.fromMap(maps.first);
   }
 
-  @override
   Future<List<Flashcard>> readAll() async {
     final database = await databaseHelper.database;
     final maps = await database.query(tableName);
     return List.generate(maps.length, (i) => Flashcard.fromMap(maps[i]));
   }
 
-  @override
   Future<List<Flashcard>> customRead(
       String whereClause, List<dynamic> whereArgs) async {
     final database = await databaseHelper.database;
@@ -54,7 +49,6 @@ class FlashcardDao with ChangeNotifier implements IDao<Flashcard> {
     return List.generate(maps.length, (i) => Flashcard.fromMap(maps[i]));
   }
 
-  @override
   Future<void> update(Flashcard item) async {
     final database = await databaseHelper.database;
     await database.update(
@@ -66,7 +60,6 @@ class FlashcardDao with ChangeNotifier implements IDao<Flashcard> {
     notifyListeners();
   }
 
-  @override
   Future<void> delete(String id) async {
     final database = await databaseHelper.database;
     await database.delete(
@@ -77,7 +70,6 @@ class FlashcardDao with ChangeNotifier implements IDao<Flashcard> {
     notifyListeners();
   }
 
-  @override
   Future<void> customDelete(String whereClause, List whereArgs) async {
     final database = await databaseHelper.database;
     await database.delete(

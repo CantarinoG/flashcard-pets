@@ -1,6 +1,6 @@
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
 import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/widgets/flashcard_card.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
@@ -31,7 +31,7 @@ class CollectionCardsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
 
-    final IDao<Flashcard> flashcardDao = Provider.of<IDao<Flashcard>>(context);
+    final FlashcardDao flashcardDao = Provider.of<FlashcardDao>(context);
 
     return FutureBuilder(
       future: flashcardDao.customRead(

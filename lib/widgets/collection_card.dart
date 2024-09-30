@@ -3,7 +3,8 @@ import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/collection_dao.dart';
+import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
 import 'package:flashcard_pets/screens/collection_cards_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/screens/review_screen.dart';
@@ -65,10 +66,10 @@ class _CollectionCardState extends State<CollectionCard> {
     ).then((shouldDelete) {
       if (shouldDelete != null && shouldDelete) {
         if (mounted) {
-          Provider.of<IDao<Flashcard>>(context, listen: false).customDelete(
+          Provider.of<FlashcardDao>(context, listen: false).customDelete(
               "collectionId = ?", [widget.collection.id]).then((_) {
             if (!mounted) return;
-            Provider.of<IDao<Collection>>(context, listen: false)
+            Provider.of<CollectionDao>(context, listen: false)
                 .delete(widget.collection.id)
                 .then((_) {
               if (mounted) {
@@ -152,7 +153,7 @@ class _CollectionCardState extends State<CollectionCard> {
     final Map<int, Subject> subjects =
         Provider.of<SubjectDataProvider>(context).retrieveData();
 
-    final flashcardDao = Provider.of<IDao<Flashcard>>(context);
+    final flashcardDao = Provider.of<FlashcardDao>(context);
 
     return Card(
       elevation: 4,

@@ -4,7 +4,8 @@ import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
+import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/providers/services/sm2_calculator.dart';
@@ -71,7 +72,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     final gameCalcProvider =
         Provider.of<IGameElementsCalculations>(context, listen: false);
     final List<Pet> petList =
-        await Provider.of<IDao<Pet>>(context, listen: false).readAll();
+        await Provider.of<PetDao>(context, listen: false).readAll();
     final double goldMultiplier =
         gameCalcProvider.calculateTotalPetBonuses(petList, PetSkill.moreGold);
     final double xpMultiplier =
@@ -115,7 +116,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     setState(() {
       _isLoading = true;
     });
-    await Provider.of<IDao<Flashcard>>(context, listen: false)
+    await Provider.of<FlashcardDao>(context, listen: false)
         .update(updatedFlashcard);
     setState(() {
       _isLoading = false;

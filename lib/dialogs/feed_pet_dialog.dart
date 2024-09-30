@@ -1,7 +1,7 @@
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
@@ -35,7 +35,7 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
     final gameCalcProvider =
         Provider.of<IGameElementsCalculations>(context, listen: false);
     final List<Pet> petList =
-        await Provider.of<IDao<Pet>>(context, listen: false).readAll();
+        await Provider.of<PetDao>(context, listen: false).readAll();
     final double petXpMultiplier = gameCalcProvider.calculateTotalPetBonuses(
         petList, PetSkill.cheaperUpgrade);
     setState(() {
@@ -69,7 +69,7 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
     user.totalPetXp += int.parse(_textController.text) * xpPerCoin;
     await userProvider.writeData(user);
     widget.pet.totalGoldSpent += feedAmount;
-    Provider.of<IDao<Pet>>(context, listen: false).update(widget.pet);
+    Provider.of<PetDao>(context, listen: false).update(widget.pet);
     Navigator.of(context).pop(int.parse(_textController.text) * xpPerCoin);
   }
 

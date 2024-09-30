@@ -1,5 +1,5 @@
 import 'package:flashcard_pets/models/pet.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
+import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/screens/store_screen.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
@@ -16,7 +16,7 @@ class PetsCollectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final petDao = Provider.of<IDao<Pet>>(
+    final petDao = Provider.of<PetDao>(
       context,
     );
 

@@ -1,16 +1,14 @@
 import 'package:flashcard_pets/helpers/sqflite_database_helper.dart';
 import 'package:flashcard_pets/models/collection.dart';
-import 'package:flashcard_pets/providers/dao/i_dao.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 
-class CollectionDao with ChangeNotifier implements IDao<Collection> {
+class CollectionDao with ChangeNotifier {
   final String tableName = "Collection";
   final SqfliteDatabaseHelper databaseHelper = SqfliteDatabaseHelper.instance;
 
   CollectionDao();
 
-  @override
   Future<void> insert(Collection item) async {
     final database = await databaseHelper.database;
     await database.insert(
@@ -21,7 +19,6 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
     notifyListeners();
   }
 
-  @override
   Future<Collection?> read(String id) async {
     final database = await databaseHelper.database;
     final maps = await database.query(
@@ -34,14 +31,12 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
     return Collection.fromMap(maps.first);
   }
 
-  @override
   Future<List<Collection>> readAll() async {
     final database = await databaseHelper.database;
     final maps = await database.query(tableName);
     return List.generate(maps.length, (i) => Collection.fromMap(maps[i]));
   }
 
-  @override
   Future<List<Collection>> customRead(
       String whereClause, List<dynamic> whereArgs) async {
     final database = await databaseHelper.database;
@@ -54,7 +49,6 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
     return List.generate(maps.length, (i) => Collection.fromMap(maps[i]));
   }
 
-  @override
   Future<void> update(Collection item) async {
     final database = await databaseHelper.database;
     await database.update(
@@ -66,7 +60,6 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
     notifyListeners();
   }
 
-  @override
   Future<void> delete(String id) async {
     final database = await databaseHelper.database;
     await database.delete(
@@ -77,7 +70,6 @@ class CollectionDao with ChangeNotifier implements IDao<Collection> {
     notifyListeners();
   }
 
-  @override
   Future<void> customDelete(String whereClause, List whereArgs) async {
     final database = await databaseHelper.database;
     await database.delete(
