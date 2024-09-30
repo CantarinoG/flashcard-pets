@@ -1,6 +1,6 @@
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/widgets/avatar_thumb.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
@@ -26,8 +26,7 @@ class ChangeAvatarScreen extends StatelessWidget {
   }
 
   void _changeBgColor(BuildContext context, int colorValue) async {
-    final IJsonDataProvider<User> userProvider =
-        Provider.of<IJsonDataProvider<User>>(
+    final UserJsonDataProvider userProvider = Provider.of<UserJsonDataProvider>(
       context,
       listen: false,
     );

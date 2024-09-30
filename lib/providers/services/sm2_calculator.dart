@@ -1,9 +1,7 @@
 import 'package:flashcard_pets/models/flashcard.dart';
-import 'package:flashcard_pets/providers/services/i_srs_calculator.dart';
 import 'package:flutter/material.dart';
 
-class Sm2Calculator with ChangeNotifier implements ISrsCalculator {
-  @override
+class Sm2Calculator with ChangeNotifier {
   Flashcard calculateNewValues(Flashcard flashcard, int quality,
       int maxReviewInterval, double reviewMultiplier) {
     double easinessFactor = flashcard.easeFactor;

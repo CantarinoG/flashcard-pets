@@ -6,9 +6,9 @@ import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
-import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flashcard_pets/providers/services/sm2_calculator.dart';
+import 'package:flashcard_pets/providers/services/standard_game_elements_calculations.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/screens/review_results_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -68,9 +68,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     // Give user reward for review
     final userDataProvider =
-        Provider.of<IJsonDataProvider<User>>(context, listen: false);
+        Provider.of<UserJsonDataProvider>(context, listen: false);
     final gameCalcProvider =
-        Provider.of<IGameElementsCalculations>(context, listen: false);
+        Provider.of<StandardGameElementsCalculations>(context, listen: false);
     final List<Pet> petList =
         await Provider.of<PetDao>(context, listen: false).readAll();
     final double goldMultiplier =

@@ -1,8 +1,8 @@
 import 'package:flashcard_pets/models/award.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/award_data_provider.dart';
-import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/standard_game_elements_calculations.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
@@ -21,10 +21,10 @@ class AwardCard extends StatelessWidget {
   void _claimAward(Award award, User user, BuildContext context) async {
     user.awards.add(awardId);
     User updatedUser =
-        Provider.of<IGameElementsCalculations>(context, listen: false)
+        Provider.of<StandardGameElementsCalculations>(context, listen: false)
             .addGoldAndXp(user, award.rewardValue, award.rewardValue, context);
     updatedUser.totalGoldEarned += award.rewardValue;
-    await Provider.of<IJsonDataProvider<User>>(context, listen: false)
+    await Provider.of<UserJsonDataProvider>(context, listen: false)
         .writeData(updatedUser);
   }
 
@@ -40,8 +40,8 @@ class AwardCard extends StatelessWidget {
     TextStyle? body = Theme.of(context).textTheme.bodySmall;
     TextStyle? bodyEm = Theme.of(context).textTheme.bodySmallEm;
 
-    final IJsonDataProvider<User> userProvider =
-        Provider.of<IJsonDataProvider<User>>(context);
+    final UserJsonDataProvider userProvider =
+        Provider.of<UserJsonDataProvider>(context);
 
     final Award award =
         Provider.of<AwardDataProvider>(context).retrieveFromKey(awardId);

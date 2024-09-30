@@ -3,11 +3,10 @@ import 'package:flashcard_pets/dialogs/feed_pet_dialog.dart';
 import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
-import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
-import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/standard_game_elements_calculations.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
@@ -84,7 +83,7 @@ class _PetScreenState extends State<PetScreen> {
     if (shouldDelete != null && shouldDelete) {
       if (!mounted) return;
       final userProvider =
-          Provider.of<IJsonDataProvider<User>>(context, listen: false);
+          Provider.of<UserJsonDataProvider>(context, listen: false);
       final user = await userProvider.readData();
 
       if (user != null) {
@@ -150,7 +149,7 @@ class _PetScreenState extends State<PetScreen> {
       if (value == null) return;
       if (!mounted) return;
       final gameElementsCalculator =
-          Provider.of<IGameElementsCalculations>(context, listen: false);
+          Provider.of<StandardGameElementsCalculations>(context, listen: false);
       if (!mounted) return;
       final updatedPet =
           gameElementsCalculator.addPetXp(widget.pet, value, context);
@@ -179,7 +178,7 @@ class _PetScreenState extends State<PetScreen> {
     final petBio = Provider.of<PetBioDataProvider>(context)
         .retrieveFromKey(widget.pet.petBioCode);
     final gameElementCalcProvider =
-        Provider.of<IGameElementsCalculations>(context);
+        Provider.of<StandardGameElementsCalculations>(context);
     final double petBonusValue =
         gameElementCalcProvider.calculatePetBonus(widget.pet, petBio.rarity);
     final String petBonusDescription =
@@ -201,7 +200,7 @@ class _PetScreenState extends State<PetScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: Provider.of<IJsonDataProvider<User>>(context, listen: false)
+        future: Provider.of<UserJsonDataProvider>(context, listen: false)
             .readData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

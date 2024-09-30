@@ -1,5 +1,5 @@
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -147,8 +147,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
       return;
     }
 
-    Provider.of<IJsonDataProvider<User>>(context, listen: false)
-        .writeData(user);
+    Provider.of<UserJsonDataProvider>(context, listen: false).writeData(user);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -161,8 +160,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
 
   void _toggleSoundEffect(bool value, User user) {
     user.userSoundEffects = value;
-    Provider.of<IJsonDataProvider<User>>(context, listen: false)
-        .writeData(user);
+    Provider.of<UserJsonDataProvider>(context, listen: false).writeData(user);
   }
 
   void _toggleNotifications(bool value, User user) {
@@ -175,8 +173,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
       user.notificationTime = null;
       _cancelNotification();
     }
-    Provider.of<IJsonDataProvider<User>>(context, listen: false)
-        .writeData(user);
+    Provider.of<UserJsonDataProvider>(context, listen: false).writeData(user);
   }
 
   Widget _buildNotificationSettingCard(BuildContext context, DateTime? value,
@@ -205,7 +202,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
           user.notificationTime = newDate;
           _changeNotificationTime(TimeOfDay.fromDateTime(newDate));
           if (!mounted) return;
-          Provider.of<IJsonDataProvider<User>>(context, listen: false)
+          Provider.of<UserJsonDataProvider>(context, listen: false)
               .writeData(user);
         }
       });
@@ -263,8 +260,8 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final Color text = Theme.of(context).colorScheme.text;
 
-    final IJsonDataProvider<User> userProvider =
-        Provider.of<IJsonDataProvider<User>>(context);
+    final UserJsonDataProvider userProvider =
+        Provider.of<UserJsonDataProvider>(context);
 
     return FutureBuilder<User?>(
       future: userProvider.readData(),

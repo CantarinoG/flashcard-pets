@@ -1,6 +1,6 @@
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,7 @@ class AvatarThumb extends StatelessWidget {
 
   void _onTap(BuildContext context, User user, int avatarCode) async {
     user.avatarCode = avatarCode;
-    await Provider.of<IJsonDataProvider<User>>(context, listen: false)
+    await Provider.of<UserJsonDataProvider>(context, listen: false)
         .writeData(user);
   }
 
@@ -21,8 +21,7 @@ class AvatarThumb extends StatelessWidget {
 
     final String avatarImgPath =
         Provider.of<AvatarDataProvider>(context).retrieveFromKey(avatarId);
-    final IJsonDataProvider<User> userProvider =
-        Provider.of<IJsonDataProvider<User>>(
+    final UserJsonDataProvider userProvider = Provider.of<UserJsonDataProvider>(
       context,
     );
 

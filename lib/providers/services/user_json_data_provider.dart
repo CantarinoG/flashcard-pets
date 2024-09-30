@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-class UserJsonDataProvider
-    with ChangeNotifier
-    implements IJsonDataProvider<User> {
+class UserJsonDataProvider with ChangeNotifier {
   UserJsonDataProvider._privateConstructor();
 
   static final UserJsonDataProvider _instance =
@@ -24,7 +21,6 @@ class UserJsonDataProvider
     return File('${directory.path}/$_fileName');
   }
 
-  @override
   Future<void> writeData(User user) async {
     try {
       final file = await _getFilePath();
@@ -36,7 +32,6 @@ class UserJsonDataProvider
     }
   }
 
-  @override
   Future<User?> readData() async {
     //await deleteData();
     try {

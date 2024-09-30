@@ -3,8 +3,8 @@ import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
-import 'package:flashcard_pets/providers/services/i_id_provider.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/uuid_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
@@ -106,7 +106,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
             .update(widget.editingCollection!);
       } else {
         final String uniqueId =
-            Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+            Provider.of<UuidProvider>(context, listen: false).getUniqueId();
 
         final Collection newCollection = Collection(
           uniqueId,
@@ -118,8 +118,8 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
         await Provider.of<CollectionDao>(context, listen: false)
             .insert(newCollection);
 
-        final IJsonDataProvider<User> userProvider =
-            Provider.of<IJsonDataProvider<User>>(context, listen: false);
+        final UserJsonDataProvider userProvider =
+            Provider.of<UserJsonDataProvider>(context, listen: false);
         final User? user = await userProvider.readData();
         if (user != null) {
           user.createdCollections++;

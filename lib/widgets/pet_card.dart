@@ -1,7 +1,6 @@
 import 'package:flashcard_pets/models/pet.dart';
-import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
-import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
+import 'package:flashcard_pets/providers/services/standard_game_elements_calculations.dart';
 import 'package:flashcard_pets/screens/pet_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -38,7 +37,7 @@ class PetCard extends StatelessWidget {
     final petBio = Provider.of<PetBioDataProvider>(context)
         .retrieveFromKey(pet.petBioCode);
     final gameElementCalcProvider =
-        Provider.of<IGameElementsCalculations>(context);
+        Provider.of<StandardGameElementsCalculations>(context);
     final double petBonusValue =
         gameElementCalcProvider.calculatePetBonus(pet, petBio.rarity);
     final String petBonusDescription =

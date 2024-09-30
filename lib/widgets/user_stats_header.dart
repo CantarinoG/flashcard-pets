@@ -1,5 +1,5 @@
 import 'package:flashcard_pets/models/user.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class UserStatsHeader extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
     return FutureBuilder<User?>(
-      future: Provider.of<IJsonDataProvider<User>>(context).readData(),
+      future: Provider.of<UserJsonDataProvider>(context).readData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox(

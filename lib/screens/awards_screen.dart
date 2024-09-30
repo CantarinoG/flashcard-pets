@@ -1,7 +1,7 @@
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/widgets/award_card.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
@@ -45,8 +45,8 @@ class AwardsScreen extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
-    final IJsonDataProvider<User> userProvider =
-        Provider.of<IJsonDataProvider<User>>(context);
+    final UserJsonDataProvider userProvider =
+        Provider.of<UserJsonDataProvider>(context);
     final PetDao petDaoProvider = Provider.of<PetDao>(context);
 
     return FutureBuilder<List<dynamic>>(

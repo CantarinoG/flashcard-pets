@@ -4,9 +4,9 @@ import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
-import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
-import 'package:flashcard_pets/providers/services/i_id_provider.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/standard_game_elements_calculations.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/uuid_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/snackbars/pet_got_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -56,7 +56,7 @@ class StoreScreen extends StatelessWidget {
     int randomNumber = random.nextInt(100);
 
     final gameCalcProvider =
-        Provider.of<IGameElementsCalculations>(context, listen: false);
+        Provider.of<StandardGameElementsCalculations>(context, listen: false);
     final List<Pet> petList =
         await Provider.of<PetDao>(context, listen: false).readAll();
     final double rarePetMultiplier =
@@ -83,10 +83,10 @@ class StoreScreen extends StatelessWidget {
     );
 
     final gameElementsCalc =
-        Provider.of<IGameElementsCalculations>(context, listen: false);
+        Provider.of<StandardGameElementsCalculations>(context, listen: false);
     if (pet.isEmpty) {
       final String uniqueId =
-          Provider.of<IIdProvider>(context, listen: false).getUniqueId();
+          Provider.of<UuidProvider>(context, listen: false).getUniqueId();
       Pet newPet = Pet(
         uniqueId,
         petGotCode,
@@ -106,8 +106,7 @@ class StoreScreen extends StatelessWidget {
 
     user.gold -= price;
     user.totalGoldSpent += price;
-    Provider.of<IJsonDataProvider<User>>(context, listen: false)
-        .writeData(user);
+    Provider.of<UserJsonDataProvider>(context, listen: false).writeData(user);
   }
 
   @override
@@ -116,7 +115,7 @@ class StoreScreen extends StatelessWidget {
       appBar: const ThemedAppBar("Loja"),
       body: ScreenLayout(
         child: FutureBuilder(
-          future: Provider.of<IJsonDataProvider<User>>(context).readData(),
+          future: Provider.of<UserJsonDataProvider>(context).readData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Loading();

@@ -2,8 +2,8 @@ import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
-import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/standard_game_elements_calculations.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
@@ -33,7 +33,7 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
 
   Future<void> _loadPetXpMultiplier() async {
     final gameCalcProvider =
-        Provider.of<IGameElementsCalculations>(context, listen: false);
+        Provider.of<StandardGameElementsCalculations>(context, listen: false);
     final List<Pet> petList =
         await Provider.of<PetDao>(context, listen: false).readAll();
     final double petXpMultiplier = gameCalcProvider.calculateTotalPetBonuses(
@@ -57,7 +57,7 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
 
   void _confirm(BuildContext context) async {
     final userProvider =
-        Provider.of<IJsonDataProvider<User>>(context, listen: false);
+        Provider.of<UserJsonDataProvider>(context, listen: false);
     final user = await userProvider.readData();
     if (user == null) return;
     int feedAmount = int.tryParse(_textController.text) ?? 0;
@@ -74,14 +74,13 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
   }
 
   void _limitValue(String value) async {
-    final user =
-        await Provider.of<IJsonDataProvider<User>>(context, listen: false)
-            .readData();
+    final user = await Provider.of<UserJsonDataProvider>(context, listen: false)
+        .readData();
     if (user == null) return;
 
     final userLevel = user.level;
     final gameElementsCalculator =
-        Provider.of<IGameElementsCalculations>(context, listen: false);
+        Provider.of<StandardGameElementsCalculations>(context, listen: false);
     final totalXpToMaxLevel =
         gameElementsCalculator.calculateTotalXpToLevel(userLevel);
     final maxXp = totalXpToMaxLevel - widget.pet.totalXp;
@@ -111,7 +110,7 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
     final Color text = Theme.of(context).colorScheme.text;
 
     final userProvider =
-        Provider.of<IJsonDataProvider<User>>(context, listen: false);
+        Provider.of<UserJsonDataProvider>(context, listen: false);
 
     return FutureBuilder<User?>(
       future: userProvider.readData(),

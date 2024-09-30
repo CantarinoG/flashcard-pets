@@ -2,7 +2,7 @@ import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/main.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/screens/awards_screen.dart';
 import 'package:flashcard_pets/screens/change_avatar_screen.dart';
 import 'package:flashcard_pets/screens/configurations_screen.dart';
@@ -63,8 +63,7 @@ class SelfProfileScreen extends StatelessWidget {
     final Color disabled = Theme.of(context).disabledColor;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
-    final IJsonDataProvider<User> userProvider =
-        Provider.of<IJsonDataProvider<User>>(
+    final UserJsonDataProvider userProvider = Provider.of<UserJsonDataProvider>(
       context,
     );
 
@@ -308,7 +307,7 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       },
     ).then((value) async {
       if (value != null && value.isNotEmpty) {
-        IJsonDataProvider<User> provider = Provider.of<IJsonDataProvider<User>>(
+        UserJsonDataProvider provider = Provider.of<UserJsonDataProvider>(
           context,
           listen: false,
         );
@@ -321,8 +320,8 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   void _changeTheme(BuildContext context) async {
-    final IJsonDataProvider<User> provider =
-        Provider.of<IJsonDataProvider<User>>(context, listen: false);
+    final UserJsonDataProvider provider =
+        Provider.of<UserJsonDataProvider>(context, listen: false);
     final User? user = await provider.readData();
     if (user != null) {
       user.darkMode = !user.darkMode;

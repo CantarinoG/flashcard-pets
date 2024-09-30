@@ -5,17 +5,13 @@ import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
-import 'package:flashcard_pets/providers/services/i_game_elements_calculations.dart';
 import 'package:flashcard_pets/snackbars/levelup_snackbar.dart';
 import 'package:flashcard_pets/snackbars/pet_levelup_snackbar.dart';
 import 'package:flashcard_pets/snackbars/reward_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 
-class StandardGameElementsCalculations
-    with ChangeNotifier
-    implements IGameElementsCalculations {
-  @override
+class StandardGameElementsCalculations with ChangeNotifier {
   User addGoldAndXp(User user, int gold, int xp, BuildContext context,
       {String? optionalMessage}) {
     if (xp > 0) {
@@ -72,7 +68,6 @@ class StandardGameElementsCalculations
     return user;
   }
 
-  @override
   Pet addPetXp(Pet pet, int xpValue, BuildContext context) {
     final int initialLevel = pet.level;
     pet.totalXp += xpValue;
@@ -105,7 +100,6 @@ class StandardGameElementsCalculations
     return pet;
   }
 
-  @override
   Pet addPetCopy(Pet pet, int copies, BuildContext context) {
     int initialStars = pet.stars;
 
@@ -141,7 +135,6 @@ class StandardGameElementsCalculations
     return pet;
   }
 
-  @override
   int calculateRevisionRewards(
       Flashcard flashcard, int quality, double multiplier) {
     quality = (quality == 0) ? 1 : quality;
@@ -150,7 +143,6 @@ class StandardGameElementsCalculations
     return (rewardValue * multiplier).round();
   }
 
-  @override
   double calculatePetBonus(Pet pet, PetRarity rarity) {
     final Map<PetRarity, double> rarityMultiplier = {
       PetRarity.common: 1.0,
@@ -168,7 +160,6 @@ class StandardGameElementsCalculations
     return bonus;
   }
 
-  @override
   int calculateTotalXpToLevel(int level) {
     const int baseXp = 50;
     const double levelMultiplier = 1.1;
@@ -182,7 +173,6 @@ class StandardGameElementsCalculations
     return totalXp;
   }
 
-  @override
   String petSkillToString(PetSkill skill) {
     final map = {
       PetSkill.betterPets: "chance de pets raros",
@@ -193,7 +183,6 @@ class StandardGameElementsCalculations
     return map[skill]!;
   }
 
-  @override
   double calculateTotalPetBonuses(List<Pet> pets, PetSkill skill) {
     final PetBioDataProvider petBioProvider = PetBioDataProvider();
 

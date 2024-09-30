@@ -3,7 +3,7 @@ import 'package:flashcard_pets/main.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
-import 'package:flashcard_pets/providers/services/i_json_data_provider.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/widgets/collection_card.dart';
@@ -21,15 +21,15 @@ class CollectionsMainScreen extends StatelessWidget {
 
   void _toggleTheme(BuildContext context) async {
     final User? user =
-        await Provider.of<IJsonDataProvider<User>>(context).readData();
+        await Provider.of<UserJsonDataProvider>(context).readData();
     if (user == null) return;
     MyApp.of(context)
         .changeTheme(user.darkMode ? ThemeMode.dark : ThemeMode.light);
   }
 
   void _updateUserStreak(BuildContext context) async {
-    final IJsonDataProvider<User> provider =
-        Provider.of<IJsonDataProvider<User>>(context, listen: false);
+    final UserJsonDataProvider provider =
+        Provider.of<UserJsonDataProvider>(context, listen: false);
     final User? user = await provider.readData();
     if (user == null) return;
 
