@@ -12,6 +12,7 @@ import 'package:flashcard_pets/widgets/themed_fab.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/value_settings_card.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ConfigurationsScreen extends StatefulWidget {
@@ -101,18 +102,35 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
         .writeData(user);
   }
 
-  Widget _buildNotificationSettingCard(
-      BuildContext context, bool value, void Function(bool)? onChanged) {
+  Widget _buildNotificationSettingCard(BuildContext context, DateTime? value,
+      void Function(bool)? onChanged, User user) {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
+    final Color text = Theme.of(context).colorScheme.text;
 
-    void _switch(bool value) {
-      //...
-    }
-
-    void _selectTime() {
-      //...
+    void selectTime() {
+      showTimePicker(
+        context: context,
+        initialTime: (value == null)
+            ? TimeOfDay.fromDateTime(DateTime.now())
+            : TimeOfDay.fromDateTime(value),
+      ).then((pickedTime) {
+        if (pickedTime != null) {
+          final now = DateTime.now();
+          final newDate = DateTime(
+            now.year,
+            now.month,
+            now.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+          user.notificationTime = newDate;
+          if (!mounted) return;
+          Provider.of<IJsonDataProvider<User>>(context, listen: false)
+              .writeData(user);
+        }
+      });
     }
 
     return SizedBox(
@@ -136,13 +154,25 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                Switch(value: value, onChanged: onChanged),
+                Switch(
+                  value: value == null ? false : true,
+                  onChanged: onChanged,
+                ),
+                if (value != null) ...[
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    DateFormat('HH:mm').format(value),
+                    style: h3?.copyWith(color: text),
+                  ),
+                ],
                 const SizedBox(
                   height: 8,
                 ),
                 ThemedFilledButton(
                   label: "Selecionar Hora",
-                  onPressed: value ? _selectTime : null,
+                  onPressed: value != null ? selectTime : null,
                 ),
               ],
             ),
@@ -189,10 +219,11 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
                 children: [
                   _buildNotificationSettingCard(
                     context,
-                    user.notificationTime == null ? false : true,
+                    user.notificationTime,
                     (value) {
                       _toggleNotifications(value, user);
                     },
+                    user,
                   ),
                   ValueSettingsCard(
                     "Intervalo Máximo de Revisões",
@@ -252,7 +283,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
             () {
               _confirm(user);
             },
-            const Icon(Icons.check),
+            const Icon(Icons.save),
           ),
         );
       },
