@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flashcard_pets/dialogs/record_audio_dialog.dart';
 import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
@@ -67,9 +68,14 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
     Navigator.of(context).pop();
   }
 
-  void _recordAudio() {
+  void _recordAudio() async {
     _resetErrorMsg();
-    //...
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RecordAudioDialog();
+      },
+    );
   }
 
   void _resetErrorMsg() {
