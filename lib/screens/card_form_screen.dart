@@ -20,9 +20,6 @@ import 'package:provider/provider.dart';
 class CardFormScreen extends StatefulWidget {
   final String? preSelectedCollectionId;
   final Flashcard? editingFlashcard;
-  //Mocked data
-  final List<int> _audioFiles = [1, 2];
-  final List<int> _imgFiles = [1];
   final String _imgPath = "assets/images/baby_pets/beagle.png";
   CardFormScreen(
       {this.preSelectedCollectionId, this.editingFlashcard, super.key});
@@ -32,6 +29,8 @@ class CardFormScreen extends StatefulWidget {
 }
 
 class _CardFormScreenState extends State<CardFormScreen> {
+  List<String> _audioFiles = [];
+  List<String> _imgFiles = [];
   List<Collection> _collections = [];
   String? _selectedItem;
 
@@ -46,10 +45,13 @@ class _CardFormScreenState extends State<CardFormScreen> {
   void initState() {
     super.initState();
     _loadCollections();
+
     if (widget.editingFlashcard != null) {
       _frontController.text = widget.editingFlashcard!.frontContent;
       _backController.text = widget.editingFlashcard!.backContent;
       _selectedItem = widget.editingFlashcard!.collectionId;
+      _audioFiles = widget.editingFlashcard!.audioFiles;
+      _imgFiles = widget.editingFlashcard!.imgFiles;
     }
   }
 
@@ -90,6 +92,8 @@ class _CardFormScreenState extends State<CardFormScreen> {
         widget.editingFlashcard!.collectionId = _selectedItem!;
         widget.editingFlashcard!.frontContent = front;
         widget.editingFlashcard!.backContent = back;
+        widget.editingFlashcard!.audioFiles = _audioFiles;
+        widget.editingFlashcard!.imgFiles = _imgFiles;
         await Provider.of<FlashcardDao>(context, listen: false)
             .update(widget.editingFlashcard!);
       } else {
@@ -102,6 +106,8 @@ class _CardFormScreenState extends State<CardFormScreen> {
           front,
           back,
           DateTime.now(),
+          _audioFiles,
+          _imgFiles,
         );
 
         await Provider.of<FlashcardDao>(context, listen: false)
@@ -168,13 +174,15 @@ class _CardFormScreenState extends State<CardFormScreen> {
     });
   }
 
-  void _addMedia(BuildContext context) {
-    showDialog(
+  void _addMedia(BuildContext context) async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AddMediaDialog();
+        return AddMediaDialog(_audioFiles, _imgFiles);
       },
     );
+
+    setState(() {});
   }
 
   void _displayError(String? message) {
@@ -184,13 +192,13 @@ class _CardFormScreenState extends State<CardFormScreen> {
   }
 
   List<Widget> _buildAudioMediaWidgets() {
-    return widget._audioFiles.map((int img) {
+    return _audioFiles.map((String img) {
       return MediaThumb();
     }).toList();
   }
 
   List<Widget> _buildImgMediaWidgets() {
-    return widget._imgFiles.map((int img) {
+    return _imgFiles.map((String img) {
       return MediaThumb(
         imgPath: widget._imgPath,
       );

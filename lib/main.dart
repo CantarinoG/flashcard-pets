@@ -5,6 +5,7 @@ import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
+import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
 import 'package:flashcard_pets/providers/services/sm2_calculator.dart';
 import 'package:flashcard_pets/providers/services/standard_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
@@ -54,6 +55,7 @@ class MyAppState extends State<MyApp> {
     Sm2Calculator sm2Provider = Sm2Calculator();
     StandardGameElementsCalculations gameElementCalcProvider =
         StandardGameElementsCalculations();
+    Base64Conversor base64ConversorProvider = Base64Conversor();
 
     return MultiProvider(
       providers: [
@@ -68,6 +70,7 @@ class MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => idProvider),
         ChangeNotifierProvider(create: (_) => sm2Provider),
         ChangeNotifierProvider(create: (_) => gameElementCalcProvider),
+        ChangeNotifierProvider(create: (_) => base64ConversorProvider),
       ],
       child: MaterialApp(
         title: 'Flashcard Pets',
