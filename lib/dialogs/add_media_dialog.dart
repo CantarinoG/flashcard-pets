@@ -38,6 +38,9 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
     Uint8List imageBytes = imageFile.readAsBytesSync();
     String base64String = base64Provider.bytesToBase64(imageBytes);
     widget.imgFiles.add(base64String);
+
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   void _choosePicFile(BuildContext context) async {
@@ -59,14 +62,12 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
     Uint8List imageBytes = imageFile.readAsBytesSync();
     String base64String = base64Provider.bytesToBase64(imageBytes);
     widget.imgFiles.add(base64String);
+
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   void _recordAudio() {
-    _resetErrorMsg();
-    //...
-  }
-
-  void _chooseAudioFile() {
     _resetErrorMsg();
     //...
   }
@@ -115,14 +116,6 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
           ThemedFilledButton(
             label: "Gravar Áudio",
             onPressed: _recordAudio,
-            width: 200,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          ThemedFilledButton(
-            label: "Escolher Áudio",
-            onPressed: _chooseAudioFile,
             width: 200,
           ),
           const SizedBox(
