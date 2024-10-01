@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
-import 'package:flutter_sound/public/flutter_sound_player.dart'; // Add this import
+import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 class RecordAudioDialog extends StatefulWidget {
   const RecordAudioDialog({super.key});
@@ -14,17 +20,18 @@ class RecordAudioDialog extends StatefulWidget {
 
 class _RecordAudioDialogState extends State<RecordAudioDialog> {
   FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-  FlutterSoundPlayer _player = FlutterSoundPlayer(); // Add this line
+  FlutterSoundPlayer _player = FlutterSoundPlayer();
   bool _isRecording = false;
-  bool _isPlaying = false; // Add this line
-  bool _hasRecorded = false; // Add this line
+  bool _isPlaying = false;
+  bool _hasRecorded = false;
+  String? _base64Audio;
 
   @override
   void initState() {
     super.initState();
     requestPermissions();
     _initializeRecorder();
-    _initializePlayer(); // Add this line
+    _initializePlayer();
   }
 
   Future<void> requestPermissions() async {
@@ -36,14 +43,13 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
   }
 
   Future<void> _initializePlayer() async {
-    // Add this method
     await _player.openPlayer();
   }
 
   @override
   void dispose() {
     _recorder.closeRecorder();
-    _player.closePlayer(); // Add this line
+    _player.closePlayer();
     super.dispose();
   }
 
@@ -55,10 +61,15 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
   }
 
   Future<void> stopRecording() async {
-    await _recorder.stopRecorder();
+    String? path = await _recorder.stopRecorder();
+    if (path != null) {
+      final bytes = await File(path).readAsBytesSync();
+      _base64Audio = Provider.of<Base64Conversor>(context, listen: false)
+          .bytesToBase64(bytes);
+    }
     setState(() {
       _isRecording = false;
-      _hasRecorded = true; // Add this line
+      _hasRecorded = true;
     });
   }
 
@@ -74,6 +85,14 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
     setState(() {
       _isPlaying = false;
     });
+  }
+
+  void _confirmRecording() {
+    Navigator.of(context).pop(_base64Audio);
+  }
+
+  void _cancelRecording() {
+    Navigator.of(context).pop();
   }
 
   @override
@@ -102,7 +121,7 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
             color: _isRecording ? Colors.red : Colors.green,
             iconSize: 48,
           ),
-          if (_hasRecorded && !_isRecording) // Update this condition
+          if (_hasRecorded && !_isRecording)
             IconButton(
               icon: Icon(_isPlaying ? Icons.stop : Icons.play_arrow),
               onPressed: _isPlaying ? stopPlaying : startPlaying,
@@ -111,6 +130,27 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
             ),
         ],
       ),
+      actions: [
+        TextButton(
+          onPressed: _cancelRecording,
+          child: Text(
+            'Cancelar',
+            style: bodyEm.copyWith(
+              color: primary,
+            ),
+          ),
+        ),
+        if (_hasRecorded)
+          TextButton(
+            onPressed: _confirmRecording,
+            child: Text(
+              'Confirmar',
+              style: bodyEm.copyWith(
+                color: primary,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

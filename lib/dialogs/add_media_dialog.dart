@@ -70,12 +70,16 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
 
   void _recordAudio() async {
     _resetErrorMsg();
-    await showDialog(
+    String? audioString = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return RecordAudioDialog();
       },
     );
+    if (audioString == null) return;
+    widget.audioFiles.add(audioString);
+    if (!mounted) return;
+    Navigator.of(context).pop();
   }
 
   void _resetErrorMsg() {
