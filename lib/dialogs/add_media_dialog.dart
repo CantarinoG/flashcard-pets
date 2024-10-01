@@ -19,11 +19,29 @@ class AddMediaDialog extends StatefulWidget {
 class _AddMediaDialogState extends State<AddMediaDialog> {
   String? errorMessage;
 
-  void _takePic() {
-    //...
+  void _takePic() async {
+    _resetErrorMsg();
+    final base64Provider = Provider.of<Base64Conversor>(context, listen: false);
+
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image == null) return;
+
+    File imageFile = File(image.path);
+    if (imageFile.lengthSync() > (5 * 1024 * 1024)) {
+      setState(() {
+        errorMessage = "Imagem não pode exceder 5mb";
+      });
+      return;
+    }
+
+    Uint8List imageBytes = imageFile.readAsBytesSync();
+    String base64String = base64Provider.bytesToBase64(imageBytes);
+    widget.imgFiles.add(base64String);
   }
 
   void _choosePicFile(BuildContext context) async {
+    _resetErrorMsg();
     final base64Provider = Provider.of<Base64Conversor>(context, listen: false);
 
     final ImagePicker picker = ImagePicker();
@@ -44,11 +62,19 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
   }
 
   void _recordAudio() {
+    _resetErrorMsg();
     //...
   }
 
   void _chooseAudioFile() {
+    _resetErrorMsg();
     //...
+  }
+
+  void _resetErrorMsg() {
+    setState(() {
+      errorMessage = null;
+    });
   }
 
   @override
