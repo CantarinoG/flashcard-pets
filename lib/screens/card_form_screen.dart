@@ -192,8 +192,13 @@ class _CardFormScreenState extends State<CardFormScreen> {
   }
 
   List<Widget> _buildAudioMediaWidgets() {
+    void _onDeleteAudio(String audioToDelete) {
+      _audioFiles.remove(audioToDelete);
+      setState(() {});
+    }
+
     return _audioFiles.map((String audio) {
-      return MediaThumbAudio(audio);
+      return MediaThumbAudio(audio, _onDeleteAudio);
     }).toList();
   }
 

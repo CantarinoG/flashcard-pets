@@ -160,13 +160,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   List<Widget> _buildAudioMediaWidgets() {
     return widget._audioFiles.map((String img) {
-      return MediaThumbAudio(img);
+      //return MediaThumbAudio(img);
+      return SizedBox();
     }).toList();
   }
 
   List<Widget> _buildImgMediaWidgets() {
     return widget._imgFiles.map((String img) {
-      return MediaThumbAudio(img);
+      //return MediaThumbAudio(img);
+      return SizedBox();
     }).toList();
   }
 

@@ -1,10 +1,22 @@
+import 'package:flashcard_pets/dialogs/display_audio_media.dart';
 import 'package:flutter/material.dart';
 
 class MediaThumbAudio extends StatelessWidget {
   final String base64AudioString;
-  const MediaThumbAudio(this.base64AudioString, {super.key});
+  final void Function(String audioToDelete) onDelete;
+  const MediaThumbAudio(this.base64AudioString, this.onDelete, {super.key});
 
-  void _onTap() {}
+  void _onTap(BuildContext context) async {
+    final bool? shouldDelete = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DisplayAudioMedia(base64AudioString);
+      },
+    );
+    if (shouldDelete != null && shouldDelete) {
+      onDelete(base64AudioString);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +37,9 @@ class MediaThumbAudio extends StatelessWidget {
         child: IconButton(
           icon: const Icon(Icons.mic),
           color: Colors.white,
-          onPressed: _onTap,
+          onPressed: () {
+            _onTap(context);
+          },
         ));
   }
 }
