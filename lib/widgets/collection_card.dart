@@ -5,6 +5,7 @@ import 'package:flashcard_pets/models/subject.dart';
 import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
+import 'package:flashcard_pets/providers/dao/media_dao.dart';
 import 'package:flashcard_pets/screens/collection_cards_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/screens/review_screen.dart';
@@ -54,8 +55,8 @@ class _CollectionCardState extends State<CollectionCard> {
     );
   }
 
-  void _deleteCollection(BuildContext context) {
-    showDialog<bool>(
+  Future<void> _deleteCollection(BuildContext context) async {
+    final bool? shouldDelete = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return const ConfirmDeleteDialog(
@@ -63,51 +64,55 @@ class _CollectionCardState extends State<CollectionCard> {
           "Tem certeza? Todos os cartões do conjunto também serão deletados. Essa ação não pode ser desfeita.",
         );
       },
-    ).then((shouldDelete) {
-      if (shouldDelete != null && shouldDelete) {
+    );
+
+    if (shouldDelete != null && shouldDelete && mounted) {
+      try {
+        final MediaDao mediaDao = Provider.of<MediaDao>(context, listen: false);
+        final List<Flashcard> cardsList =
+            await Provider.of<FlashcardDao>(context, listen: false)
+                .customRead("collectionId = ?", [widget.collection.id]);
+        for (int i = 0; i < cardsList.length; i++) {
+          for (int j = 0; j < cardsList[i].audioFiles.length; j++) {
+            mediaDao.delete(cardsList[i].audioFiles[j]);
+            print("Delete audio");
+          }
+          for (int j = 0; j < cardsList[i].imgFiles.length; j++) {
+            mediaDao.delete(cardsList[i].imgFiles[j]);
+            print("Delete img");
+          }
+        }
+
+        await Provider.of<FlashcardDao>(context, listen: false)
+            .customDelete("collectionId = ?", [widget.collection.id]);
+
+        if (!mounted) return;
+
+        await Provider.of<CollectionDao>(context, listen: false)
+            .delete(widget.collection.id);
+
         if (mounted) {
-          Provider.of<FlashcardDao>(context, listen: false).customDelete(
-              "collectionId = ?", [widget.collection.id]).then((_) {
-            if (!mounted) return;
-            Provider.of<CollectionDao>(context, listen: false)
-                .delete(widget.collection.id)
-                .then((_) {
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const SuccessSnackbar("Deletado com sucesso!"),
-                    backgroundColor: Theme.of(context).colorScheme.bright,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              }
-            }).catchError((error) {
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const ErrorSnackbar(
-                        "Ocorreu um erro ao deletar o conjunto. Tente novamente."),
-                    backgroundColor: Theme.of(context).colorScheme.bright,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              }
-            });
-          }).catchError((error) {
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const ErrorSnackbar(
-                      "Ocorreu um erro ao deletar os cartões. Tente novamente."),
-                  backgroundColor: Theme.of(context).colorScheme.bright,
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-            }
-          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const SuccessSnackbar("Deletado com sucesso!"),
+              backgroundColor: Theme.of(context).colorScheme.bright,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      } catch (error) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const ErrorSnackbar(
+                  "Ocorreu um erro ao deletar. Tente novamente."),
+              backgroundColor: Theme.of(context).colorScheme.bright,
+              duration: const Duration(seconds: 2),
+            ),
+          );
         }
       }
-    });
+    }
   }
 
   void _reviewCollection(BuildContext context, List<Flashcard> toReviewToday) {

@@ -32,9 +32,9 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
     if (image == null) return;
 
     File imageFile = File(image.path);
-    if (imageFile.lengthSync() > (5 * 1024 * 1024)) {
+    if (imageFile.lengthSync() > (2 * 1024 * 1024)) {
       setState(() {
-        errorMessage = "Imagem não pode exceder 5mb";
+        errorMessage = "Imagem não pode exceder 2mb";
       });
       return;
     }
@@ -61,9 +61,9 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
     if (image == null) return;
 
     File imageFile = File(image.path);
-    if (imageFile.lengthSync() > (5 * 1024 * 1024)) {
+    if (imageFile.lengthSync() > (2 * 1024 * 1024)) {
       setState(() {
-        errorMessage = "Imagem não pode exceder 5mb";
+        errorMessage = "Imagem não pode exceder 2mb";
       });
       return;
     }
