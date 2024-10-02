@@ -2,15 +2,40 @@ import 'dart:typed_data';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
+import 'package:flashcard_pets/providers/dao/media_dao.dart';
+import 'package:flashcard_pets/models/media.dart';
+import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class DisplayImageMedia extends StatelessWidget {
-  final String base64imgString;
+class DisplayImageMedia extends StatefulWidget {
+  final String imgId;
   final bool canDelete;
 
-  const DisplayImageMedia(this.base64imgString,
-      {this.canDelete = true, super.key});
+  const DisplayImageMedia(this.imgId, {this.canDelete = true, super.key});
+
+  @override
+  _DisplayImageMediaState createState() => _DisplayImageMediaState();
+}
+
+class _DisplayImageMediaState extends State<DisplayImageMedia> {
+  String? _imageString;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImageString();
+  }
+
+  Future<void> _loadImageString() async {
+    final mediaDao = Provider.of<MediaDao>(context, listen: false);
+    final Media? media = await mediaDao.read(widget.imgId);
+    if (media != null) {
+      setState(() {
+        _imageString = media.fileString;
+      });
+    }
+  }
 
   void _cancel(BuildContext context) {
     Navigator.of(context).pop();
@@ -28,9 +53,6 @@ class DisplayImageMedia extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color error = Theme.of(context).colorScheme.error;
 
-    final Uint8List imgBytes =
-        Provider.of<Base64Conversor>(context).base64ToBytes(base64imgString);
-
     return AlertDialog(
       title: Text(
         "Exibir imagem",
@@ -38,10 +60,13 @@ class DisplayImageMedia extends StatelessWidget {
           color: secondary,
         ),
       ),
-      content: Image.memory(
-        imgBytes,
-        fit: BoxFit.contain,
-      ),
+      content: _imageString == null
+          ? Loading()
+          : Image.memory(
+              Provider.of<Base64Conversor>(context)
+                  .base64ToBytes(_imageString!),
+              fit: BoxFit.contain,
+            ),
       actions: [
         TextButton(
           onPressed: () {
@@ -54,7 +79,7 @@ class DisplayImageMedia extends StatelessWidget {
             ),
           ),
         ),
-        if (canDelete)
+        if (widget.canDelete)
           TextButton(
             onPressed: () {
               _delete(context);

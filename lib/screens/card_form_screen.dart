@@ -4,6 +4,7 @@ import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
+import 'package:flashcard_pets/providers/dao/media_dao.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/providers/services/uuid_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
@@ -192,24 +193,28 @@ class _CardFormScreenState extends State<CardFormScreen> {
   }
 
   List<Widget> _buildAudioMediaWidgets() {
-    void _onDeleteAudio(String audioToDelete) {
-      _audioFiles.remove(audioToDelete);
+    void _onDeleteAudio(String audioId) async {
+      _audioFiles.remove(audioId);
+      final mediaDao = Provider.of<MediaDao>(context, listen: false);
+      await mediaDao.delete(audioId);
       setState(() {});
     }
 
-    return _audioFiles.map((String audio) {
-      return MediaThumbAudio(audio, _onDeleteAudio);
+    return _audioFiles.map((String audioId) {
+      return MediaThumbAudio(audioId, _onDeleteAudio);
     }).toList();
   }
 
   List<Widget> _buildImgMediaWidgets() {
-    void _onDeleteImg(String imgToDelete) {
-      _imgFiles.remove(imgToDelete);
+    void _onDeleteImg(String imgId) async {
+      _imgFiles.remove(imgId);
+      final mediaDao = Provider.of<MediaDao>(context, listen: false);
+      await mediaDao.delete(imgId);
       setState(() {});
     }
 
-    return _imgFiles.map((String img) {
-      return MediaThumbImg(img, _onDeleteImg);
+    return _imgFiles.map((String imgId) {
+      return MediaThumbImg(imgId, _onDeleteImg);
     }).toList();
   }
 

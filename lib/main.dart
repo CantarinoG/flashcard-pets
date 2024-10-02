@@ -4,6 +4,7 @@ import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/subject_data_provider.dart';
 import 'package:flashcard_pets/providers/dao/collection_dao.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
+import 'package:flashcard_pets/providers/dao/media_dao.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
 import 'package:flashcard_pets/providers/services/sm2_calculator.dart';
@@ -48,6 +49,7 @@ class MyAppState extends State<MyApp> {
     CollectionDao collectionDaoProvider = CollectionDao();
     FlashcardDao flashcardDaoProvider = FlashcardDao();
     PetDao petDaoProvider = PetDao();
+    MediaDao mediaDaoProvider = MediaDao();
 
     UserJsonDataProvider userDataProvider = UserJsonDataProvider();
 
@@ -66,6 +68,7 @@ class MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => collectionDaoProvider),
         ChangeNotifierProvider(create: (_) => flashcardDaoProvider),
         ChangeNotifierProvider(create: (_) => petDaoProvider),
+        ChangeNotifierProvider(create: (_) => mediaDaoProvider),
         ChangeNotifierProvider(create: (_) => userDataProvider),
         ChangeNotifierProvider(create: (_) => idProvider),
         ChangeNotifierProvider(create: (_) => sm2Provider),

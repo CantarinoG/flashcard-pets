@@ -2,7 +2,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flashcard_pets/dialogs/record_audio_dialog.dart';
+import 'package:flashcard_pets/models/media.dart';
+import 'package:flashcard_pets/providers/dao/media_dao.dart';
 import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
+import 'package:flashcard_pets/providers/services/uuid_provider.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,7 +41,12 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
 
     Uint8List imageBytes = imageFile.readAsBytesSync();
     String base64String = base64Provider.bytesToBase64(imageBytes);
-    widget.imgFiles.add(base64String);
+    final String uniqueId =
+        Provider.of<UuidProvider>(context, listen: false).getUniqueId();
+    final Media newMedia = Media(uniqueId, base64String);
+    await Provider.of<MediaDao>(context, listen: false).insert(newMedia);
+
+    widget.imgFiles.add(uniqueId);
 
     if (!mounted) return;
     Navigator.of(context).pop();
@@ -62,7 +70,13 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
 
     Uint8List imageBytes = imageFile.readAsBytesSync();
     String base64String = base64Provider.bytesToBase64(imageBytes);
-    widget.imgFiles.add(base64String);
+
+    final String uniqueId =
+        Provider.of<UuidProvider>(context, listen: false).getUniqueId();
+    final Media newMedia = Media(uniqueId, base64String);
+    await Provider.of<MediaDao>(context, listen: false).insert(newMedia);
+
+    widget.imgFiles.add(uniqueId);
 
     if (!mounted) return;
     Navigator.of(context).pop();
@@ -77,7 +91,11 @@ class _AddMediaDialogState extends State<AddMediaDialog> {
       },
     );
     if (audioString == null) return;
-    widget.audioFiles.add(audioString);
+    final String uniqueId =
+        Provider.of<UuidProvider>(context, listen: false).getUniqueId();
+    final Media newMedia = Media(uniqueId, audioString);
+    await Provider.of<MediaDao>(context, listen: false).insert(newMedia);
+    widget.audioFiles.add(uniqueId);
     if (!mounted) return;
     Navigator.of(context).pop();
   }
