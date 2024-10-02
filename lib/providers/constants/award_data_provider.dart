@@ -104,7 +104,7 @@ class AwardDataProvider with ChangeNotifier {
       "assets/images/awards/pets/pet_lover_i.png",
       "Amante de Pets I",
       "Adote 4 pets.",
-      3,
+      4,
       100,
     ),
     13: Award(
@@ -112,7 +112,7 @@ class AwardDataProvider with ChangeNotifier {
       "assets/images/awards/pets/pet_lover_ii.png",
       "Amante de Pets II",
       "Adote 8 pets.",
-      10,
+      8,
       300,
     ),
     14: Award(
@@ -120,7 +120,7 @@ class AwardDataProvider with ChangeNotifier {
       "assets/images/awards/pets/pet_lover_iii.png",
       "Amante de Pets III",
       "Adote 16 pets.",
-      20,
+      16,
       1000,
     ),
     15: Award(
