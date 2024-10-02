@@ -13,7 +13,7 @@ import 'package:flashcard_pets/screens/review_results_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
-import 'package:flashcard_pets/widgets/media_thumb.dart';
+import 'package:flashcard_pets/widgets/media_thumb_audio.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
@@ -25,8 +25,8 @@ class ReviewScreen extends StatefulWidget {
   final Collection collection;
   final List<Flashcard> cardsToReview;
   //Mocked data
-  final List<int> _audioFiles = [1, 2];
-  final List<int> _imgFiles = [1];
+  final List<String> _audioFiles = [" ", " "];
+  final List<String> _imgFiles = [" "];
   final String _imgPath = "assets/images/baby_pets/beagle.png";
   ReviewScreen(this.collection, this.cardsToReview, {super.key});
 
@@ -159,16 +159,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   List<Widget> _buildAudioMediaWidgets() {
-    return widget._audioFiles.map((int img) {
-      return MediaThumb();
+    return widget._audioFiles.map((String img) {
+      return MediaThumbAudio(img);
     }).toList();
   }
 
   List<Widget> _buildImgMediaWidgets() {
-    return widget._imgFiles.map((int img) {
-      return MediaThumb(
-        imgPath: widget._imgPath,
-      );
+    return widget._imgFiles.map((String img) {
+      return MediaThumbAudio(img);
     }).toList();
   }
 

@@ -1,7 +1,7 @@
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
-import 'package:flashcard_pets/widgets/media_thumb.dart';
+import 'package:flashcard_pets/widgets/media_thumb_audio.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 class PreviewCardScreen extends StatefulWidget {
   final Flashcard flashcard;
   //Mocked data
-  final List<int> _audioFiles = [1, 2];
-  final List<int> _imgFiles = [1];
+  final List<String> _audioFiles = ["", ""];
+  final List<String> _imgFiles = [""];
   final String _imgPath = "assets/images/baby_pets/beagle.png";
   PreviewCardScreen(this.flashcard, {super.key});
 
@@ -21,16 +21,14 @@ class PreviewCardScreen extends StatefulWidget {
 
 class _PreviewCardScreenState extends State<PreviewCardScreen> {
   List<Widget> _buildAudioMediaWidgets() {
-    return widget._audioFiles.map((int img) {
-      return MediaThumb();
+    return widget._audioFiles.map((String img) {
+      return MediaThumbAudio(img);
     }).toList();
   }
 
   List<Widget> _buildImgMediaWidgets() {
-    return widget._imgFiles.map((int img) {
-      return MediaThumb(
-        imgPath: widget._imgPath,
-      );
+    return widget._imgFiles.map((String img) {
+      return MediaThumbAudio(img);
     }).toList();
   }
 

@@ -8,8 +8,8 @@ import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/providers/services/uuid_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
-import 'package:flashcard_pets/widgets/media_thumb.dart';
+import 'package:flashcard_pets/widgets/media_thumb_audio.dart';
+import 'package:flashcard_pets/widgets/media_thumb_img.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
@@ -192,16 +192,14 @@ class _CardFormScreenState extends State<CardFormScreen> {
   }
 
   List<Widget> _buildAudioMediaWidgets() {
-    return _audioFiles.map((String img) {
-      return MediaThumb();
+    return _audioFiles.map((String audio) {
+      return MediaThumbAudio(audio);
     }).toList();
   }
 
   List<Widget> _buildImgMediaWidgets() {
     return _imgFiles.map((String img) {
-      return MediaThumb(
-        imgPath: widget._imgPath,
-      );
+      return MediaThumbImg(img);
     }).toList();
   }
 
