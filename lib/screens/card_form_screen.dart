@@ -198,8 +198,13 @@ class _CardFormScreenState extends State<CardFormScreen> {
   }
 
   List<Widget> _buildImgMediaWidgets() {
+    void _onDeleteImg(String imgToDelete) {
+      _imgFiles.remove(imgToDelete);
+      setState(() {});
+    }
+
     return _imgFiles.map((String img) {
-      return MediaThumbImg(img);
+      return MediaThumbImg(img, _onDeleteImg);
     }).toList();
   }
 
@@ -254,7 +259,6 @@ class _CardFormScreenState extends State<CardFormScreen> {
                         label: "Frente",
                         child: TextField(
                           controller: _frontController,
-                          autofocus: true,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.text,
                           style: body?.copyWith(

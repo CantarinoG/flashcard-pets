@@ -1,13 +1,26 @@
 import 'dart:typed_data';
 import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
+import 'package:flashcard_pets/dialogs/display_image_media.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MediaThumbImg extends StatelessWidget {
   final String base64ImgString;
-  const MediaThumbImg(this.base64ImgString, {super.key});
+  final void Function(String imgToDelete) onDelete;
 
-  void _onTap() {}
+  const MediaThumbImg(this.base64ImgString, this.onDelete, {super.key});
+
+  void _onTap(BuildContext context) async {
+    final bool? shouldDelete = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DisplayImageMedia(base64ImgString);
+      },
+    );
+    if (shouldDelete != null && shouldDelete) {
+      onDelete(base64ImgString);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +30,7 @@ class MediaThumbImg extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
 
     return InkWell(
-      onTap: _onTap,
+      onTap: () => _onTap(context),
       radius: 12,
       child: Container(
         width: 50,
