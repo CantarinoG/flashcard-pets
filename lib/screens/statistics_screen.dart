@@ -203,21 +203,6 @@ class StatisticsScreen extends StatelessWidget {
                                       (user.totalXp / user.totalReviewedCards),
                                       "pontos",
                                     ),
-                                    /* StatisticsCard(
-                                      "Amigos Adicionados",
-                                      0, // TODO
-                                      "amigos",
-                                    ),
-                                    StatisticsCard(
-                                      "Presentes Enviados",
-                                      0, // TODO
-                                      "presentes",
-                                    ),
-                                    StatisticsCard(
-                                      "Presentes Recebidos",
-                                      0, // TODO
-                                      "presentes",
-                                    ),*/
                                   ],
                                 ),
                               ),

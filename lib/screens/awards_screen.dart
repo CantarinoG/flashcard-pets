@@ -99,7 +99,7 @@ class AwardsScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: DefaultTabController(
-                    length: 3,
+                    length: 2,
                     child: Column(
                       children: [
                         TabBar(
@@ -127,10 +127,6 @@ class AwardsScreen extends StatelessWidget {
                             Tab(
                                 icon: Icon(
                               Icons.pets,
-                            )),
-                            Tab(
-                                icon: Icon(
-                              Icons.diversity_3,
                             )),
                           ],
                         ),
@@ -171,21 +167,6 @@ class AwardsScreen extends StatelessWidget {
                                     AwardCard(18, highestPetStar),
                                     AwardCard(19, highestPetStar),
                                     AwardCard(20, highestPetStar),
-                                  ],
-                                ),
-                              ),
-                              _subScreen(
-                                context,
-                                "Social",
-                                ListView(
-                                  children: [
-                                    AwardCard(21, mockedData),
-                                    AwardCard(22, mockedData),
-                                    AwardCard(23, mockedData),
-                                    AwardCard(24, mockedData),
-                                    AwardCard(25, mockedData),
-                                    AwardCard(26, mockedData),
-                                    AwardCard(27, mockedData),
                                   ],
                                 ),
                               ),
