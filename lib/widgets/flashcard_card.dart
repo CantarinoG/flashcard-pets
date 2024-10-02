@@ -24,9 +24,6 @@ class FlashcardCard extends StatefulWidget {
 }
 
 class _FlashcardCardState extends State<FlashcardCard> {
-  //Mocked data
-  final int _mediaAttachedNum = 2;
-
   void _previewCard(BuildContext context) {
     Navigator.push(
       context,
@@ -171,7 +168,7 @@ class _FlashcardCardState extends State<FlashcardCard> {
                         width: 4,
                       ),
                       Text(
-                        "$_mediaAttachedNum anexos",
+                        "${widget.flashcard.audioFiles.length + widget.flashcard.imgFiles.length} anexos",
                         style: body?.copyWith(color: secondary),
                       ),
                       const Expanded(
