@@ -14,10 +14,18 @@ import 'package:flashcard_pets/providers/services/uuid_provider.dart';
 import 'package:flashcard_pets/screens/navigation_screen.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Add this import
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure binding is initialized
+  SystemChrome.setPreferredOrientations([
+    // Set preferred orientations
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatefulWidget {
