@@ -3,8 +3,6 @@ import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
-import 'package:flashcard_pets/widgets/bool_settings_card.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
@@ -345,7 +343,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
                       ),
                     ),
                   ),
-                  BoolSettingsCard(
+                  /*BoolSettingsCard(
                     "Habilitar Efeitos Sonoros",
                     "Habilita ou desabilita efeitos sonoros no aplicativo.",
                     Switch(
@@ -354,7 +352,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
                         _toggleSoundEffect(value, user);
                       },
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),
