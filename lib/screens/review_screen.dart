@@ -14,6 +14,7 @@ import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/media_thumb_audio.dart';
+import 'package:flashcard_pets/widgets/media_thumb_img.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
@@ -159,16 +160,23 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   List<Widget> _buildAudioMediaWidgets() {
-    return widget._audioFiles.map((String img) {
-      //return MediaThumbAudio(img);
-      return SizedBox();
+    return widget.cardsToReview[_currentCardIndex].audioFiles
+        .map((String audio) {
+      return MediaThumbAudio(
+        audio,
+        (_) {},
+        canDelete: false,
+      );
     }).toList();
   }
 
   List<Widget> _buildImgMediaWidgets() {
-    return widget._imgFiles.map((String img) {
-      //return MediaThumbAudio(img);
-      return SizedBox();
+    return widget.cardsToReview[_currentCardIndex].imgFiles.map((String img) {
+      return MediaThumbImg(
+        img,
+        (_) {},
+        canDelete: false,
+      );
     }).toList();
   }
 

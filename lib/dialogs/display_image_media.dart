@@ -7,8 +7,10 @@ import 'package:provider/provider.dart';
 
 class DisplayImageMedia extends StatelessWidget {
   final String base64imgString;
+  final bool canDelete;
 
-  const DisplayImageMedia(this.base64imgString, {super.key});
+  const DisplayImageMedia(this.base64imgString,
+      {this.canDelete = true, super.key});
 
   void _cancel(BuildContext context) {
     Navigator.of(context).pop();
@@ -52,15 +54,16 @@ class DisplayImageMedia extends StatelessWidget {
             ),
           ),
         ),
-        TextButton(
-          onPressed: () {
-            _delete(context);
-          },
-          child: Text(
-            "Excluir",
-            style: bodyEm.copyWith(color: error),
+        if (canDelete)
+          TextButton(
+            onPressed: () {
+              _delete(context);
+            },
+            child: Text(
+              "Excluir",
+              style: bodyEm.copyWith(color: error),
+            ),
           ),
-        ),
       ],
     );
   }

@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 class MediaThumbAudio extends StatelessWidget {
   final String base64AudioString;
   final void Function(String audioToDelete) onDelete;
-  const MediaThumbAudio(this.base64AudioString, this.onDelete, {super.key});
+  final bool canDelete;
+  const MediaThumbAudio(this.base64AudioString, this.onDelete,
+      {this.canDelete = true, super.key});
 
   void _onTap(BuildContext context) async {
     final bool? shouldDelete = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DisplayAudioMedia(base64AudioString);
+        return DisplayAudioMedia(base64AudioString, canDelete: canDelete);
       },
     );
     if (shouldDelete != null && shouldDelete) {

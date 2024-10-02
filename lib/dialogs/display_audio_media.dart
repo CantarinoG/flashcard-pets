@@ -8,8 +8,10 @@ import 'package:flutter_sound/flutter_sound.dart';
 
 class DisplayAudioMedia extends StatefulWidget {
   final String base64AudioString;
+  final bool canDelete;
 
-  const DisplayAudioMedia(this.base64AudioString, {super.key});
+  const DisplayAudioMedia(this.base64AudioString,
+      {this.canDelete = true, super.key});
 
   @override
   _DisplayAudioMediaState createState() => _DisplayAudioMediaState();
@@ -89,15 +91,16 @@ class _DisplayAudioMediaState extends State<DisplayAudioMedia> {
             ),
           ),
         ),
-        TextButton(
-          onPressed: () {
-            _delete(context);
-          },
-          child: Text(
-            "Excluir",
-            style: bodyEm.copyWith(color: error),
+        if (widget.canDelete)
+          TextButton(
+            onPressed: () {
+              _delete(context);
+            },
+            child: Text(
+              "Excluir",
+              style: bodyEm.copyWith(color: error),
+            ),
           ),
-        ),
       ],
     );
   }

@@ -6,15 +6,17 @@ import 'package:provider/provider.dart';
 
 class MediaThumbImg extends StatelessWidget {
   final String base64ImgString;
+  final bool canDelete;
   final void Function(String imgToDelete) onDelete;
 
-  const MediaThumbImg(this.base64ImgString, this.onDelete, {super.key});
+  const MediaThumbImg(this.base64ImgString, this.onDelete,
+      {this.canDelete = true, super.key});
 
   void _onTap(BuildContext context) async {
     final bool? shouldDelete = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DisplayImageMedia(base64ImgString);
+        return DisplayImageMedia(base64ImgString, canDelete: canDelete);
       },
     );
     if (shouldDelete != null && shouldDelete) {
