@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flashcard_pets/firebase_options.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/award_data_provider.dart';
 import 'package:flashcard_pets/providers/constants/pet_bio_data_provider.dart';
@@ -49,6 +51,10 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
     SubjectDataProvider subjectDataProvider = SubjectDataProvider();
     AwardDataProvider awardDataProvider = AwardDataProvider();
     AvatarDataProvider avatarDataProvider = AvatarDataProvider();

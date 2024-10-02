@@ -1,4 +1,4 @@
-package com.example.flashcard_pets
+package com.cantarino.flashcard_pets
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -49,3 +49,9 @@ app.*.map.json
 
 # Tests will not be included for now
 /test/
+
+#Firebase
+android/app/google-services.json
+firebase.json
+lib/firebase_options.dart
+#To recreate those files just run 'flutterfire configure', or follow this: 'https://firebase.google.com/docs/flutter/setup?authuser=0&hl=pt-br&platform=android'
