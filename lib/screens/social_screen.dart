@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashcard_pets/dialogs/notifications_dialog.dart';
 import 'package:flashcard_pets/dialogs/sync_dialog.dart';
+import 'package:flashcard_pets/models/user.dart' as model;
 import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
+import 'package:flashcard_pets/providers/services/sync_provider.dart';
+import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/screens/auth_screen.dart';
 import 'package:flashcard_pets/screens/friends_subscreen.dart';
 import 'package:flashcard_pets/screens/leaderboard_subscreen.dart';
@@ -39,7 +43,7 @@ class SocialScreen extends StatelessWidget {
   }
 
   void _sync(BuildContext context) async {
-    await showDialog(
+    final SyncOption? result = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return SyncDialog();
