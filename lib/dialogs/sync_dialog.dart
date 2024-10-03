@@ -54,9 +54,11 @@ class _SyncDialogState extends State<SyncDialog> {
     final String? userFirebaseId =
         Provider.of<FirebaseAuthProvider>(context, listen: false).uid;
     if (user == null || userFirebaseId == null) return;
+    print("começando");
     final String? anyError =
         await Provider.of<SyncProvider>(context, listen: false)
             .upload(user, userFirebaseId);
+    print("terminour");
     setState(() {
       _isLoading = false;
     });
