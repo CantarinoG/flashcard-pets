@@ -1,4 +1,5 @@
 import 'package:flashcard_pets/dialogs/notifications_dialog.dart';
+import 'package:flashcard_pets/dialogs/sync_dialog.dart';
 import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
 import 'package:flashcard_pets/screens/auth_screen.dart';
 import 'package:flashcard_pets/screens/friends_subscreen.dart';
@@ -37,8 +38,13 @@ class SocialScreen extends StatelessWidget {
     );
   }
 
-  void _sync() {
-    //...
+  void _sync(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SyncDialog();
+      },
+    );
   }
 
   Widget needLoginSubscreen(BuildContext context) {
@@ -95,7 +101,9 @@ class SocialScreen extends StatelessWidget {
           ),
           ThemedFilledButton(
             label: "Sincronizar",
-            onPressed: _sync,
+            onPressed: () {
+              _sync(context);
+            },
             width: 150,
           ),
         ],
