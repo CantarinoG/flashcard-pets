@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashcard_pets/dialogs/notifications_dialog.dart';
 import 'package:flashcard_pets/dialogs/sync_dialog.dart';
@@ -16,9 +17,15 @@ import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SocialScreen extends StatelessWidget {
-  final bool _isUserSyncronized = false;
+class SocialScreen extends StatefulWidget {
   const SocialScreen({super.key});
+
+  @override
+  State<SocialScreen> createState() => _SocialScreenState();
+}
+
+class _SocialScreenState extends State<SocialScreen> {
+  final bool _isUserSyncronized = false;
 
   void _logIn(BuildContext context) {
     Navigator.push(
@@ -43,12 +50,13 @@ class SocialScreen extends StatelessWidget {
   }
 
   void _sync(BuildContext context) async {
-    final SyncOption? result = await showDialog(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return SyncDialog();
       },
     );
+    setState(() {});
   }
 
   Widget needLoginSubscreen(BuildContext context) {
@@ -125,58 +133,78 @@ class SocialScreen extends StatelessWidget {
         Provider.of<FirebaseAuthProvider>(context);
     final _isUserLoggedIn = authProvider.user != null;
 
-    return ScreenLayout(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const UserStatsHeader(),
-          if (!_isUserLoggedIn) needLoginSubscreen(context),
-          if (_isUserLoggedIn && !_isUserSyncronized)
-            needSyncSubscreen(context),
-          if (_isUserLoggedIn && _isUserSyncronized)
-            Expanded(
-              child: DefaultTabController(
-                length: 2,
-                child: Column(
-                  children: [
-                    TabBar(
-                      labelColor: secondary,
-                      unselectedLabelColor: primary,
-                      labelStyle: h3,
-                      unselectedLabelStyle: h3,
-                      indicatorColor: secondary,
-                      overlayColor: WidgetStateProperty.resolveWith<Color?>(
-                        (Set<WidgetState> states) {
-                          if (states.contains(WidgetState.hovered)) {
-                            return primary.withOpacity(0.05);
-                          }
-                          if (states.contains(WidgetState.pressed)) {
-                            return secondary;
-                          }
-                          return null;
-                        },
-                      ),
-                      tabs: const [
-                        Tab(text: "Amigos"),
-                        Tab(
-                          text: "Placar",
-                        )
+    SyncProvider syncProvider = Provider.of<SyncProvider>(context);
+
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: syncProvider.getUserData(authProvider.user?.uid ?? ''),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        bool _isUserSyncronized = false;
+        final userData = snapshot.data;
+        if (userData != null) {
+          final time = userData["lastSync"];
+          final currentTime = DateTime.now();
+          final difference = currentTime.difference(time);
+          _isUserSyncronized = difference.inMinutes <= 30;
+        }
+
+        return ScreenLayout(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const UserStatsHeader(),
+              if (!_isUserLoggedIn) needLoginSubscreen(context),
+              if (_isUserLoggedIn && !_isUserSyncronized)
+                needSyncSubscreen(context),
+              if (_isUserLoggedIn && _isUserSyncronized)
+                Expanded(
+                  child: DefaultTabController(
+                    length: 2,
+                    child: Column(
+                      children: [
+                        TabBar(
+                          labelColor: secondary,
+                          unselectedLabelColor: primary,
+                          labelStyle: h3,
+                          unselectedLabelStyle: h3,
+                          indicatorColor: secondary,
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.hovered)) {
+                                return primary.withOpacity(0.05);
+                              }
+                              if (states.contains(MaterialState.pressed)) {
+                                return secondary;
+                              }
+                              return null;
+                            },
+                          ),
+                          tabs: const [
+                            Tab(text: "Amigos"),
+                            Tab(
+                              text: "Placar",
+                            )
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              FriendsSubscreen(),
+                              LeaderboardSubscreen(),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          FriendsSubscreen(),
-                          LeaderboardSubscreen(),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-        ],
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

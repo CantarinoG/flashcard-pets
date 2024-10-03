@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flashcard_pets/models/user.dart' as model;
 import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
 import 'package:flashcard_pets/providers/services/sync_provider.dart';
@@ -10,11 +11,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-enum SyncOption {
-  local,
-  remote,
-}
-
 class SyncDialog extends StatefulWidget {
   SyncDialog({super.key});
 
@@ -23,16 +19,6 @@ class SyncDialog extends StatefulWidget {
 }
 
 class _SyncDialogState extends State<SyncDialog> {
-  //MockedData
-  final int localLevel = 14;
-  final int localGold = 14;
-  final int localReviews = 34;
-  final DateTime localLastTimeUsedApp = DateTime.now();
-  //dia
-  final int? remoteLevel = 14;
-  final int? remoteGold = 14;
-  final int? remoteReviews = 34;
-  final DateTime? remoteLastTimeUsedApp = DateTime.now();
   bool _isLoading = false;
   String? errorMsg;
 
@@ -54,11 +40,9 @@ class _SyncDialogState extends State<SyncDialog> {
     final String? userFirebaseId =
         Provider.of<FirebaseAuthProvider>(context, listen: false).uid;
     if (user == null || userFirebaseId == null) return;
-    print("começando");
     final String? anyError =
         await Provider.of<SyncProvider>(context, listen: false)
             .upload(user, userFirebaseId);
-    print("terminour");
     setState(() {
       _isLoading = false;
     });
@@ -69,11 +53,33 @@ class _SyncDialogState extends State<SyncDialog> {
       });
       return;
     }
-    Navigator.of(context).pop(SyncOption.local);
+    Navigator.of(context).pop();
   }
 
-  void _chooseRemote(BuildContext context) {
-    Navigator.of(context).pop(SyncOption.remote);
+  void _chooseRemote(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+    final model.User? user =
+        await Provider.of<UserJsonDataProvider>(context, listen: false)
+            .readData();
+    final String? userFirebaseId =
+        Provider.of<FirebaseAuthProvider>(context, listen: false).uid;
+    if (user == null || userFirebaseId == null) return;
+    final String? anyError =
+        await Provider.of<SyncProvider>(context, listen: false)
+            .download(user, userFirebaseId);
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (anyError != null) {
+      setState(() {
+        errorMsg = anyError;
+      });
+      return;
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -94,208 +100,262 @@ class _SyncDialogState extends State<SyncDialog> {
           color: secondary,
         ),
       ),
-      content: _isLoading
-          ? const Column(
+      content: FutureBuilder<Map<String, dynamic>>(
+        future: Future.wait([
+          Provider.of<UserJsonDataProvider>(context, listen: false).readData(),
+          Provider.of<SyncProvider>(context, listen: false).getUserData(
+            Provider.of<FirebaseAuthProvider>(context, listen: false).uid ?? '',
+          ),
+        ]).then((results) {
+          final localUser = results[0] as model.User?;
+          final remoteData = results[1] as Map<String, dynamic>?;
+          return {
+            'localUser': localUser,
+            'remoteData': remoteData,
+          };
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Loading(),
               ],
-            )
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: secondary,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.all(8),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "Dados Locais",
-                              style: h3?.copyWith(
+            );
+          } else if (snapshot.hasError) {
+            return Text(
+              "Erro: ${snapshot.error}",
+              style: body?.copyWith(color: error),
+            );
+          } else if (!snapshot.hasData) {
+            return Text(
+              "Sem dados disponíveis",
+              style: body,
+            );
+          }
+
+          final localUser = snapshot.data!['localUser'] as model.User?;
+          final remoteData =
+              snapshot.data!['remoteData'] as Map<String, dynamic>?;
+
+          final localLevel = localUser?.level ?? 0;
+          final localGold = localUser?.gold ?? 0;
+          final localReviews = localUser?.totalReviewedCards ?? 0;
+          final localLastTimeUsedApp = localUser?.lastTimeUsedApp;
+
+          final remoteLevel = remoteData?['level'] as int?;
+          final remoteGold = remoteData?['gold'] as int?;
+          final remoteReviews = remoteData?['totalReviewedCards'] as int?;
+          final remoteLastTimeUsedApp = remoteData?["lastSync"] as DateTime?;
+
+          return _isLoading
+              ? const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Loading(),
+                  ],
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
                                 color: secondary,
+                                width: 1,
                               ),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            Row(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  "LVL",
-                                  style: h4.copyWith(
+                                  "Dados Locais",
+                                  style: h3?.copyWith(
                                     color: secondary,
                                   ),
                                 ),
-                                Text(
-                                  " $localLevel",
-                                  style: body,
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "LVL",
+                                      style: h4.copyWith(
+                                        color: secondary,
+                                      ),
+                                    ),
+                                    Text(
+                                      " $localLevel",
+                                      style: body,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/images/custom_icons/coin.svg",
-                                  width: 30,
-                                  height: 30,
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SvgPicture.asset(
+                                      "assets/images/custom_icons/coin.svg",
+                                      width: 30,
+                                      height: 30,
+                                    ),
+                                    Text(
+                                      " $localGold",
+                                      style: body,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Revisões",
+                                      style: body?.copyWith(
+                                        color: secondary,
+                                      ),
+                                    ),
+                                    Text(
+                                      " $localReviews",
+                                      style: body,
+                                    ),
+                                  ],
                                 ),
                                 Text(
-                                  " $localGold",
-                                  style: body,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Revisões",
+                                  "Atualizado em",
                                   style: body?.copyWith(
                                     color: secondary,
                                   ),
                                 ),
                                 Text(
-                                  " $localReviews",
+                                  " ${_formatDate(localLastTimeUsedApp!)}",
                                   style: body,
                                 ),
                               ],
                             ),
-                            Text(
-                              "Atualizado em",
-                              style: body?.copyWith(
-                                color: secondary,
-                              ),
-                            ),
-                            Text(
-                              " ${_formatDate(localLastTimeUsedApp)}",
-                              style: body,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      if ((remoteGold != null) &&
-                          (remoteLastTimeUsedApp != null) &&
-                          (remoteLevel != null) &&
-                          (remoteReviews != null))
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: secondary,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
                           ),
-                          padding: EdgeInsets.all(8),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Dados na Nuvem",
-                                style: h3?.copyWith(
+                          SizedBox(
+                            width: 16,
+                          ),
+                          if (remoteGold != null &&
+                              remoteLevel != null &&
+                              remoteLastTimeUsedApp != null &&
+                              remoteReviews != null)
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
                                   color: secondary,
+                                  width: 1,
                                 ),
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              Row(
+                              padding: EdgeInsets.all(8),
+                              child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    "LVL",
-                                    style: h4.copyWith(
+                                    "Dados na Nuvem",
+                                    style: h3?.copyWith(
                                       color: secondary,
                                     ),
                                   ),
-                                  Text(
-                                    " $remoteLevel",
-                                    style: body,
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "LVL",
+                                        style: h4.copyWith(
+                                          color: secondary,
+                                        ),
+                                      ),
+                                      Text(
+                                        " $remoteLevel",
+                                        style: body,
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/images/custom_icons/coin.svg",
-                                    width: 30,
-                                    height: 30,
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/images/custom_icons/coin.svg",
+                                        width: 30,
+                                        height: 30,
+                                      ),
+                                      Text(
+                                        " $remoteGold",
+                                        style: body,
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "Revisões",
+                                        style: body?.copyWith(
+                                          color: secondary,
+                                        ),
+                                      ),
+                                      Text(
+                                        " $remoteReviews",
+                                        style: body,
+                                      ),
+                                    ],
                                   ),
                                   Text(
-                                    " $remoteGold",
-                                    style: body,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "Revisões",
+                                    "Atualizado em",
                                     style: body?.copyWith(
                                       color: secondary,
                                     ),
                                   ),
                                   Text(
-                                    " $remoteReviews",
+                                    " ${_formatDate(remoteLastTimeUsedApp!)}",
                                     style: body,
                                   ),
                                 ],
                               ),
-                              Text(
-                                "Atualizado em",
-                                style: body?.copyWith(
-                                  color: secondary,
-                                ),
-                              ),
-                              Text(
-                                " ${_formatDate(remoteLastTimeUsedApp!)}",
-                                style: body,
-                              ),
-                            ],
-                          ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ThemedFilledButton(
+                            label: "Local",
+                            onPressed: () {
+                              _chooseLocal(context);
+                            }),
+                        SizedBox(
+                          width: 16,
                         ),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ThemedFilledButton(
-                        label: "Local",
-                        onPressed: () {
-                          _chooseLocal(context);
-                        }),
-                    SizedBox(
-                      width: 16,
+                        if (remoteGold != null &&
+                            remoteLevel != null &&
+                            remoteLastTimeUsedApp != null &&
+                            remoteReviews != null)
+                          ThemedFilledButton(
+                              label: "Nuvem",
+                              onPressed: () {
+                                _chooseRemote(context);
+                              })
+                      ],
                     ),
-                    ThemedFilledButton(
-                        label: "Nuvem",
-                        onPressed: () {
-                          _chooseRemote(context);
-                        })
+                    if (errorMsg != null)
+                      Text(
+                        errorMsg!,
+                        style: body?.copyWith(
+                          color: error,
+                        ),
+                      ),
                   ],
-                ),
-                if (errorMsg != null)
-                  Text(
-                    errorMsg!,
-                    style: body?.copyWith(
-                      color: error,
-                    ),
-                  ),
-              ],
-            ),
+                );
+        },
+      ),
       actions: [
         TextButton(
           onPressed: () {

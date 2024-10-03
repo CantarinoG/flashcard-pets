@@ -1,4 +1,5 @@
 import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
+import 'package:flashcard_pets/dialogs/sync_dialog.dart';
 import 'package:flashcard_pets/main.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
@@ -386,6 +387,15 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
+  void _sync(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SyncDialog();
+      },
+    );
+  }
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
@@ -395,6 +405,10 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
 
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
+
+    FirebaseAuthProvider authProvider =
+        Provider.of<FirebaseAuthProvider>(context);
+    final _isUserLoggedIn = authProvider.user != null;
 
     return ThemedAppBar(
       "Perfil",
@@ -406,6 +420,7 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
           onSelected: (SelfProfileAction result) {
             switch (result) {
               case SelfProfileAction.synchronize:
+                _sync(context);
                 break;
               case SelfProfileAction.toggleTheme:
                 _changeTheme(context);
@@ -420,13 +435,14 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
           itemBuilder: (BuildContext context) =>
               <PopupMenuEntry<SelfProfileAction>>[
-            PopupMenuItem<SelfProfileAction>(
-              value: SelfProfileAction.synchronize,
-              child: Text(
-                'Sincronizar',
-                style: body,
+            if (_isUserLoggedIn)
+              PopupMenuItem<SelfProfileAction>(
+                value: SelfProfileAction.synchronize,
+                child: Text(
+                  'Sincronizar',
+                  style: body,
+                ),
               ),
-            ),
             PopupMenuItem<SelfProfileAction>(
               value: SelfProfileAction.toggleTheme,
               child: Text(
