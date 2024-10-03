@@ -2,11 +2,13 @@ import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/main.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
+import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/screens/awards_screen.dart';
 import 'package:flashcard_pets/screens/change_avatar_screen.dart';
 import 'package:flashcard_pets/screens/configurations_screen.dart';
 import 'package:flashcard_pets/screens/statistics_screen.dart';
+import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/award_card_basic.dart';
@@ -18,12 +20,10 @@ import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class SelfProfileScreen extends StatelessWidget {
-  //Mocked data
-  final bool _isUserLoggedIn = false;
-  final String _nick = "CantarinoG";
   const SelfProfileScreen({super.key});
 
   void _changeAvatar(BuildContext context) {
@@ -53,6 +53,21 @@ class SelfProfileScreen extends StatelessWidget {
     );
   }
 
+  void _copyId(BuildContext context, String id) {
+    Clipboard.setData(ClipboardData(text: id));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const SuccessSnackbar("Id copiado."),
+        backgroundColor: Theme.of(context).colorScheme.bright,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _logout(BuildContext context) async {
+    await Provider.of<FirebaseAuthProvider>(context, listen: false).signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
@@ -62,10 +77,15 @@ class SelfProfileScreen extends StatelessWidget {
     final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final Color disabled = Theme.of(context).disabledColor;
     final Color secondary = Theme.of(context).colorScheme.secondary;
+    final Color primary = Theme.of(context).colorScheme.primary;
 
     final UserJsonDataProvider userProvider = Provider.of<UserJsonDataProvider>(
       context,
     );
+
+    FirebaseAuthProvider authProvider =
+        Provider.of<FirebaseAuthProvider>(context);
+    final _isUserLoggedIn = authProvider.user != null;
 
     return FutureBuilder<User?>(
       future: userProvider.readData(),
@@ -151,9 +171,44 @@ class SelfProfileScreen extends StatelessWidget {
                         const SizedBox(
                           height: 4,
                         ),
-                        Text(
-                          "@$_nick",
-                          style: h3?.copyWith(color: disabled),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(
+                            children: [
+                              ThemedFilledButton(
+                                  label: "Sair da Conta",
+                                  onPressed: () {
+                                    _logout(context);
+                                  }),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "id ",
+                                    style: h3?.copyWith(color: secondary),
+                                  ),
+                                  Text(
+                                    "${authProvider.uid}",
+                                    style: h3?.copyWith(color: disabled),
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      _copyId(context, authProvider.uid ?? "");
+                                    },
+                                    icon: Icon(
+                                      Icons.copy,
+                                      color: primary,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                       const SizedBox(

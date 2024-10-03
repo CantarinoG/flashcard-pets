@@ -1,4 +1,5 @@
 import 'package:flashcard_pets/dialogs/notifications_dialog.dart';
+import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
 import 'package:flashcard_pets/screens/auth_screen.dart';
 import 'package:flashcard_pets/screens/friends_subscreen.dart';
 import 'package:flashcard_pets/screens/leaderboard_subscreen.dart';
@@ -8,11 +9,10 @@ import 'package:flashcard_pets/widgets/themed_fab.dart';
 import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flashcard_pets/widgets/user_stats_header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SocialScreen extends StatelessWidget {
-  //Mocked data
-  final bool _isUserLoggedIn = true;
-  final bool _isUserSyncronized = true;
+  final bool _isUserSyncronized = false;
   const SocialScreen({super.key});
 
   void _logIn(BuildContext context) {
@@ -109,6 +109,10 @@ class SocialScreen extends StatelessWidget {
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
+    FirebaseAuthProvider authProvider =
+        Provider.of<FirebaseAuthProvider>(context);
+    final _isUserLoggedIn = authProvider.user != null;
+
     return ScreenLayout(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -167,7 +171,7 @@ class SocialScreen extends StatelessWidget {
 
 class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
   //Mocked data
-  final bool _userIsLoggedInAndSynced = true;
+  final bool _userIsSynced = false;
   final bool _anySocialNotifications = true;
   const SocialAppBar({super.key});
 
@@ -185,9 +189,13 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuthProvider authProvider =
+        Provider.of<FirebaseAuthProvider>(context);
+    final _isUserLoggedIn = authProvider.user != null;
+
     return ThemedAppBar(
       "Social",
-      actions: _userIsLoggedInAndSynced
+      actions: (_isUserLoggedIn && _userIsSynced)
           ? [
               IconButton(
                 onPressed: () {
@@ -208,6 +216,9 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class SocialFab extends StatelessWidget {
+  //Mocked data
+  final bool _userIsSynced = false;
+
   const SocialFab({super.key});
 
   void _onTap(BuildContext context) {
@@ -221,11 +232,17 @@ class SocialFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ThemedFab(
-      () {
-        _onTap(context);
-      },
-      const Icon(Icons.add),
-    );
+    FirebaseAuthProvider authProvider =
+        Provider.of<FirebaseAuthProvider>(context);
+    final _isUserLoggedIn = authProvider.user != null;
+
+    return (_userIsSynced && _isUserLoggedIn)
+        ? ThemedFab(
+            () {
+              _onTap(context);
+            },
+            const Icon(Icons.add),
+          )
+        : const SizedBox.shrink();
   }
 }

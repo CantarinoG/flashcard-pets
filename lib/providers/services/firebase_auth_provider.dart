@@ -21,7 +21,6 @@ class FirebaseAuthProvider with ChangeNotifier {
       );
       return null;
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       final message = e.message;
       return message ?? 'Ocorreu um erro inesperado. Tente mais tarde.';
     } catch (e) {
@@ -35,6 +34,9 @@ class FirebaseAuthProvider with ChangeNotifier {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailAddress, password: password);
     } on FirebaseAuthException catch (e) {
+      if (e.code == "invalid-credential") {
+        return "Senha ou email inválidos.";
+      }
       final message = e.message;
       return message ?? 'Ocorreu um erro inesperado. Tente mais tarde.';
     } catch (e) {
@@ -42,7 +44,7 @@ class FirebaseAuthProvider with ChangeNotifier {
     }
   }
 
-  Future<String?> singOut() async {
+  Future<String?> signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
       return null;
