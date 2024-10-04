@@ -141,4 +141,28 @@ class FirebaseSocialProvider with ChangeNotifier {
       return 'Erro ao enviar presente. Tente novamente mais tarde.';
     }
   }
+
+  Future<List<Map<String, dynamic>>> getTop10GlobalUsers() async {
+    try {
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .orderBy('totalXp', descending: true)
+          .limit(10)
+          .get();
+
+      return querySnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return {
+          'avatarCode': data['avatarCode'],
+          'bgColorCode': data['bgColorCode'],
+          'name': data['name'],
+          'id': doc.id,
+          'totalXp': data['totalXp'],
+        };
+      }).toList();
+    } catch (e) {
+      print('Error getting top 10 global users: $e');
+      return [];
+    }
+  }
 }

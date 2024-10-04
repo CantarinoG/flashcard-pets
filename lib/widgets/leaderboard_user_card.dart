@@ -6,15 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LeaderboardUserCard extends StatelessWidget {
-  //Mocked data
-  final int _colorCode = 0xFF5C9EAD;
-  final int _position = 1;
-  final int _avatarId = 10;
-  final String _name = "Guilherme Cantarino";
-  final String _nick = "CantarinoG";
-  final int _pontos = 1456;
+  final int ranking;
+  final int avatarCode;
+  final int bgColorCode;
+  final String name;
+  final String id;
+  final int totalXp;
 
-  const LeaderboardUserCard({super.key});
+  const LeaderboardUserCard({
+    super.key,
+    required this.ranking,
+    required this.avatarCode,
+    required this.bgColorCode,
+    required this.name,
+    required this.id,
+    required this.totalXp,
+  });
 
   void _visitUserProfile(BuildContext context) {
     Navigator.push(
@@ -34,16 +41,17 @@ class LeaderboardUserCard extends StatelessWidget {
     final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final Color brightColor = Theme.of(context).colorScheme.bright;
     final Color secondary = Theme.of(context).colorScheme.secondary;
+    final Color disabled = Theme.of(context).disabledColor;
 
     final String avatarPath =
-        Provider.of<AvatarDataProvider>(context).retrieveFromKey(_avatarId);
+        Provider.of<AvatarDataProvider>(context).retrieveFromKey(avatarCode);
 
     Color positionColor = secondary;
-    if (_position == 1) {
+    if (ranking == 1) {
       positionColor = const Color(0xFFDAC387);
-    } else if (_position == 2) {
+    } else if (ranking == 2) {
       positionColor = const Color(0xFF9BABB1);
-    } else if (_position == 3) {
+    } else if (ranking == 3) {
       positionColor = const Color(0xFFBDA655);
     }
 
@@ -65,7 +73,7 @@ class LeaderboardUserCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "$_position°",
+                "$ranking°",
                 style: h1?.copyWith(color: positionColor),
               ),
               const SizedBox(
@@ -76,7 +84,7 @@ class LeaderboardUserCard extends StatelessWidget {
                 width: 50,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Color(_colorCode),
+                    color: Color(bgColorCode),
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
@@ -95,7 +103,7 @@ class LeaderboardUserCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _name,
+                        name,
                         style: h3?.copyWith(
                           color: secondary,
                         ),
@@ -103,8 +111,8 @@ class LeaderboardUserCard extends StatelessWidget {
                         maxLines: 1,
                       ),
                       Text(
-                        "@$_nick",
-                        style: body,
+                        "id $id",
+                        style: body?.copyWith(color: disabled),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
@@ -115,7 +123,7 @@ class LeaderboardUserCard extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    "$_pontos",
+                    "$totalXp",
                     style: h4.copyWith(color: secondary),
                   ),
                   Text(
