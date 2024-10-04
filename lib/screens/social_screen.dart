@@ -1,14 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashcard_pets/dialogs/add_friend_dialog.dart';
 import 'package:flashcard_pets/dialogs/notifications_dialog.dart';
 import 'package:flashcard_pets/dialogs/sync_dialog.dart';
 import 'package:flashcard_pets/models/user.dart' as model;
 import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
+import 'package:flashcard_pets/providers/services/firebase_social_provider.dart';
 import 'package:flashcard_pets/providers/services/sync_provider.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/screens/auth_screen.dart';
 import 'package:flashcard_pets/screens/friends_subscreen.dart';
 import 'package:flashcard_pets/screens/leaderboard_subscreen.dart';
+import 'package:flashcard_pets/snackbars/error_snackbar.dart';
+import 'package:flashcard_pets/snackbars/success_snackbar.dart';
+import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
 import 'package:flashcard_pets/widgets/themed_fab.dart';
@@ -210,9 +215,6 @@ class _SocialScreenState extends State<SocialScreen> {
 }
 
 class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
-  //Mocked data
-  final bool _userIsSynced = false;
-  final bool _anySocialNotifications = true;
   const SocialAppBar({super.key});
 
   @override
@@ -235,18 +237,14 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return ThemedAppBar(
       "Social",
-      actions: (_isUserLoggedIn && _userIsSynced)
+      actions: (_isUserLoggedIn)
           ? [
               IconButton(
                 onPressed: () {
                   _showNotification(context);
                 },
-                icon: Badge(
-                  backgroundColor:
-                      _anySocialNotifications ? Colors.red : Colors.transparent,
-                  child: const Icon(
-                    Icons.notifications,
-                  ),
+                icon: const Icon(
+                  Icons.notifications,
                 ),
               ),
             ]
@@ -256,18 +254,50 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class SocialFab extends StatelessWidget {
-  //Mocked data
-  final bool _userIsSynced = false;
-
   const SocialFab({super.key});
 
-  void _onTap(BuildContext context) {
-    /*showDialog(
+  void _onTap(BuildContext context) async {
+    final String? userId =
+        Provider.of<FirebaseAuthProvider>(context, listen: false).uid;
+    if (userId == null) return;
+    final Map<String, dynamic>? userData =
+        await Provider.of<SyncProvider>(context, listen: false)
+            .getUserData(userId);
+    if (userData == null) return;
+    final time = userData["lastSync"];
+    final currentTime = DateTime.now();
+    final difference = currentTime.difference(time);
+    final bool _isUserSyncronized = difference.inMinutes <= 30;
+    if (!_isUserSyncronized) return;
+
+    final String? friendId = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AddFriendDialog();
+        return AddFriendDialog();
       },
-    );*/
+    );
+    if (friendId == null) return;
+
+    final result =
+        await Provider.of<FirebaseSocialProvider>(context, listen: false)
+            .addFriend(userId, friendId);
+    if (result != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: ErrorSnackbar(result),
+          backgroundColor: Theme.of(context).colorScheme.bright,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: SuccessSnackbar("Adicionado com sucesso!"),
+          backgroundColor: Theme.of(context).colorScheme.bright,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   @override
@@ -276,7 +306,7 @@ class SocialFab extends StatelessWidget {
         Provider.of<FirebaseAuthProvider>(context);
     final _isUserLoggedIn = authProvider.user != null;
 
-    return (_userIsSynced && _isUserLoggedIn)
+    return (_isUserLoggedIn)
         ? ThemedFab(
             () {
               _onTap(context);

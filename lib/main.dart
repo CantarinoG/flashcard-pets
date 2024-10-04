@@ -10,6 +10,7 @@ import 'package:flashcard_pets/providers/dao/media_dao.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
 import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
+import 'package:flashcard_pets/providers/services/firebase_social_provider.dart';
 import 'package:flashcard_pets/providers/services/sm2_calculator.dart';
 import 'package:flashcard_pets/providers/services/standard_game_elements_calculations.dart';
 import 'package:flashcard_pets/providers/services/sync_provider.dart';
@@ -78,6 +79,7 @@ class MyAppState extends State<MyApp> {
     Base64Conversor base64ConversorProvider = Base64Conversor();
     FirebaseAuthProvider firebaseAuthProvider = FirebaseAuthProvider();
     SyncProvider syncProvider = SyncProvider();
+    FirebaseSocialProvider firebaseSocialProvider = FirebaseSocialProvider();
 
     return MultiProvider(
       providers: [
@@ -96,6 +98,7 @@ class MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => base64ConversorProvider),
         ChangeNotifierProvider(create: (_) => firebaseAuthProvider),
         ChangeNotifierProvider(create: (_) => syncProvider),
+        ChangeNotifierProvider(create: (_) => firebaseSocialProvider),
       ],
       child: MaterialApp(
         title: 'Flashcard Pets',
