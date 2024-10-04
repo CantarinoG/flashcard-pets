@@ -77,4 +77,33 @@ class FirebaseSocialProvider with ChangeNotifier {
       return "Erro!";
     }
   }
+
+  Future<bool> canSendGift(String userId, String friendId) async {
+    try {
+      final friendDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('friends')
+          .doc(friendId)
+          .get();
+
+      if (!friendDoc.exists) {
+        return false;
+      }
+
+      final lastTimeSent = friendDoc.data()?['lastTimeSent'] as String?;
+      if (lastTimeSent == null) {
+        return true;
+      }
+
+      final lastSentDateTime = DateTime.parse(lastTimeSent);
+      final currentTime = DateTime.now();
+      final difference = currentTime.difference(lastSentDateTime);
+
+      return difference.inHours >= 24;
+    } catch (e) {
+      print('Error checking if can send gift: $e');
+      return false;
+    }
+  }
 }
