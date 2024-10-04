@@ -106,4 +106,39 @@ class FirebaseSocialProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<String?> sendGift(String userId, String friendId) async {
+    try {
+      // Update lastTimeSent for the user
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('friends')
+          .doc(friendId)
+          .set({
+        'lastTimeSent': DateTime.now().toIso8601String(),
+      }, SetOptions(merge: true));
+
+      // Update or create giftTotal for the friend
+      final friendDoc =
+          FirebaseFirestore.instance.collection('users').doc(friendId);
+
+      return FirebaseFirestore.instance.runTransaction((transaction) async {
+        final snapshot = await transaction.get(friendDoc);
+
+        if (!snapshot.exists) {
+          throw Exception('Friend document does not exist!');
+        }
+
+        final currentGiftTotal = snapshot.data()?['giftTotal'] as int? ?? 0;
+        transaction.update(friendDoc, {'giftTotal': currentGiftTotal + 25});
+
+        notifyListeners();
+        return null;
+      });
+    } catch (e) {
+      print('Error sending gift: $e');
+      return 'Erro ao enviar presente. Tente novamente mais tarde.';
+    }
+  }
 }

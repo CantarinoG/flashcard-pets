@@ -46,6 +46,16 @@ class SyncProvider with ChangeNotifier {
         }
       }
 
+      // Fetch the existing document
+      final docSnapshot = await db.collection("users").doc(userId).get();
+      if (docSnapshot.exists) {
+        final existingData = docSnapshot.data() as Map<String, dynamic>;
+        // Preserve the giftTotal if it exists
+        if (existingData.containsKey("giftTotal")) {
+          userMap["giftTotal"] = existingData["giftTotal"];
+        }
+      }
+
       await db.collection("users").doc(userId).set(userMap);
     } catch (error) {
       print("Error during sync: $error");

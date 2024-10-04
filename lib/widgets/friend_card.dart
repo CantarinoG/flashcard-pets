@@ -21,8 +21,17 @@ class FriendCard extends StatelessWidget {
     );
   }
 
-  void _sendGift() {
-    //...
+  void _sendGift(BuildContext context) async {
+    final String ownUserId =
+        Provider.of<FirebaseAuthProvider>(context, listen: false).uid!;
+    final result =
+        await Provider.of<FirebaseSocialProvider>(context, listen: false)
+            .sendGift(ownUserId, friendId);
+    if (result != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result)),
+      );
+    }
   }
 
   @override
@@ -39,7 +48,7 @@ class FriendCard extends StatelessWidget {
     return FutureBuilder<List<dynamic>>(
       future: Future.wait([
         Provider.of<SyncProvider>(context, listen: false).getUserData(friendId),
-        Provider.of<FirebaseSocialProvider>(context, listen: false)
+        Provider.of<FirebaseSocialProvider>(context)
             .canSendGift(ownUserId, friendId),
       ]),
       builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
@@ -118,7 +127,7 @@ class FriendCard extends StatelessWidget {
                     ),
                   ),
                   IconButton.filled(
-                    onPressed: canSendGift ? _sendGift : null,
+                    onPressed: canSendGift ? () => _sendGift(context) : null,
                     icon: SvgPicture.asset(
                       "assets/images/custom_icons/gift_icon.svg",
                       width: 20,
