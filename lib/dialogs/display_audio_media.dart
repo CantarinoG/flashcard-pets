@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
-import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
 import 'package:flashcard_pets/providers/dao/media_dao.dart';
 import 'package:flashcard_pets/models/media.dart';
@@ -15,10 +14,10 @@ class DisplayAudioMedia extends StatefulWidget {
   const DisplayAudioMedia(this.audioId, {this.canDelete = true, super.key});
 
   @override
-  _DisplayAudioMediaState createState() => _DisplayAudioMediaState();
+  DisplayAudioMediaState createState() => DisplayAudioMediaState();
 }
 
-class _DisplayAudioMediaState extends State<DisplayAudioMedia> {
+class DisplayAudioMediaState extends State<DisplayAudioMedia> {
   final FlutterSoundPlayer _player = FlutterSoundPlayer();
   bool _isPlaying = false;
   String? _audioString;
@@ -28,6 +27,12 @@ class _DisplayAudioMediaState extends State<DisplayAudioMedia> {
     super.initState();
     _player.openPlayer();
     _loadAudioString();
+  }
+
+  @override
+  void dispose() {
+    _player.closePlayer();
+    super.dispose();
   }
 
   Future<void> _loadAudioString() async {
@@ -40,37 +45,35 @@ class _DisplayAudioMediaState extends State<DisplayAudioMedia> {
     }
   }
 
-  @override
-  void dispose() {
-    _player.closePlayer();
-    super.dispose();
-  }
-
-  void _cancel(BuildContext context) {
-    Navigator.of(context).pop();
-  }
-
-  void _delete(BuildContext context) {
-    Navigator.of(context).pop(true);
-  }
-
   Future<void> _playPause() async {
     if (_isPlaying) {
       await _player.stopPlayer();
     } else {
-      if (_audioString != null) {
-        final Uint8List audioBytes =
-            Provider.of<Base64Conversor>(context, listen: false)
-                .base64ToBytes(_audioString!);
-        await _player.startPlayer(
-          fromDataBuffer: audioBytes,
-          codec: Codec.aacADTS,
-        );
-      }
+      await _playAudio();
     }
     setState(() {
       _isPlaying = !_isPlaying;
     });
+  }
+
+  Future<void> _playAudio() async {
+    if (_audioString != null) {
+      final Uint8List audioBytes =
+          Provider.of<Base64Conversor>(context, listen: false)
+              .base64ToBytes(_audioString!);
+      await _player.startPlayer(
+        fromDataBuffer: audioBytes,
+        codec: Codec.aacADTS,
+      );
+    }
+  }
+
+  void _cancel() {
+    Navigator.of(context).pop();
+  }
+
+  void _delete() {
+    Navigator.of(context).pop(true);
   }
 
   @override
@@ -97,7 +100,7 @@ class _DisplayAudioMediaState extends State<DisplayAudioMedia> {
       actions: [
         TextButton(
           onPressed: () {
-            _cancel(context);
+            _cancel();
           },
           child: Text(
             "Voltar",
@@ -109,7 +112,7 @@ class _DisplayAudioMediaState extends State<DisplayAudioMedia> {
         if (widget.canDelete)
           TextButton(
             onPressed: () {
-              _delete(context);
+              _delete();
             },
             child: Text(
               "Excluir",

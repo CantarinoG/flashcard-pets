@@ -1,4 +1,3 @@
-import 'package:flashcard_pets/dialogs/leaderboard_filter_dialog.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';

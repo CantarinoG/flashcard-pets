@@ -1,4 +1,5 @@
 import 'package:flashcard_pets/themes/app_text_styles.dart';
+import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +30,7 @@ class _SingleInputDialogState<T> extends State<SingleInputDialog<T>> {
     super.dispose();
   }
 
-  void _cancel(BuildContext context) {
-    Navigator.of(context).pop();
-  }
+  void _cancel(BuildContext context) => Navigator.of(context).pop();
 
   void _confirm(BuildContext context) {
     Navigator.of(context).pop(_textController.text.trim());
@@ -43,6 +42,7 @@ class _SingleInputDialogState<T> extends State<SingleInputDialog<T>> {
     final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color primary = Theme.of(context).colorScheme.primary;
+    final Color text = Theme.of(context).colorScheme.text;
 
     return AlertDialog(
       title: Text(
@@ -56,7 +56,7 @@ class _SingleInputDialogState<T> extends State<SingleInputDialog<T>> {
         children: [
           Text(
             widget.description,
-            style: bodyEm,
+            style: bodyEm.copyWith(color: text),
           ),
           const SizedBox(
             height: 8,
@@ -65,8 +65,10 @@ class _SingleInputDialogState<T> extends State<SingleInputDialog<T>> {
             label: widget.label,
             child: TextField(
               controller: _textController,
+              style: TextStyle(color: text),
               decoration: InputDecoration(
                 prefixText: widget.prefixText,
+                prefixStyle: TextStyle(color: text),
                 border: InputBorder.none,
               ),
             ),

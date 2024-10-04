@@ -1,6 +1,4 @@
-import 'dart:typed_data';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
-import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
 import 'package:flashcard_pets/providers/dao/media_dao.dart';
 import 'package:flashcard_pets/models/media.dart';
@@ -15,10 +13,10 @@ class DisplayImageMedia extends StatefulWidget {
   const DisplayImageMedia(this.imgId, {this.canDelete = true, super.key});
 
   @override
-  _DisplayImageMediaState createState() => _DisplayImageMediaState();
+  DisplayImageMediaState createState() => DisplayImageMediaState();
 }
 
-class _DisplayImageMediaState extends State<DisplayImageMedia> {
+class DisplayImageMediaState extends State<DisplayImageMedia> {
   String? _imageString;
 
   @override
@@ -61,7 +59,7 @@ class _DisplayImageMediaState extends State<DisplayImageMedia> {
         ),
       ),
       content: _imageString == null
-          ? Loading()
+          ? const Loading()
           : Image.memory(
               Provider.of<Base64Conversor>(context)
                   .base64ToBytes(_imageString!),

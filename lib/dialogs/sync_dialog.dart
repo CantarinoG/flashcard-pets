@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/models/user.dart' as model;
 import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
 import 'package:flashcard_pets/providers/services/sync_provider.dart';
@@ -12,7 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SyncDialog extends StatefulWidget {
-  SyncDialog({super.key});
+  const SyncDialog({super.key});
 
   @override
   State<SyncDialog> createState() => _SyncDialogState();
@@ -171,7 +172,7 @@ class _SyncDialogState extends State<SyncDialog> {
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -238,7 +239,7 @@ class _SyncDialogState extends State<SyncDialog> {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           if (remoteGold != null &&
@@ -253,7 +254,7 @@ class _SyncDialogState extends State<SyncDialog> {
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -314,7 +315,7 @@ class _SyncDialogState extends State<SyncDialog> {
                                     ),
                                   ),
                                   Text(
-                                    " ${_formatDate(remoteLastTimeUsedApp!)}",
+                                    " ${_formatDate(remoteLastTimeUsedApp)}",
                                     style: body,
                                   ),
                                 ],
@@ -331,7 +332,7 @@ class _SyncDialogState extends State<SyncDialog> {
                             onPressed: () {
                               _chooseLocal(context);
                             }),
-                        SizedBox(
+                        const SizedBox(
                           width: 16,
                         ),
                         if (remoteGold != null &&

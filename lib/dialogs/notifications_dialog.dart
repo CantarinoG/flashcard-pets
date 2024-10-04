@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -9,7 +11,7 @@ import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
 import 'package:flashcard_pets/providers/services/firebase_social_provider.dart';
 
 class NotificationsDialog extends StatelessWidget {
-  NotificationsDialog({super.key});
+  const NotificationsDialog({super.key});
 
   void _goBack(BuildContext context) {
     Navigator.of(context).pop();
@@ -42,10 +44,10 @@ class NotificationsDialog extends StatelessWidget {
             .checkReceivedGifts(userId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Column(
+            return const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircularProgressIndicator(),
+                CircularProgressIndicator(),
               ],
             );
           } else if (snapshot.hasError) {
@@ -59,7 +61,7 @@ class NotificationsDialog extends StatelessWidget {
                     children: [
                       Text("Sem notificações...",
                           style: body?.copyWith(color: textColor)),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       ThemedFilledButton(
@@ -74,7 +76,7 @@ class NotificationsDialog extends StatelessWidget {
                     children: [
                       Text("Você recebeu presentes de seus amigos...",
                           style: body?.copyWith(color: textColor)),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Row(
@@ -91,7 +93,7 @@ class NotificationsDialog extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       ThemedFilledButton(

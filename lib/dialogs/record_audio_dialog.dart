@@ -1,13 +1,10 @@
 import 'dart:io';
-
 import 'package:flashcard_pets/providers/services/base_64_conversor.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
-import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:convert';
 
 import 'package:provider/provider.dart';
 
@@ -19,8 +16,11 @@ class RecordAudioDialog extends StatefulWidget {
 }
 
 class _RecordAudioDialogState extends State<RecordAudioDialog> {
-  FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-  FlutterSoundPlayer _player = FlutterSoundPlayer();
+  // Audio components
+  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  final FlutterSoundPlayer _player = FlutterSoundPlayer();
+
+  // State variables
   bool _isRecording = false;
   bool _isPlaying = false;
   bool _hasRecorded = false;
@@ -29,9 +29,13 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
   @override
   void initState() {
     super.initState();
-    requestPermissions();
-    _initializeRecorder();
-    _initializePlayer();
+    _initializeAudio();
+  }
+
+  Future<void> _initializeAudio() async {
+    await requestPermissions();
+    await _initializeRecorder();
+    await _initializePlayer();
   }
 
   Future<void> requestPermissions() async {
@@ -53,6 +57,7 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
     super.dispose();
   }
 
+  // Recording methods
   Future<void> startRecording() async {
     await _recorder.startRecorder(toFile: 'audio.aac');
     setState(() {
@@ -63,7 +68,8 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
   Future<void> stopRecording() async {
     String? path = await _recorder.stopRecorder();
     if (path != null) {
-      final bytes = await File(path).readAsBytesSync();
+      final bytes = File(path).readAsBytesSync();
+      if (!mounted) return;
       _base64Audio = Provider.of<Base64Conversor>(context, listen: false)
           .bytesToBase64(bytes);
     }
@@ -73,6 +79,7 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
     });
   }
 
+  // Playback methods
   Future<void> startPlaying() async {
     await _player.startPlayer(fromURI: 'audio.aac');
     setState(() {
@@ -87,6 +94,7 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
     });
   }
 
+  // Dialog actions
   void _confirmRecording() {
     Navigator.of(context).pop(_base64Audio);
   }
@@ -97,58 +105,51 @@ class _RecordAudioDialogState extends State<RecordAudioDialog> {
 
   @override
   Widget build(BuildContext context) {
+    Widget buildRecordButton() {
+      return IconButton(
+        icon: Icon(_isRecording ? Icons.stop : Icons.mic),
+        onPressed: _isRecording ? stopRecording : startRecording,
+        color: _isRecording ? Colors.red : Colors.green,
+        iconSize: 48,
+      );
+    }
+
+    Widget buildPlayButton() {
+      return IconButton(
+        icon: Icon(_isPlaying ? Icons.stop : Icons.play_arrow),
+        onPressed: _isPlaying ? stopPlaying : startPlaying,
+        color: _isPlaying ? Colors.red : Colors.blue,
+        iconSize: 48,
+      );
+    }
+
     final TextStyle? h2 = Theme.of(context).textTheme.headlineMedium;
     final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
     final Color secondary = Theme.of(context).colorScheme.secondary;
-    final Color warning = Theme.of(context).colorScheme.warning;
     final Color primary = Theme.of(context).colorScheme.primary;
-    final Color text = Theme.of(context).colorScheme.text;
 
     return AlertDialog(
       title: Text(
         "Gravar Áudio",
-        style: h2?.copyWith(
-          color: secondary,
-        ),
+        style: h2?.copyWith(color: secondary),
       ),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          IconButton(
-            icon: Icon(_isRecording ? Icons.stop : Icons.mic),
-            onPressed: _isRecording ? stopRecording : startRecording,
-            color: _isRecording ? Colors.red : Colors.green,
-            iconSize: 48,
-          ),
-          if (_hasRecorded && !_isRecording)
-            IconButton(
-              icon: Icon(_isPlaying ? Icons.stop : Icons.play_arrow),
-              onPressed: _isPlaying ? stopPlaying : startPlaying,
-              color: _isPlaying ? Colors.red : Colors.blue,
-              iconSize: 48,
-            ),
+          buildRecordButton(),
+          if (_hasRecorded && !_isRecording) buildPlayButton(),
         ],
       ),
       actions: [
         TextButton(
           onPressed: _cancelRecording,
-          child: Text(
-            'Cancelar',
-            style: bodyEm.copyWith(
-              color: primary,
-            ),
-          ),
+          child: Text('Cancelar', style: bodyEm.copyWith(color: primary)),
         ),
         if (_hasRecorded)
           TextButton(
             onPressed: _confirmRecording,
-            child: Text(
-              'Confirmar',
-              style: bodyEm.copyWith(
-                color: primary,
-              ),
-            ),
+            child: Text('Confirmar', style: bodyEm.copyWith(color: primary)),
           ),
       ],
     );

@@ -3,26 +3,29 @@ import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmDeleteDialog extends StatelessWidget {
-  final String _title;
-  final String _message;
+  static const String _cancelLabel = "Cancelar";
+
+  final String title;
+  final String message;
   final String deleteLabel;
   final Widget? content;
 
   /// Dialog to confirm deletion.
   ///
-  /// Returns true if the user confirmed.
-  /// Returns false if the user declined.
-  /// Retuns null if the user exited.
-  const ConfirmDeleteDialog(this._title, this._message,
+  /// [title] The title of the dialog.
+  /// [message] The message to display in the dialog.
+  /// [deleteLabel] The label for the delete button (default: "Deletar").
+  /// [content] Custom content widget to replace the default message text.
+  ///
+  /// Returns:
+  /// - true if the user confirmed.
+  /// - false if the user declined.
+  /// - null if the user exited.
+  const ConfirmDeleteDialog(this.title, this.message,
       {this.deleteLabel = "Deletar", this.content, super.key});
 
-  void _cancel(BuildContext context) {
-    Navigator.of(context).pop(false);
-  }
-
-  void _delete(BuildContext context) {
-    Navigator.of(context).pop(true);
-  }
+  void _cancel(BuildContext context) => Navigator.of(context).pop(false);
+  void _delete(BuildContext context) => Navigator.of(context).pop(true);
 
   @override
   Widget build(BuildContext context) {
@@ -35,34 +38,30 @@ class ConfirmDeleteDialog extends StatelessWidget {
 
     return AlertDialog(
       title: Text(
-        _title,
+        title,
         style: h2?.copyWith(
           color: secondary,
         ),
       ),
       content: content ??
           Text(
-            _message,
+            message,
             style: bodyEm.copyWith(
               color: warning,
             ),
           ),
       actions: [
         TextButton(
-          onPressed: () {
-            _cancel(context);
-          },
+          onPressed: () => _cancel(context),
           child: Text(
-            "Cancelar",
+            _cancelLabel,
             style: bodyEm.copyWith(
               color: primary,
             ),
           ),
         ),
         TextButton(
-          onPressed: () {
-            _delete(context);
-          },
+          onPressed: () => _delete(context),
           child: Text(
             deleteLabel,
             style: bodyEm.copyWith(color: error),

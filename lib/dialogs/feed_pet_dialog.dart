@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
 import 'package:flashcard_pets/models/user.dart';
@@ -6,7 +8,6 @@ import 'package:flashcard_pets/providers/services/standard_game_elements_calcula
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flutter/material.dart';
@@ -19,16 +20,24 @@ class FeedPetDialog extends StatefulWidget {
   const FeedPetDialog(this.pet, {super.key});
 
   @override
-  State<FeedPetDialog> createState() => _FeedPetDialog();
+  State<FeedPetDialog> createState() => _FeedPetDialogState();
 }
 
-class _FeedPetDialog<T> extends State<FeedPetDialog> {
-  int xpPerCoin = 3;
+class _FeedPetDialogState extends State<FeedPetDialog> {
+  static const int _baseXpPerCoin = 3;
+  int _xpPerCoin = _baseXpPerCoin;
+  final TextEditingController _textController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _loadPetXpMultiplier();
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadPetXpMultiplier() async {
@@ -39,38 +48,30 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
     final double petXpMultiplier = gameCalcProvider.calculateTotalPetBonuses(
         petList, PetSkill.cheaperUpgrade);
     setState(() {
-      xpPerCoin = (3 * petXpMultiplier).round();
+      _xpPerCoin = (_baseXpPerCoin * petXpMultiplier).round();
     });
   }
 
-  final TextEditingController _textController = TextEditingController();
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
-
-  void _cancel(BuildContext context) {
-    Navigator.of(context).pop();
-  }
+  void _cancel(BuildContext context) => Navigator.of(context).pop();
 
   void _confirm(BuildContext context) async {
     final userProvider =
         Provider.of<UserJsonDataProvider>(context, listen: false);
     final user = await userProvider.readData();
     if (user == null) return;
+
     int feedAmount = int.tryParse(_textController.text) ?? 0;
-    if (feedAmount > user.gold) {
-      feedAmount = user.gold;
-    }
+    feedAmount = feedAmount.clamp(0, user.gold);
+
     user.gold -= feedAmount;
     user.totalGoldSpent += feedAmount;
-    user.totalPetXp += int.parse(_textController.text) * xpPerCoin;
+    user.totalPetXp += feedAmount * _xpPerCoin;
     await userProvider.writeData(user);
+
     widget.pet.totalGoldSpent += feedAmount;
     Provider.of<PetDao>(context, listen: false).update(widget.pet);
-    Navigator.of(context).pop(int.parse(_textController.text) * xpPerCoin);
+
+    Navigator.of(context).pop(feedAmount * _xpPerCoin);
   }
 
   void _limitValue(String value) async {
@@ -78,19 +79,16 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
         .readData();
     if (user == null) return;
 
-    final userLevel = user.level;
     final gameElementsCalculator =
         Provider.of<StandardGameElementsCalculations>(context, listen: false);
     final totalXpToMaxLevel =
-        gameElementsCalculator.calculateTotalXpToLevel(userLevel);
+        gameElementsCalculator.calculateTotalXpToLevel(user.level);
     final maxXp = totalXpToMaxLevel - widget.pet.totalXp;
 
-    final maxCoinsToSpent = (maxXp / xpPerCoin).ceil();
-    final userGold = user.gold;
+    final maxCoinsToSpent = (maxXp / _xpPerCoin).ceil();
+    final maxValue = maxCoinsToSpent.clamp(0, user.gold);
 
-    final maxValue = (maxCoinsToSpent < userGold) ? maxCoinsToSpent : userGold;
     int? intValue = int.tryParse(value);
-
     if (intValue != null && intValue > maxValue) {
       _textController.text = maxValue.toString();
       _textController.selection = TextSelection.fromPosition(
@@ -157,7 +155,7 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
                   children: [
                     TextSpan(
                       text:
-                          "A cada moeda, o pet é alimentado e ganha $xpPerCoin",
+                          "A cada moeda, o pet é alimentado e ganha $_xpPerCoin",
                       style: bodyEm.copyWith(
                         color: text,
                       ),
@@ -181,8 +179,10 @@ class _FeedPetDialog<T> extends State<FeedPetDialog> {
                   autofocus: true,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: const InputDecoration(
+                  style: TextStyle(color: text),
+                  decoration: InputDecoration(
                     prefixText: "\$",
+                    prefixStyle: TextStyle(color: text),
                     border: InputBorder.none,
                   ),
                   onChanged: _limitValue,
