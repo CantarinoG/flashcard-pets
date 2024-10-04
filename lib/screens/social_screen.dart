@@ -220,7 +220,20 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
-  void _showNotification(BuildContext context) {
+  void _showNotification(BuildContext context) async {
+    final String? userId =
+        Provider.of<FirebaseAuthProvider>(context, listen: false).uid;
+    if (userId == null) return;
+    final Map<String, dynamic>? userData =
+        await Provider.of<SyncProvider>(context, listen: false)
+            .getUserData(userId);
+    if (userData == null) return;
+    final time = userData["lastSync"];
+    final currentTime = DateTime.now();
+    final difference = currentTime.difference(time);
+    final bool _isUserSyncronized = difference.inMinutes <= 30;
+    if (!_isUserSyncronized) return;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {

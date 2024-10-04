@@ -29,6 +29,7 @@ class FriendCard extends StatelessWidget {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
     final Color brightColor = Theme.of(context).colorScheme.bright;
     final Color secondary = Theme.of(context).colorScheme.secondary;
+    final Color disabled = Theme.of(context).disabledColor;
 
     return FutureBuilder<Map<String, dynamic>?>(
       future: Provider.of<SyncProvider>(context, listen: false)
@@ -99,7 +100,7 @@ class FriendCard extends StatelessWidget {
                           ),
                           Text(
                             "id $friendId",
-                            style: body,
+                            style: body?.copyWith(color: disabled),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),

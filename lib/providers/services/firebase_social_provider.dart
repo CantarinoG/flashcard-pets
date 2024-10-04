@@ -20,6 +20,7 @@ class FirebaseSocialProvider with ChangeNotifier {
           .doc(friendId)
           .set({});
 
+      notifyListeners();
       return null;
     } catch (e) {
       print('Error adding friend: $e');
@@ -39,6 +40,41 @@ class FirebaseSocialProvider with ChangeNotifier {
     } catch (e) {
       print('Error getting friends list: $e');
       return [];
+    }
+  }
+
+  Future<int?> checkReceivedGifts(String userId) async {
+    try {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      if (!userDoc.exists) {
+        return null;
+      }
+
+      return userDoc.data()?['giftTotal'] as int?;
+    } catch (e) {
+      print('Error checking received gifts: $e');
+      return null;
+    }
+  }
+
+  Future<String?> receiveGifts(String userId) async {
+    try {
+      final userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(userId);
+
+      final userData = await userDoc.get();
+      if (!userData.exists) {
+        return null;
+      }
+
+      await userDoc.update({'giftTotal': 0});
+    } catch (e) {
+      print('Error receiving gifts: $e');
+      return "Erro!";
     }
   }
 }
