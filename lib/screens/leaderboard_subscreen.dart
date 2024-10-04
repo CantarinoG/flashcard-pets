@@ -12,33 +12,6 @@ import 'package:flashcard_pets/providers/services/firebase_social_provider.dart'
 class LeaderboardSubscreen extends StatelessWidget {
   LeaderboardSubscreen({super.key});
 
-  void _filterByDate(BuildContext context) {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-    );
-  }
-
-  void _filterBySubject(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const LeaderboardFilterDialog("Filtrar por Disciplina");
-      },
-    );
-  }
-
-  void _filterByPublic(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const LeaderboardFilterDialog("Filtrar por Público");
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
@@ -73,46 +46,6 @@ class LeaderboardSubscreen extends StatelessWidget {
 
         return Column(
           children: [
-            const SizedBox(
-              height: 6,
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  ThemedFilledButton(
-                    label: "Data",
-                    leadingIcon: const Icon(Icons.calendar_month),
-                    onPressed: () {
-                      _filterByDate(context);
-                    },
-                    isBold: false,
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  ThemedFilledButton(
-                    label: "Disciplina",
-                    leadingIcon: const Icon(Icons.menu_book),
-                    onPressed: () {
-                      _filterBySubject(context);
-                    },
-                    isBold: false,
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  ThemedFilledButton(
-                    label: "Público",
-                    leadingIcon: const Icon(Icons.public),
-                    onPressed: () {
-                      _filterByPublic(context);
-                    },
-                    isBold: false,
-                  ),
-                ],
-              ),
-            ),
             const SizedBox(
               height: 6,
             ),
