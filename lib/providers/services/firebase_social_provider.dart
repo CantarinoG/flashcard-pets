@@ -165,4 +165,22 @@ class FirebaseSocialProvider with ChangeNotifier {
       return [];
     }
   }
+
+  Future<Map<String, dynamic>?> getUserInfo(String userId) async {
+    try {
+      final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      if (userDoc.exists) {
+        return userDoc.data() as Map<String, dynamic>;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error getting user info: $e');
+      return null;
+    }
+  }
 }
