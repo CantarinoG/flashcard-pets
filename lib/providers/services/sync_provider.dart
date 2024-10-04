@@ -102,6 +102,9 @@ class SyncProvider with ChangeNotifier {
         "level": userMap["level"],
         "gold": userMap["gold"],
         "totalReviewedCards": userMap["totalReviewedCards"],
+        "name": userMap["name"],
+        "avatarCode": userMap["avatarCode"],
+        "bgColorCode": userMap["bgColorCode"],
       };
     } catch (error) {
       print(error);

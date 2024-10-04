@@ -26,4 +26,19 @@ class FirebaseSocialProvider with ChangeNotifier {
       return 'Um erro ocorreu enquanto tentava adicionar um amigo. Tente novamente mais tarde.';
     }
   }
+
+  Future<List<String>> getFriendsIdList(String userId) async {
+    try {
+      final friendsSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('friends')
+          .get();
+
+      return friendsSnapshot.docs.map((doc) => doc.id).toList();
+    } catch (e) {
+      print('Error getting friends list: $e');
+      return [];
+    }
+  }
 }
