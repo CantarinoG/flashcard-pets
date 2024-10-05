@@ -1,7 +1,6 @@
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

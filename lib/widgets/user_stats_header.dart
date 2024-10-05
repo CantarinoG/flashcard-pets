@@ -1,7 +1,6 @@
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +22,7 @@ class UserStatsHeader extends StatelessWidget {
           return const SizedBox(
             width: double.infinity,
             height: 80,
-            child: const SizedBox(),
+            child: SizedBox(),
           );
         } else if (snapshot.hasError) {
           return const Text("Ocorreu algum erro. Tente novamente mais tarde.");

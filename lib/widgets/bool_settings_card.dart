@@ -8,10 +8,6 @@ class BoolSettingsCard extends StatelessWidget {
   const BoolSettingsCard(this.title, this.explanation, this.switchWidget,
       {super.key});
 
-  void _switch(bool value) {
-    //...
-  }
-
   @override
   Widget build(BuildContext context) {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
@@ -53,11 +55,9 @@ class _FlashcardCardState extends State<FlashcardCard> {
         final MediaDao mediaDao = Provider.of<MediaDao>(context, listen: false);
         for (int i = 0; i < widget.flashcard.audioFiles.length; i++) {
           await mediaDao.delete(widget.flashcard.audioFiles[i]);
-          print("delete audio file");
         }
         for (int i = 0; i < widget.flashcard.imgFiles.length; i++) {
           await mediaDao.delete(widget.flashcard.imgFiles[i]);
-          print("delete img file");
         }
 
         if (mounted) {

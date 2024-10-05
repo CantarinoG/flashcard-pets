@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
@@ -14,7 +16,6 @@ import 'package:flashcard_pets/snackbars/info_snackbar.dart';
 import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -75,11 +76,9 @@ class _CollectionCardState extends State<CollectionCard> {
         for (int i = 0; i < cardsList.length; i++) {
           for (int j = 0; j < cardsList[i].audioFiles.length; j++) {
             mediaDao.delete(cardsList[i].audioFiles[j]);
-            print("Delete audio");
           }
           for (int j = 0; j < cardsList[i].imgFiles.length; j++) {
             mediaDao.delete(cardsList[i].imgFiles[j]);
-            print("Delete img");
           }
         }
 

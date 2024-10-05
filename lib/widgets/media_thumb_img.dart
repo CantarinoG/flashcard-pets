@@ -38,11 +38,11 @@ class MediaThumbImg extends StatelessWidget {
       future: mediaDao.read(imgId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Loading();
+          return const Loading();
         }
 
         if (!snapshot.hasData || snapshot.data == null) {
-          return NoItemsPlaceholder("Nenhum dado encontrado.");
+          return const NoItemsPlaceholder("Nenhum dado encontrado.");
         }
 
         final Media media = snapshot.data!;
