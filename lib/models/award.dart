@@ -12,7 +12,7 @@ class Award {
   final int target;
   final int rewardValue;
 
-  Award(
+  const Award(
     this.category,
     this.iconPath,
     this.title,

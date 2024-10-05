@@ -2,5 +2,5 @@ class Subject {
   final String name;
   final String iconPath;
 
-  Subject(this.name, this.iconPath);
+  const Subject(this.name, this.iconPath);
 }
