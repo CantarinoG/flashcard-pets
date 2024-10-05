@@ -25,10 +25,7 @@ import 'package:provider/provider.dart';
 class ReviewScreen extends StatefulWidget {
   final Collection collection;
   final List<Flashcard> cardsToReview;
-  //Mocked data
-  final List<String> _audioFiles = [" ", " "];
-  final List<String> _imgFiles = [" "];
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
+
   ReviewScreen(this.collection, this.cardsToReview, {super.key});
 
   @override

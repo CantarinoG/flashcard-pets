@@ -85,8 +85,6 @@ class AwardsScreen extends StatelessWidget {
                 .reduce((max, stars) => stars > max ? stars : max)
             : 0;
 
-        const int mockedData = 5;
-
         return Scaffold(
           appBar: const ThemedAppBar("Conquistas"),
           body: ScreenLayout(
