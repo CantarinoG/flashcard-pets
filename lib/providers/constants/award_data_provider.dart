@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class AwardDataProvider with ChangeNotifier {
   final Map<int, Award> _data = {
-    0: Award(
+    0: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/reviewer_i.png",
       "Revisor I",
@@ -11,7 +11,7 @@ class AwardDataProvider with ChangeNotifier {
       10,
       50,
     ),
-    1: Award(
+    1: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/reviewer_ii.png",
       "Revisor II",
@@ -19,7 +19,7 @@ class AwardDataProvider with ChangeNotifier {
       300,
       300,
     ),
-    2: Award(
+    2: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/reviewer_iii.png",
       "Revisor III",
@@ -27,7 +27,7 @@ class AwardDataProvider with ChangeNotifier {
       1000,
       1000,
     ),
-    3: Award(
+    3: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/streak_i.png",
       "Focado I",
@@ -35,7 +35,7 @@ class AwardDataProvider with ChangeNotifier {
       7,
       150,
     ),
-    4: Award(
+    4: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/streak_ii.png",
       "Focado II",
@@ -43,7 +43,7 @@ class AwardDataProvider with ChangeNotifier {
       28,
       300,
     ),
-    5: Award(
+    5: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/streak_iii.png",
       "Focado III",
@@ -51,7 +51,7 @@ class AwardDataProvider with ChangeNotifier {
       100,
       1000,
     ),
-    6: Award(
+    6: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/bullseye_i.png",
       "Na mosca! I",
@@ -59,7 +59,7 @@ class AwardDataProvider with ChangeNotifier {
       10,
       50,
     ),
-    7: Award(
+    7: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/bullseye_ii.png",
       "Na mosca! II",
@@ -67,7 +67,7 @@ class AwardDataProvider with ChangeNotifier {
       50,
       200,
     ),
-    8: Award(
+    8: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/bullseye_iii.png",
       "Na mosca! III",
@@ -75,7 +75,7 @@ class AwardDataProvider with ChangeNotifier {
       100,
       500,
     ),
-    9: Award(
+    9: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/card_collector_i.png",
       "Coletor de Cartas I",
@@ -83,7 +83,7 @@ class AwardDataProvider with ChangeNotifier {
       10,
       50,
     ),
-    10: Award(
+    10: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/card_collector_ii.png",
       "Coletor de Cartas  II",
@@ -91,7 +91,7 @@ class AwardDataProvider with ChangeNotifier {
       100,
       200,
     ),
-    11: Award(
+    11: const Award(
       AwardCategory.cards,
       "assets/images/awards/reviews/card_collector_iii.png",
       "Coletor de Cartas  III",
@@ -99,7 +99,7 @@ class AwardDataProvider with ChangeNotifier {
       300,
       500,
     ),
-    12: Award(
+    12: const Award(
       AwardCategory.pets,
       "assets/images/awards/pets/pet_lover_i.png",
       "Amante de Pets I",
@@ -107,7 +107,7 @@ class AwardDataProvider with ChangeNotifier {
       4,
       100,
     ),
-    13: Award(
+    13: const Award(
       AwardCategory.pets,
       "assets/images/awards/pets/pet_lover_ii.png",
       "Amante de Pets II",
@@ -115,7 +115,7 @@ class AwardDataProvider with ChangeNotifier {
       8,
       300,
     ),
-    14: Award(
+    14: const Award(
       AwardCategory.pets,
       "assets/images/awards/pets/pet_lover_iii.png",
       "Amante de Pets III",
@@ -123,7 +123,7 @@ class AwardDataProvider with ChangeNotifier {
       16,
       1000,
     ),
-    15: Award(
+    15: const Award(
       AwardCategory.pets,
       "assets/images/awards/pets/trainer_i.png",
       "Treinador I",
@@ -131,7 +131,7 @@ class AwardDataProvider with ChangeNotifier {
       5,
       100,
     ),
-    16: Award(
+    16: const Award(
       AwardCategory.pets,
       "assets/images/awards/pets/trainer_ii.png",
       "Treinador II",
@@ -139,7 +139,7 @@ class AwardDataProvider with ChangeNotifier {
       25,
       300,
     ),
-    17: Award(
+    17: const Award(
       AwardCategory.pets,
       "assets/images/awards/pets/trainer_iii.png",
       "Treinador III",
@@ -147,7 +147,7 @@ class AwardDataProvider with ChangeNotifier {
       50,
       1000,
     ),
-    18: Award(
+    18: const Award(
       AwardCategory.pets,
       "assets/images/awards/pets/seeing_stars_i.png",
       "Vendo Estrelas I",
@@ -155,7 +155,7 @@ class AwardDataProvider with ChangeNotifier {
       1,
       100,
     ),
-    19: Award(
+    19: const Award(
       AwardCategory.pets,
       "assets/images/awards/pets/seeing_stars_ii.png",
       "Vendo Estrelas II",
@@ -163,7 +163,7 @@ class AwardDataProvider with ChangeNotifier {
       3,
       300,
     ),
-    20: Award(
+    20: const Award(
       AwardCategory.pets,
       "assets/images/awards/pets/seeing_stars_iii.png",
       "Vendo Estrelas III",
@@ -171,7 +171,7 @@ class AwardDataProvider with ChangeNotifier {
       5,
       500,
     ),
-    21: Award(
+    21: const Award(
       AwardCategory.social,
       "assets/images/awards/social/popular_i.png",
       "Popular I",
@@ -179,7 +179,7 @@ class AwardDataProvider with ChangeNotifier {
       1,
       50,
     ),
-    22: Award(
+    22: const Award(
       AwardCategory.social,
       "assets/images/awards/social/popular_ii.png",
       "Popular II",
@@ -187,7 +187,7 @@ class AwardDataProvider with ChangeNotifier {
       5,
       75,
     ),
-    23: Award(
+    23: const Award(
       AwardCategory.social,
       "assets/images/awards/social/popular_iii.png",
       "Popular III",
@@ -195,7 +195,7 @@ class AwardDataProvider with ChangeNotifier {
       10,
       100,
     ),
-    24: Award(
+    24: const Award(
       AwardCategory.social,
       "assets/images/awards/social/just_a_gift_i.png",
       "Só uma Lembrancinha I",
@@ -203,7 +203,7 @@ class AwardDataProvider with ChangeNotifier {
       1,
       50,
     ),
-    25: Award(
+    25: const Award(
       AwardCategory.social,
       "assets/images/awards/social/just_a_gift_ii.png",
       "Só uma Lembrancinha II",
@@ -211,7 +211,7 @@ class AwardDataProvider with ChangeNotifier {
       20,
       100,
     ),
-    26: Award(
+    26: const Award(
       AwardCategory.social,
       "assets/images/awards/social/just_a_gift_iii.png",
       "Só uma Lembrancinha III",
@@ -219,7 +219,7 @@ class AwardDataProvider with ChangeNotifier {
       100,
       300,
     ),
-    27: Award(
+    27: const Award(
       AwardCategory.social,
       "assets/images/awards/social/competitor.png",
       "Competidor",
@@ -230,7 +230,7 @@ class AwardDataProvider with ChangeNotifier {
   };
 
   Map<int, Award> retrieveData() {
-    return _data;
+    return Map.unmodifiable(_data);
   }
 
   Award retrieveFromKey(int key) {

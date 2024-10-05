@@ -166,7 +166,7 @@ class PetBioDataProvider with ChangeNotifier {
   };
 
   Map<int, PetBio> retrieveData() {
-    return _data;
+    return Map.unmodifiable(_data);
   }
 
   PetBio retrieveFromKey(int key) {
