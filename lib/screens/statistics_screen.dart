@@ -129,12 +129,12 @@ class StatisticsScreen extends StatelessWidget {
                                       "%",
                                     ),
                                     StatisticsCard(
-                                      "Sequência Atual de Revisões Diárias",
+                                      "Sequência Atual de Dias Usando o App",
                                       user.streak,
                                       "dias",
                                     ),
                                     StatisticsCard(
-                                      "Sequência Mais Longa de Revisões Diárias",
+                                      "Sequência Mais Longa de Dias Usando o App",
                                       user.highestStreak,
                                       "dias",
                                     ),

@@ -144,6 +144,7 @@ class _AuthScreenState extends State<AuthScreen> {
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color error = Theme.of(context).colorScheme.error;
+    final Color textColor = Theme.of(context).colorScheme.text;
 
     return Scaffold(
       appBar: const ThemedAppBar(""),
@@ -189,6 +190,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         controller: _emailController,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.emailAddress,
+                        style: TextStyle(color: textColor),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           errorText: null,
@@ -204,6 +206,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         obscureText: _obscurePassText,
                         enableSuggestions: false,
                         autocorrect: false,
+                        style: TextStyle(color: textColor),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           errorText: null,
@@ -229,6 +232,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           obscureText: _obscureConfirmedPassText,
                           enableSuggestions: false,
                           autocorrect: false,
+                          style: TextStyle(color: textColor),
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             errorText: null,

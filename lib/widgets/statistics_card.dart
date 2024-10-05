@@ -15,6 +15,9 @@ class StatisticsCard extends StatelessWidget {
     final Color secondary = Theme.of(context).colorScheme.secondary;
     final Color bright = Theme.of(context).colorScheme.bright;
 
+    String formattedValue =
+        value is double ? value.toStringAsFixed(1) : value.toString();
+
     return Card(
       elevation: 4,
       color: bright,
@@ -39,7 +42,7 @@ class StatisticsCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "$value ",
+                  "$formattedValue ",
                   style: h1,
                 ),
                 Text(
