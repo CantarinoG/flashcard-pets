@@ -27,7 +27,7 @@ class ReviewScreen extends StatefulWidget {
   final Collection collection;
   final List<Flashcard> cardsToReview;
 
-  ReviewScreen(this.collection, this.cardsToReview, {super.key});
+  const ReviewScreen(this.collection, this.cardsToReview, {super.key});
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();

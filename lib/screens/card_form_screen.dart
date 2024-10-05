@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/dialogs/add_media_dialog.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
@@ -192,7 +194,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
   }
 
   List<Widget> _buildAudioMediaWidgets() {
-    void _onDeleteAudio(String audioId) async {
+    void onDeleteAudio(String audioId) async {
       _audioFiles.remove(audioId);
       final mediaDao = Provider.of<MediaDao>(context, listen: false);
       await mediaDao.delete(audioId);
@@ -200,12 +202,12 @@ class _CardFormScreenState extends State<CardFormScreen> {
     }
 
     return _audioFiles.map((String audioId) {
-      return MediaThumbAudio(audioId, _onDeleteAudio);
+      return MediaThumbAudio(audioId, onDeleteAudio);
     }).toList();
   }
 
   List<Widget> _buildImgMediaWidgets() {
-    void _onDeleteImg(String imgId) async {
+    void onDeleteImg(String imgId) async {
       _imgFiles.remove(imgId);
       final mediaDao = Provider.of<MediaDao>(context, listen: false);
       await mediaDao.delete(imgId);
@@ -213,7 +215,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
     }
 
     return _imgFiles.map((String imgId) {
-      return MediaThumbImg(imgId, _onDeleteImg);
+      return MediaThumbImg(imgId, onDeleteImg);
     }).toList();
   }
 

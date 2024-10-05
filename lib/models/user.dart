@@ -26,6 +26,7 @@ class User {
   int maxReviewInterval;
   bool userSoundEffects;
   List<int> awards;
+  bool hasSeenPetTutorial;
   DateTime? notificationTime;
 
   User({
@@ -56,6 +57,7 @@ class User {
     this.maxReviewInterval = 365,
     this.userSoundEffects = true,
     this.awards = const [],
+    this.hasSeenPetTutorial = false,
     this.notificationTime,
   });
 
@@ -91,6 +93,7 @@ class User {
       maxReviewInterval: map["maxReviewInterval"],
       userSoundEffects: map["userSoundEffects"],
       awards: List<int>.from(map["awards"] ?? []),
+      hasSeenPetTutorial: map["hasSeenPetTutorial"] ?? false,
       notificationTime: map["notificationTime"] != null
           ? DateTime.parse(map["notificationTime"])
           : null,
@@ -127,6 +130,7 @@ class User {
       "maxReviewInterval": maxReviewInterval,
       "userSoundEffects": userSoundEffects,
       "notificationTime": notificationTime?.toIso8601String(),
+      "hasSeenPetTutorial": hasSeenPetTutorial,
     };
   }
 }

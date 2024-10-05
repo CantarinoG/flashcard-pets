@@ -118,6 +118,7 @@ class _CollectionFormScreenState extends State<CollectionFormScreen> {
             .insert(newCollection);
 
         final UserJsonDataProvider userProvider =
+            // ignore: use_build_context_synchronously
             Provider.of<UserJsonDataProvider>(context, listen: false);
         final User? user = await userProvider.readData();
         if (user != null) {

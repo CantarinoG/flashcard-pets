@@ -2,6 +2,7 @@
 
 import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/dialogs/feed_pet_dialog.dart';
+import 'package:flashcard_pets/dialogs/pet_tutorial_dialog.dart';
 import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
@@ -33,6 +34,34 @@ class PetScreen extends StatefulWidget {
 }
 
 class _PetScreenState extends State<PetScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndShowTutorial();
+    });
+  }
+
+  Future<void> _checkAndShowTutorial() async {
+    final userProvider =
+        Provider.of<UserJsonDataProvider>(context, listen: false);
+    final user = await userProvider.readData();
+    if (user != null && !user.hasSeenPetTutorial) {
+      await _showTutorial();
+      user.hasSeenPetTutorial = true;
+      await userProvider.writeData(user);
+    }
+  }
+
+  Future<void> _showTutorial() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const PetTutorialDialog();
+      },
+    );
+  }
+
   void _sell(Pet pet, PetBio petBio) async {
     final Color warning = Theme.of(context).colorScheme.warning;
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
