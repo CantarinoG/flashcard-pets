@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/providers/constants/avatar_data_provider.dart';
 import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
 import 'package:flashcard_pets/providers/services/firebase_social_provider.dart';
@@ -36,7 +38,6 @@ class UserProfileScreen extends StatelessWidget {
     final TextStyle? h3 = Theme.of(context).textTheme.headlineSmall;
     final TextStyle h4 = Theme.of(context).textTheme.headlineSmallEm;
     final Color disabled = Theme.of(context).disabledColor;
-    final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
 
     final String ownUserId = Provider.of<FirebaseAuthProvider>(context).uid!;

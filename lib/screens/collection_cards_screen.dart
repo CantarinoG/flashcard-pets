@@ -3,7 +3,6 @@ import 'package:flashcard_pets/models/flashcard.dart';
 import 'package:flashcard_pets/providers/dao/flashcard_dao.dart';
 import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/widgets/flashcard_card.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';

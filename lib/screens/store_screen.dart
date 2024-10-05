@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math';
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/pet_bio.dart';
@@ -10,7 +12,6 @@ import 'package:flashcard_pets/providers/services/uuid_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/snackbars/pet_got_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/store_card.dart';

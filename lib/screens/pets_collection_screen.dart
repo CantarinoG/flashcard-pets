@@ -1,7 +1,6 @@
 import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/screens/store_screen.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/pet_card.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
@@ -22,7 +21,7 @@ class PetsCollectionScreen extends StatelessWidget {
 
     return ScreenLayout(
       child: FutureBuilder<List<Pet>>(
-        future: petDao.readAll(), // The Future you want to resolve
+        future: petDao.readAll(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SizedBox();
@@ -45,7 +44,7 @@ class PetsCollectionScreen extends StatelessWidget {
                     itemCount: petList.length,
                     itemBuilder: (context, index) {
                       final pet = petList[index];
-                      return PetCard(pet); // Passing pet to PetCard
+                      return PetCard(pet);
                     },
                   ),
                 ),

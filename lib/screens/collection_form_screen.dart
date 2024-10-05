@@ -7,7 +7,6 @@ import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/providers/services/uuid_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/text_field_wrapper.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';

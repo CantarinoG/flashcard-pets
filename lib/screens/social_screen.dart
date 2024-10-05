@@ -1,13 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/dialogs/add_friend_dialog.dart';
 import 'package:flashcard_pets/dialogs/notifications_dialog.dart';
 import 'package:flashcard_pets/dialogs/sync_dialog.dart';
-import 'package:flashcard_pets/models/user.dart' as model;
 import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
 import 'package:flashcard_pets/providers/services/firebase_social_provider.dart';
 import 'package:flashcard_pets/providers/services/sync_provider.dart';
-import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/screens/auth_screen.dart';
 import 'package:flashcard_pets/screens/friends_subscreen.dart';
 import 'package:flashcard_pets/screens/leaderboard_subscreen.dart';
@@ -30,8 +28,6 @@ class SocialScreen extends StatefulWidget {
 }
 
 class _SocialScreenState extends State<SocialScreen> {
-  final bool _isUserSyncronized = false;
-
   void _logIn(BuildContext context) {
     Navigator.push(
       context,
@@ -58,7 +54,7 @@ class _SocialScreenState extends State<SocialScreen> {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SyncDialog();
+        return const SyncDialog();
       },
     );
     setState(() {});
@@ -136,7 +132,7 @@ class _SocialScreenState extends State<SocialScreen> {
 
     FirebaseAuthProvider authProvider =
         Provider.of<FirebaseAuthProvider>(context);
-    final _isUserLoggedIn = authProvider.user != null;
+    final isUserLoggedIn = authProvider.user != null;
 
     SyncProvider syncProvider = Provider.of<SyncProvider>(context);
 
@@ -146,13 +142,13 @@ class _SocialScreenState extends State<SocialScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        bool _isUserSyncronized = false;
+        bool isUserSyncronized = false;
         final userData = snapshot.data;
         if (userData != null) {
           final time = userData["lastSync"];
           final currentTime = DateTime.now();
           final difference = currentTime.difference(time);
-          _isUserSyncronized = difference.inMinutes <= 30;
+          isUserSyncronized = difference.inMinutes <= 30;
         }
 
         return ScreenLayout(
@@ -160,10 +156,10 @@ class _SocialScreenState extends State<SocialScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const UserStatsHeader(),
-              if (!_isUserLoggedIn) needLoginSubscreen(context),
-              if (_isUserLoggedIn && !_isUserSyncronized)
+              if (!isUserLoggedIn) needLoginSubscreen(context),
+              if (isUserLoggedIn && !isUserSyncronized)
                 needSyncSubscreen(context),
-              if (_isUserLoggedIn && _isUserSyncronized)
+              if (isUserLoggedIn && isUserSyncronized)
                 Expanded(
                   child: DefaultTabController(
                     length: 2,
@@ -175,13 +171,12 @@ class _SocialScreenState extends State<SocialScreen> {
                           labelStyle: h3,
                           unselectedLabelStyle: h3,
                           indicatorColor: secondary,
-                          overlayColor:
-                              MaterialStateProperty.resolveWith<Color?>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.hovered)) {
+                          overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                            (Set<WidgetState> states) {
+                              if (states.contains(WidgetState.hovered)) {
                                 return primary.withOpacity(0.05);
                               }
-                              if (states.contains(MaterialState.pressed)) {
+                              if (states.contains(WidgetState.pressed)) {
                                 return secondary;
                               }
                               return null;
@@ -194,7 +189,7 @@ class _SocialScreenState extends State<SocialScreen> {
                             )
                           ],
                         ),
-                        Expanded(
+                        const Expanded(
                           child: TabBarView(
                             children: [
                               FriendsSubscreen(),
@@ -231,13 +226,13 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
     final time = userData["lastSync"];
     final currentTime = DateTime.now();
     final difference = currentTime.difference(time);
-    final bool _isUserSyncronized = difference.inMinutes <= 30;
-    if (!_isUserSyncronized) return;
+    final bool isUserSyncronized = difference.inMinutes <= 30;
+    if (!isUserSyncronized) return;
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return NotificationsDialog();
+        return const NotificationsDialog();
       },
     );
   }
@@ -246,11 +241,11 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     FirebaseAuthProvider authProvider =
         Provider.of<FirebaseAuthProvider>(context);
-    final _isUserLoggedIn = authProvider.user != null;
+    final isUserLoggedIn = authProvider.user != null;
 
     return ThemedAppBar(
       "Social",
-      actions: (_isUserLoggedIn)
+      actions: (isUserLoggedIn)
           ? [
               IconButton(
                 onPressed: () {
@@ -280,13 +275,13 @@ class SocialFab extends StatelessWidget {
     final time = userData["lastSync"];
     final currentTime = DateTime.now();
     final difference = currentTime.difference(time);
-    final bool _isUserSyncronized = difference.inMinutes <= 30;
-    if (!_isUserSyncronized) return;
+    final bool isUserSyncronized = difference.inMinutes <= 30;
+    if (!isUserSyncronized) return;
 
     final String? friendId = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AddFriendDialog();
+        return const AddFriendDialog();
       },
     );
     if (friendId == null) return;
@@ -305,7 +300,7 @@ class SocialFab extends StatelessWidget {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: SuccessSnackbar("Adicionado com sucesso!"),
+          content: const SuccessSnackbar("Adicionado com sucesso!"),
           backgroundColor: Theme.of(context).colorScheme.bright,
           duration: const Duration(seconds: 2),
         ),
@@ -317,9 +312,9 @@ class SocialFab extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseAuthProvider authProvider =
         Provider.of<FirebaseAuthProvider>(context);
-    final _isUserLoggedIn = authProvider.user != null;
+    final isUserLoggedIn = authProvider.user != null;
 
-    return (_isUserLoggedIn)
+    return (isUserLoggedIn)
         ? ThemedFab(
             () {
               _onTap(context);

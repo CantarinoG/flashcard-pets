@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/dialogs/evaluation_score_info.dart';
 import 'package:flashcard_pets/models/collection.dart';
 import 'package:flashcard_pets/models/flashcard.dart';
@@ -12,7 +14,6 @@ import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/screens/review_results_screen.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/media_thumb_audio.dart';
 import 'package:flashcard_pets/widgets/media_thumb_img.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
@@ -104,7 +105,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     });
     await userDataProvider.writeData(updatedUser);
 
-    // Save card attributes
+    if (!mounted) return;
     final updatedFlashcard = Provider.of<Sm2Calculator>(context, listen: false)
         .calculateNewValues(
             widget.cardsToReview[_currentCardIndex],

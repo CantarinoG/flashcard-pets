@@ -23,7 +23,7 @@ class NavigationScreen extends StatefulWidget {
       "fab": const SocialFab(),
     },
     {
-      "widget": SelfProfileScreen(),
+      "widget": const SelfProfileScreen(),
       "appBar": const SelfProfileAppBar(),
       "fab": null,
     },

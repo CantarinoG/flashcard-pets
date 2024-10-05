@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/providers/services/firebase_auth_provider.dart';
 import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
@@ -43,49 +45,31 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  void _toggleAuthAction() {
-    setState(() {
-      _isLogIn = !_isLogIn;
-    });
-  }
+  void _toggleAuthAction() => setState(() => _isLogIn = !_isLogIn);
+  void _togglePassVisibility() =>
+      setState(() => _obscurePassText = !_obscurePassText);
+  void _toggleConfirmedPassVisibility() =>
+      setState(() => _obscureConfirmedPassText = !_obscureConfirmedPassText);
 
-  void _togglePassVisibility() {
-    setState(() {
-      _obscurePassText = !_obscurePassText;
-    });
-  }
+  void _setError(String? message) => setState(() => errorMsg = message);
 
-  void _toggleConfirmedPassVisibility() {
-    setState(() {
-      _obscureConfirmedPassText = !_obscureConfirmedPassText;
-    });
-  }
+  void _setLoading(bool isLoading) => setState(() => _isLoading = isLoading);
 
   void _forgotPassword() async {
-    setState(() {
-      errorMsg = null;
-    });
+    _setError(null);
     final String email = _emailController.text.trim();
     if (email.isEmpty) {
-      setState(() {
-        errorMsg = "Digite seu email primeiro para solicitar mudança de senha.";
-      });
+      _setError("Digite seu email primeiro para solicitar mudança de senha.");
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    _setLoading(true);
     final String? anyErrors =
         await Provider.of<FirebaseAuthProvider>(context, listen: false)
             .updatePasswordViaEmail(email);
-    setState(() {
-      _isLoading = false;
-    });
+    _setLoading(false);
     if (anyErrors != null) {
-      setState(() {
-        errorMsg = anyErrors;
-      });
+      _setError(anyErrors);
       return;
     }
     if (!mounted) return;
@@ -100,29 +84,21 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _confirm(BuildContext context) async {
-    setState(() {
-      errorMsg = null;
-    });
+    _setError(null);
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
     String confirmedPassword = _confirmPasswordController.text.trim();
 
     if (!_isDataValidated(email, password, confirmedPassword)) return;
 
-    setState(() {
-      _isLoading = true;
-    });
+    _setLoading(true);
     if (_isLogIn) {
       String? error =
           await Provider.of<FirebaseAuthProvider>(context, listen: false)
               .loginEmailPassword(email, password);
-      setState(() {
-        _isLoading = false;
-      });
+      _setLoading(false);
       if (error != null) {
-        setState(() {
-          errorMsg = error;
-        });
+        _setError(error);
       } else {
         Navigator.of(context).pop();
       }
@@ -130,13 +106,9 @@ class _AuthScreenState extends State<AuthScreen> {
       String? error =
           await Provider.of<FirebaseAuthProvider>(context, listen: false)
               .createEmailPasswordAccount(email, password);
-      setState(() {
-        _isLoading = false;
-      });
+      _setLoading(false);
       if (error != null) {
-        setState(() {
-          errorMsg = error;
-        });
+        _setError(error);
       } else {
         Navigator.of(context).pop();
       }
@@ -146,24 +118,18 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isDataValidated(
       String email, String password, String confirmedPassword) {
     if (email.isEmpty || password.isEmpty) {
-      setState(() {
-        errorMsg = "Email e senha são obrigatórios.";
-      });
+      _setError("Email e senha são obrigatórios.");
       return false;
     }
 
     if (password.length < 6) {
-      setState(() {
-        errorMsg = "A senha deve ter pelo menos 6 caracteres.";
-      });
+      _setError("A senha deve ter pelo menos 6 caracteres.");
       return false;
     }
 
     if (!_isLogIn) {
       if (password != confirmedPassword) {
-        setState(() {
-          errorMsg = "As senhas são diferentes.";
-        });
+        _setError("As senhas são diferentes.");
         return false;
       }
     }

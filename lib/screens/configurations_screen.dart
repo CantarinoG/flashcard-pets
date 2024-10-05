@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/snackbars/error_snackbar.dart';
@@ -19,7 +21,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class ConfigurationsScreen extends StatefulWidget {
-  ConfigurationsScreen({super.key});
+  const ConfigurationsScreen({super.key});
 
   @override
   State<ConfigurationsScreen> createState() => _ConfigurationsScreenState();
@@ -38,7 +40,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
 
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
@@ -63,7 +65,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
   }
 
   Future<void> _scheduleDailyNotification(TimeOfDay time) async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
         "cantarino.flashcard.pets", "Flashcard Pets",
         importance: Importance.max, priority: Priority.high, showWhen: false);
     var platformChannelSpecifics =
@@ -80,17 +82,15 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
       matchDateTimeComponents: DateTimeComponents.time,
     );
 
-    print("shceduled");
+    debugPrint("Notification Scheduled successfully!");
   }
 
   tz.TZDateTime _nextInstanceOfTime(TimeOfDay time) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate = tz.TZDateTime(
         tz.local, now.year, now.month, now.day, time.hour, time.minute);
-    /*if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(Duration(days: 1));
-    }*/
-    print("Scheduled Date: $scheduledDate");
+
+    debugPrint("Next notification time: $scheduledDate");
     return scheduledDate;
   }
 
@@ -123,6 +123,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
     if (maxReviewInterval != null && maxReviewInterval > 0) {
       user.maxReviewInterval = maxReviewInterval;
     } else {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const ErrorSnackbar(
@@ -137,6 +138,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
     if (reviewMultiplier != null && reviewMultiplier > 0) {
       user.reviewMultiplier = reviewMultiplier;
     } else {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const ErrorSnackbar(
@@ -148,6 +150,7 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
       return;
     }
 
+    if (!mounted) return;
     Provider.of<UserJsonDataProvider>(context, listen: false).writeData(user);
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -159,10 +162,11 @@ class _ConfigurationsScreenState extends State<ConfigurationsScreen> {
     );
   }
 
-  void _toggleSoundEffect(bool value, User user) {
+  //Temporaly removed
+  /*void _toggleSoundEffect(bool value, User user) {
     user.userSoundEffects = value;
     Provider.of<UserJsonDataProvider>(context, listen: false).writeData(user);
-  }
+  }*/
 
   void _toggleNotifications(bool value, User user) {
     if (value) {

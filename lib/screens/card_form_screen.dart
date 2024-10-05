@@ -21,8 +21,7 @@ import 'package:provider/provider.dart';
 class CardFormScreen extends StatefulWidget {
   final String? preSelectedCollectionId;
   final Flashcard? editingFlashcard;
-  final String _imgPath = "assets/images/baby_pets/beagle.png";
-  CardFormScreen(
+  const CardFormScreen(
       {this.preSelectedCollectionId, this.editingFlashcard, super.key});
 
   @override

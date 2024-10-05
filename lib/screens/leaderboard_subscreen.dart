@@ -3,13 +3,12 @@ import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/widgets/leaderboard_user_card.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
-import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flashcard_pets/providers/services/firebase_social_provider.dart';
 
 class LeaderboardSubscreen extends StatelessWidget {
-  LeaderboardSubscreen({super.key});
+  const LeaderboardSubscreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,6 @@ class LeaderboardSubscreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          print(snapshot);
           return const NoItemsPlaceholder(
               "Ocorreu um erro ao carregar o placar. Tente novamente mais tarde.");
         } else if (!snapshot.hasData ||

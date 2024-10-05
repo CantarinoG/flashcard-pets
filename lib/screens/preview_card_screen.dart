@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 class PreviewCardScreen extends StatefulWidget {
   final Flashcard flashcard;
-  PreviewCardScreen(this.flashcard, {super.key});
+  const PreviewCardScreen(this.flashcard, {super.key});
 
   @override
   State<PreviewCardScreen> createState() => _PreviewCardScreenState();

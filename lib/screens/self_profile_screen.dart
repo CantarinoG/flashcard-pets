@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/dialogs/single_input_dialog.dart';
 import 'package:flashcard_pets/dialogs/sync_dialog.dart';
 import 'package:flashcard_pets/main.dart';
@@ -13,7 +15,6 @@ import 'package:flashcard_pets/snackbars/success_snackbar.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/themes/app_themes.dart';
 import 'package:flashcard_pets/widgets/award_card_basic.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/statistics_display.dart';
@@ -86,7 +87,7 @@ class SelfProfileScreen extends StatelessWidget {
 
     FirebaseAuthProvider authProvider =
         Provider.of<FirebaseAuthProvider>(context);
-    final _isUserLoggedIn = authProvider.user != null;
+    final isUserLoggedIn = authProvider.user != null;
 
     return FutureBuilder<User?>(
       future: userProvider.readData(),
@@ -168,7 +169,7 @@ class SelfProfileScreen extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                      if (_isUserLoggedIn) ...[
+                      if (isUserLoggedIn) ...[
                         const SizedBox(
                           height: 4,
                         ),
@@ -181,7 +182,7 @@ class SelfProfileScreen extends StatelessWidget {
                                   onPressed: () {
                                     _logout(context);
                                   }),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               Row(
@@ -194,7 +195,7 @@ class SelfProfileScreen extends StatelessWidget {
                                     "${authProvider.uid}",
                                     style: h3?.copyWith(color: disabled),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 8,
                                   ),
                                   IconButton(
@@ -346,7 +347,7 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ConfigurationsScreen(),
+        builder: (context) => const ConfigurationsScreen(),
       ),
     );
   }
@@ -391,7 +392,7 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SyncDialog();
+        return const SyncDialog();
       },
     );
   }
@@ -408,7 +409,7 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     FirebaseAuthProvider authProvider =
         Provider.of<FirebaseAuthProvider>(context);
-    final _isUserLoggedIn = authProvider.user != null;
+    final isUserLoggedIn = authProvider.user != null;
 
     return ThemedAppBar(
       "Perfil",
@@ -435,7 +436,7 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
           itemBuilder: (BuildContext context) =>
               <PopupMenuEntry<SelfProfileAction>>[
-            if (_isUserLoggedIn)
+            if (isUserLoggedIn)
               PopupMenuItem<SelfProfileAction>(
                 value: SelfProfileAction.synchronize,
                 child: Text(

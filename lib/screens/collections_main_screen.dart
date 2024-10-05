@@ -7,7 +7,6 @@ import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/screens/card_form_screen.dart';
 import 'package:flashcard_pets/screens/collection_form_screen.dart';
 import 'package:flashcard_pets/widgets/collection_card.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/themed_app_bar.dart';
@@ -23,6 +22,7 @@ class CollectionsMainScreen extends StatelessWidget {
     final User? user =
         await Provider.of<UserJsonDataProvider>(context).readData();
     if (user == null) return;
+    // ignore: use_build_context_synchronously
     MyApp.of(context)
         .changeTheme(user.darkMode ? ThemeMode.dark : ThemeMode.light);
   }
@@ -162,7 +162,7 @@ class _CollectionMainFabState extends State<CollectionMainFab> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CardFormScreen(),
+              builder: (context) => const CardFormScreen(),
             ),
           );
         } else if (result == CardOrCollectionDialogResult.collection) {

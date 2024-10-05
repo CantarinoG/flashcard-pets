@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flashcard_pets/dialogs/confirm_delete_dialog.dart';
 import 'package:flashcard_pets/dialogs/feed_pet_dialog.dart';
 import 'package:flashcard_pets/dialogs/single_input_dialog.dart';

@@ -2,7 +2,6 @@ import 'package:flashcard_pets/models/pet.dart';
 import 'package:flashcard_pets/models/user.dart';
 import 'package:flashcard_pets/providers/dao/pet_dao.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
-import 'package:flashcard_pets/widgets/loading.dart';
 import 'package:flashcard_pets/widgets/no_items_placeholder.dart';
 import 'package:flashcard_pets/widgets/screen_layout.dart';
 import 'package:flashcard_pets/widgets/statistics_card.dart';
