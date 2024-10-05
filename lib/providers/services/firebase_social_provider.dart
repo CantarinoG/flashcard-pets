@@ -23,7 +23,8 @@ class FirebaseSocialProvider with ChangeNotifier {
       notifyListeners();
       return null;
     } catch (e) {
-      print('Error adding friend: $e');
+      debugPrint(
+          "Error on method 'addFriend' in 'FirebaseSocialProvider' class: e");
       return 'Um erro ocorreu enquanto tentava adicionar um amigo. Tente novamente mais tarde.';
     }
   }
@@ -38,7 +39,8 @@ class FirebaseSocialProvider with ChangeNotifier {
 
       return friendsSnapshot.docs.map((doc) => doc.id).toList();
     } catch (e) {
-      print('Error getting friends list: $e');
+      debugPrint(
+          "Error on method 'getFriendsIdList' in 'FirebaseSocialProvider' class: $e");
       return [];
     }
   }
@@ -56,7 +58,8 @@ class FirebaseSocialProvider with ChangeNotifier {
 
       return userDoc.data()?['giftTotal'] as int?;
     } catch (e) {
-      print('Error checking received gifts: $e');
+      debugPrint(
+          "Error on method 'checkReceivedGifts' in 'FirebaseSocialProvider' class: $e");
       return null;
     }
   }
@@ -64,7 +67,7 @@ class FirebaseSocialProvider with ChangeNotifier {
   Future<String?> receiveGifts(String userId) async {
     try {
       final userDoc =
-          await FirebaseFirestore.instance.collection('users').doc(userId);
+          FirebaseFirestore.instance.collection('users').doc(userId);
 
       final userData = await userDoc.get();
       if (!userData.exists) {
@@ -73,9 +76,11 @@ class FirebaseSocialProvider with ChangeNotifier {
 
       await userDoc.update({'giftTotal': 0});
     } catch (e) {
-      print('Error receiving gifts: $e');
+      debugPrint(
+          "Error on method 'receiveGifts' in 'FirebaseSocialProvider' class: $e");
       return "Erro!";
     }
+    return null;
   }
 
   Future<bool> canSendGift(String userId, String friendId) async {
@@ -102,7 +107,8 @@ class FirebaseSocialProvider with ChangeNotifier {
 
       return difference.inHours >= 24;
     } catch (e) {
-      print('Error checking if can send gift: $e');
+      debugPrint(
+          "Error on method 'canSendGift' in 'FirebaseSocialProvider' class: $e");
       return false;
     }
   }
@@ -137,7 +143,8 @@ class FirebaseSocialProvider with ChangeNotifier {
         return null;
       });
     } catch (e) {
-      print('Error sending gift: $e');
+      debugPrint(
+          "Error on method 'sendGift' in 'FirebaseSocialProvider' class: $e");
       return 'Erro ao enviar presente. Tente novamente mais tarde.';
     }
   }
@@ -161,7 +168,8 @@ class FirebaseSocialProvider with ChangeNotifier {
         };
       }).toList();
     } catch (e) {
-      print('Error getting top 10 global users: $e');
+      debugPrint(
+          "Error on method 'getTop10GlobalUsers' in 'FirebaseSocialProvider' class: $e");
       return [];
     }
   }
@@ -179,7 +187,8 @@ class FirebaseSocialProvider with ChangeNotifier {
         return null;
       }
     } catch (e) {
-      print('Error getting user info: $e');
+      debugPrint(
+          "Error on method 'getUserInfo' in 'FirebaseSocialProvider' class: $e");
       return null;
     }
   }

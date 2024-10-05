@@ -8,7 +8,6 @@ class FirebaseAuthProvider with ChangeNotifier {
     FirebaseAuth.instance.userChanges().listen((User? user) {
       this.user = user;
       notifyListeners();
-      print("===========construtor========");
     });
   }
 
@@ -24,8 +23,10 @@ class FirebaseAuthProvider with ChangeNotifier {
       final message = e.message;
       return message ?? 'Ocorreu um erro inesperado. Tente mais tarde.';
     } catch (e) {
-      print(e);
+      debugPrint(
+          "Error on method 'createEmailPasswordAccount', in class 'FirebaseAuthProvider': $e");
     }
+    return null;
   }
 
   Future<String?> loginEmailPassword(
@@ -40,8 +41,10 @@ class FirebaseAuthProvider with ChangeNotifier {
       final message = e.message;
       return message ?? 'Ocorreu um erro inesperado. Tente mais tarde.';
     } catch (e) {
-      print(e);
+      debugPrint(
+          "Error on method 'loginEmailPassword', in class 'FirebaseAuthProvider': $e");
     }
+    return null;
   }
 
   Future<String?> signOut() async {
@@ -49,7 +52,8 @@ class FirebaseAuthProvider with ChangeNotifier {
       await FirebaseAuth.instance.signOut();
       return null;
     } catch (e) {
-      print(e);
+      debugPrint(
+          "Error on method 'signOut', in class 'FirebaseAuthProvider': $e");
       return "Ocorreu um erro inesperado. Tente mais tarde.";
     }
   }
@@ -63,9 +67,11 @@ class FirebaseAuthProvider with ChangeNotifier {
         return "Por favor. Faça logout e login novamente para conseguir redefinir a senha.";
       }
     } catch (e) {
-      print(e);
+      debugPrint(
+          "Error on method 'updatePassword', in class 'FirebaseAuthProvider': $e");
       return "Ocorreu um erro inesperado. Tente mais tarde.";
     }
+    return null;
   }
 
   Future<String?> updatePasswordViaEmail(String email) async {
@@ -73,7 +79,8 @@ class FirebaseAuthProvider with ChangeNotifier {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       return null;
     } catch (e) {
-      print(e);
+      debugPrint(
+          "Error on method 'updatePasswordViaEmail', in class 'FirebaseAuthProvider': $e");
       return "Ocorreu um erro inesperado. Tente mais tarde.";
     }
   }

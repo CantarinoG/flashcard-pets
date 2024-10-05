@@ -25,22 +25,15 @@ class SyncProvider with ChangeNotifier {
       final storageRef =
           storage.ref().child('databases/$userId/flashcard_pets.db');
       // Start the file upload without awaiting it
-      storageRef.putFile(dbFile).then((_) {
-        print("put db file there");
-      }).catchError((e) {
-        print("Error during file upload: $e");
-      });
+      storageRef.putFile(dbFile).then((_) {}).catchError((e) {});
 
       for (int i = 0; i < 15; i++) {
-        await Future.delayed(Duration(seconds: 5));
-        print(i);
+        await Future.delayed(const Duration(seconds: 5));
         try {
           await storageRef.getDownloadURL();
-          print("File upload confirmed");
           break;
         } catch (e) {
           if (i == 14) {
-            print("File upload failed after multiple attempts: $e");
             return "Error during file upload: $e";
           }
         }
@@ -58,7 +51,8 @@ class SyncProvider with ChangeNotifier {
 
       await db.collection("users").doc(userId).set(userMap);
     } catch (error) {
-      print("Error during sync: $error");
+      debugPrint(
+          "Error on the 'upload' method in the 'SyncProvider' class: $error");
       return "Ocorreu algum erro durante a sincronização. Tente novamente mais tarde.";
     }
     return null;
@@ -76,7 +70,6 @@ class SyncProvider with ChangeNotifier {
           storage.ref().child('databases/$userId/flashcard_pets.db');
 
       await storageRef.writeToFile(dbFile);
-      print("Database file downloaded successfully");
 
       final docSnapshot = await db.collection("users").doc(userId).get();
       if (!docSnapshot.exists) {
@@ -92,10 +85,9 @@ class SyncProvider with ChangeNotifier {
 
       userData["lastSync"] = DateTime.now().toIso8601String();
       await db.collection("users").doc(userId).set(userData);
-
-      print("User data downloaded and saved successfully");
     } catch (error) {
-      print("Error during download: $error");
+      debugPrint(
+          "Error on the 'download' method in the 'SyncProvider' class: $error");
       return "Ocorreu algum erro durante o download. Tente novamente mais tarde.";
     }
     return null;
@@ -117,7 +109,9 @@ class SyncProvider with ChangeNotifier {
         "bgColorCode": userMap["bgColorCode"],
       };
     } catch (error) {
-      print(error);
+      debugPrint(
+          "Error on the 'getUserData' method in the 'SyncProvider' class: $error");
     }
+    return null;
   }
 }

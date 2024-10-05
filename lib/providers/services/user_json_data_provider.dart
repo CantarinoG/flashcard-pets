@@ -28,12 +28,12 @@ class UserJsonDataProvider with ChangeNotifier {
       await file.writeAsString(jsonString);
       notifyListeners();
     } catch (e) {
-      debugPrint("Error writing to file: $e");
+      debugPrint(
+          "Error in the 'writeData' method, in the 'UserJsonDataProvider' class: $e");
     }
   }
 
   Future<User?> readData() async {
-    //await deleteData();
     try {
       final file = await _getFilePath();
       if (await file.exists()) {
@@ -45,7 +45,8 @@ class UserJsonDataProvider with ChangeNotifier {
       await writeData(defaultUser);
       return defaultUser;
     } catch (e) {
-      debugPrint("Error reading file: $e");
+      debugPrint(
+          "Error in the 'readData' method, in the 'UserJsonDataProvider' class: $e");
       return null;
     }
   }
@@ -61,7 +62,8 @@ class UserJsonDataProvider with ChangeNotifier {
         debugPrint("No user data to delete.");
       }
     } catch (e) {
-      debugPrint("Error deleting file: $e");
+      debugPrint(
+          "Error in the 'deleteData' method, in the 'UserJsonDataProvider' class: $e");
     }
   }
 }
