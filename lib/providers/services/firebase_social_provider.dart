@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseSocialProvider with ChangeNotifier {
   Future<String?> addFriend(String userId, String friendId) async {
+    if (userId == friendId) {
+      return "Esse é o seu ID. Você não pode adicionar a si mesmo.";
+    }
     try {
       final friendDoc = await FirebaseFirestore.instance
           .collection('users')
@@ -153,7 +156,7 @@ class FirebaseSocialProvider with ChangeNotifier {
     try {
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .orderBy('totalXp', descending: true)
+          .orderBy('totalXpFromRevisions', descending: true)
           .limit(10)
           .get();
 
