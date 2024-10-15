@@ -199,7 +199,6 @@ class _PetScreenState extends State<PetScreen> {
     final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
     final Color primary = Theme.of(context).colorScheme.primary;
     final Color secondary = Theme.of(context).colorScheme.secondary;
-    final Color bright = Theme.of(context).colorScheme.bright;
     final Color star = Theme.of(context).colorScheme.star;
     final Color starLighter = Theme.of(context).colorScheme.starLighter;
     final Color text = Theme.of(context).colorScheme.text;
@@ -269,7 +268,7 @@ class _PetScreenState extends State<PetScreen> {
                       IconButton.filled(
                         onPressed: () => _changeName(context),
                         icon: const Icon(Icons.edit),
-                        color: bright,
+                        color: Colors.white,
                       )
                     ],
                   ),

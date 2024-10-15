@@ -70,6 +70,30 @@ class SelfProfileScreen extends StatelessWidget {
     await Provider.of<FirebaseAuthProvider>(context, listen: false).signOut();
   }
 
+  void _changeName(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const SingleInputDialog<String>(
+          title: "Mudar o Nome de Usuário",
+          description: "Insira o novo nome.",
+          label: "Nome",
+        );
+      },
+    ).then((value) async {
+      if (value != null && value.isNotEmpty) {
+        UserJsonDataProvider provider = Provider.of<UserJsonDataProvider>(
+          context,
+          listen: false,
+        );
+        User? user = await provider.readData();
+        if (user == null) return;
+        user.name = value;
+        provider.writeData(user);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? body = Theme.of(context).textTheme.bodySmall;
@@ -163,11 +187,22 @@ class SelfProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        user.name,
-                        style: h2?.copyWith(color: secondary),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            user.name,
+                            style: h2?.copyWith(color: secondary),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          const SizedBox(width: 4),
+                          IconButton.filled(
+                            onPressed: () => _changeName(context),
+                            icon: const Icon(Icons.edit),
+                            color: Colors.white,
+                          ),
+                        ],
                       ),
                       if (isUserLoggedIn) ...[
                         const SizedBox(
@@ -337,7 +372,6 @@ enum SelfProfileAction {
   synchronize,
   toggleTheme,
   configurations,
-  changeName,
 }
 
 class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -350,30 +384,6 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
         builder: (context) => const ConfigurationsScreen(),
       ),
     );
-  }
-
-  void _changeName(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const SingleInputDialog<String>(
-          title: "Mudar o Nome de Usuário",
-          description: "Insira o novo nome.",
-          label: "Nome",
-        );
-      },
-    ).then((value) async {
-      if (value != null && value.isNotEmpty) {
-        UserJsonDataProvider provider = Provider.of<UserJsonDataProvider>(
-          context,
-          listen: false,
-        );
-        User? user = await provider.readData();
-        if (user == null) return;
-        user.name = value;
-        provider.writeData(user);
-      }
-    });
   }
 
   void _changeTheme(BuildContext context) async {
@@ -429,9 +439,6 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
               case SelfProfileAction.configurations:
                 _changeSettings(context);
                 break;
-              case SelfProfileAction.changeName:
-                _changeName(context);
-                break;
             }
           },
           itemBuilder: (BuildContext context) =>
@@ -455,13 +462,6 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
               value: SelfProfileAction.configurations,
               child: Text(
                 'Configurações',
-                style: body,
-              ),
-            ),
-            PopupMenuItem<SelfProfileAction>(
-              value: SelfProfileAction.changeName,
-              child: Text(
-                'Alterar Nome',
                 style: body,
               ),
             ),
