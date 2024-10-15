@@ -11,6 +11,13 @@ class RarityText extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle bodyEm = Theme.of(context).textTheme.bodySmallEm;
     final Color text = Theme.of(context).colorScheme.text;
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    Color getColorForRarity(Color lightColor) {
+      return isDarkMode
+          ? Color.lerp(lightColor, Colors.white, 0.5) ?? lightColor
+          : lightColor;
+    }
 
     final Map<PetRarity, Widget> widget = {
       PetRarity.common: Text(
@@ -19,15 +26,18 @@ class RarityText extends StatelessWidget {
       ),
       PetRarity.uncommon: Text(
         "Incomum",
-        style: bodyEm.copyWith(color: const Color.fromARGB(255, 74, 94, 150)),
+        style: bodyEm.copyWith(
+            color: getColorForRarity(const Color.fromARGB(255, 74, 94, 150))),
       ),
       PetRarity.rare: Text(
         "Raro",
-        style: bodyEm.copyWith(color: const Color.fromARGB(255, 114, 68, 141)),
+        style: bodyEm.copyWith(
+            color: getColorForRarity(const Color.fromARGB(255, 114, 68, 141))),
       ),
       PetRarity.epic: Text(
         "Épico",
-        style: bodyEm.copyWith(color: const Color.fromARGB(255, 129, 91, 60)),
+        style: bodyEm.copyWith(
+            color: getColorForRarity(const Color.fromARGB(255, 129, 91, 60))),
       ),
     };
 
