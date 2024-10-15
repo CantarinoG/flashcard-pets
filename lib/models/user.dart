@@ -47,7 +47,7 @@ class User {
     this.dayCreated,
     this.createdCollections = 0,
     this.createdCards = 0,
-    this.totalGoldEarned = 0,
+    this.totalGoldEarned = 100,
     this.totalGoldSpent = 0,
     this.totalPetXp = 0,
     this.totalGoldFromRevisions = 0,

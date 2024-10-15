@@ -199,7 +199,8 @@ class StatisticsScreen extends StatelessWidget {
                                     ),
                                     StatisticsCard(
                                       "Média de Pontos de Experiência por Revisão",
-                                      (user.totalXp / user.totalReviewedCards),
+                                      (user.totalXpFromRevisions /
+                                          user.totalReviewedCards),
                                       "pontos",
                                     ),
                                   ],

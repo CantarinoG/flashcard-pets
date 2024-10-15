@@ -56,7 +56,7 @@ class CollectionsMainScreen extends StatelessWidget {
         await provider.writeData(user);
       }
       if (openedBeforeYesterday) {
-        user.streak = 0;
+        user.streak = 1;
         user.lastTimeUsedApp = now;
         await provider.writeData(user);
       }

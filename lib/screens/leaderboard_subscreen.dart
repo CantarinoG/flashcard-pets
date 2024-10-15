@@ -72,7 +72,7 @@ class LeaderboardSubscreen extends StatelessWidget {
                 children: [
                   TextSpan(
                     text:
-                        "${userData.totalXp}", // Use user's actual XP if available
+                        "${userData.totalXpFromRevisions}", // Use user's actual XP if available
                     style: h4.copyWith(color: secondary),
                   ),
                 ],

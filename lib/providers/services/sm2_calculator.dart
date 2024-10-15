@@ -14,7 +14,7 @@ class Sm2Calculator with ChangeNotifier {
       } else if (repetitions == 1) {
         interval = 6;
       } else {
-        interval = (interval * easinessFactor).round() as double;
+        interval = (interval * easinessFactor).roundToDouble();
       }
       repetitions += 1;
     } else {
@@ -38,7 +38,7 @@ class Sm2Calculator with ChangeNotifier {
     flashcard.easeFactor = easinessFactor;
     flashcard.repeticoes = repetitions;
     flashcard.revisionDate =
-        flashcard.revisionDate.add(Duration(days: interval.ceil()));
+        DateTime.now().add(Duration(days: interval.ceil()));
 
     return flashcard;
   }

@@ -164,7 +164,7 @@ class FirebaseSocialProvider with ChangeNotifier {
           'bgColorCode': data['bgColorCode'],
           'name': data['name'],
           'id': doc.id,
-          'totalXp': data['totalXp'],
+          'totalXp': data['totalXpFromRevisions'],
         };
       }).toList();
     } catch (e) {
