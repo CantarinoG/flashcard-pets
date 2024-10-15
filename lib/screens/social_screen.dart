@@ -237,6 +237,29 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  Future<bool> _hasNotifications(BuildContext context) async {
+    final String? userId =
+        Provider.of<FirebaseAuthProvider>(context, listen: false).uid;
+    if (userId == null) return false;
+
+    final Map<String, dynamic>? userData =
+        await Provider.of<SyncProvider>(context, listen: false)
+            .getUserData(userId);
+    if (userData == null) return false;
+
+    final time = userData["lastSync"];
+    final currentTime = DateTime.now();
+    final difference = currentTime.difference(time);
+    final bool isUserSyncronized = difference.inMinutes <= 30;
+    if (!isUserSyncronized) return false;
+
+    final int? receivedGifts =
+        await Provider.of<FirebaseSocialProvider>(context, listen: false)
+            .checkReceivedGifts(userId);
+    if (receivedGifts == null || receivedGifts == 0) return false;
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     FirebaseAuthProvider authProvider =
@@ -247,13 +270,38 @@ class SocialAppBar extends StatelessWidget implements PreferredSizeWidget {
       "Social",
       actions: (isUserLoggedIn)
           ? [
-              IconButton(
-                onPressed: () {
-                  _showNotification(context);
+              FutureBuilder<bool>(
+                future: _hasNotifications(context),
+                builder: (context, snapshot) {
+                  return Stack(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _showNotification(context);
+                        },
+                        icon: const Icon(
+                          Icons.notifications,
+                        ),
+                      ),
+                      if (snapshot.data == true)
+                        Positioned(
+                          right: 5,
+                          top: 5,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 12,
+                              minHeight: 12,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
                 },
-                icon: const Icon(
-                  Icons.notifications,
-                ),
               ),
             ]
           : null,
