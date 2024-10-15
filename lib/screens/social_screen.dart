@@ -54,7 +54,7 @@ class _SocialScreenState extends State<SocialScreen> {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const SyncDialog();
+        return const SyncDialog(true);
       },
     );
     setState(() {});
@@ -105,7 +105,7 @@ class _SocialScreenState extends State<SocialScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Você precisa sincronizar seus dados para acessar recursos sociais.",
+            "Você precisa fazer backup seus dados para acessar recursos sociais.",
             style: body,
             textAlign: TextAlign.center,
           ),
@@ -113,11 +113,11 @@ class _SocialScreenState extends State<SocialScreen> {
             height: 8,
           ),
           ThemedFilledButton(
-            label: "Sincronizar",
+            label: "Fazer backup",
             onPressed: () {
               _sync(context);
             },
-            width: 150,
+            width: 200,
           ),
         ],
       ),

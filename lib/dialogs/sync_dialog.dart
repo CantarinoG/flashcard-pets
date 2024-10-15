@@ -6,14 +6,14 @@ import 'package:flashcard_pets/providers/services/sync_provider.dart';
 import 'package:flashcard_pets/providers/services/user_json_data_provider.dart';
 import 'package:flashcard_pets/themes/app_text_styles.dart';
 import 'package:flashcard_pets/widgets/loading.dart';
-import 'package:flashcard_pets/widgets/themed_filled_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SyncDialog extends StatefulWidget {
-  const SyncDialog({super.key});
+  final bool isSaving;
+  const SyncDialog(this.isSaving, {super.key});
 
   @override
   State<SyncDialog> createState() => _SyncDialogState();
@@ -96,7 +96,9 @@ class _SyncDialogState extends State<SyncDialog> {
 
     return AlertDialog(
       title: Text(
-        "Quais Dados Deseja Manter?",
+        widget.isSaving
+            ? "Deseja fazer backup dos seus dados?"
+            : "Deseja carregar seus dados do backup?",
         style: h2?.copyWith(
           color: secondary,
         ),
@@ -159,6 +161,27 @@ class _SyncDialogState extends State<SyncDialog> {
               : Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    (remoteGold == null ||
+                            remoteLevel == null ||
+                            remoteLastTimeUsedApp == null ||
+                            remoteReviews == null)
+                        ? Text(
+                            "Não possui nenhum backup salvo.",
+                            style: bodyEm.copyWith(
+                              color: secondary,
+                            ),
+                          )
+                        : Text(
+                            widget.isSaving
+                                ? "Tem certeza? Os dados do seu último backup serão apagados. Essa ação não pode ser desfeita."
+                                : "Tem certeza? Os dados do seu dispositivo serão substituídos pelo backup. Essa ação não pode ser desfeita.",
+                            style: bodyEm.copyWith(
+                              color: error,
+                            ),
+                          ),
+                    const SizedBox(
+                      height: 16,
+                    ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -259,7 +282,7 @@ class _SyncDialogState extends State<SyncDialog> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    "Dados na Nuvem",
+                                    "Último Backup",
                                     style: h3?.copyWith(
                                       color: secondary,
                                     ),
@@ -324,28 +347,6 @@ class _SyncDialogState extends State<SyncDialog> {
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ThemedFilledButton(
-                            label: "Local",
-                            onPressed: () {
-                              _chooseLocal(context);
-                            }),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        if (remoteGold != null &&
-                            remoteLevel != null &&
-                            remoteLastTimeUsedApp != null &&
-                            remoteReviews != null)
-                          ThemedFilledButton(
-                              label: "Nuvem",
-                              onPressed: () {
-                                _chooseRemote(context);
-                              })
-                      ],
-                    ),
                     if (errorMsg != null)
                       Text(
                         errorMsg!,
@@ -357,19 +358,36 @@ class _SyncDialogState extends State<SyncDialog> {
                 );
         },
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            _cancel(context);
-          },
-          child: Text(
-            "Cancelar",
-            style: bodyEm.copyWith(
-              color: primary,
-            ),
-          ),
-        ),
-      ],
+      actions: (!_isLoading)
+          ? [
+              TextButton(
+                onPressed: () {
+                  _cancel(context);
+                },
+                child: Text(
+                  "Cancelar",
+                  style: bodyEm.copyWith(
+                    color: primary,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (widget.isSaving) {
+                    _chooseLocal(context);
+                  } else {
+                    _chooseRemote(context);
+                  }
+                },
+                child: Text(
+                  widget.isSaving ? "Fazer Backup" : "Carregar Backup",
+                  style: bodyEm.copyWith(
+                    color: primary,
+                  ),
+                ),
+              ),
+            ]
+          : [],
     );
   }
 }

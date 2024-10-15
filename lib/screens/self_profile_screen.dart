@@ -369,7 +369,8 @@ class SelfProfileScreen extends StatelessWidget {
 }
 
 enum SelfProfileAction {
-  synchronize,
+  saveBackup,
+  loadBackup,
   toggleTheme,
   configurations,
 }
@@ -398,11 +399,11 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
-  void _sync(BuildContext context) {
+  void _sync(BuildContext context, bool isSaving) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const SyncDialog();
+        return SyncDialog(isSaving);
       },
     );
   }
@@ -430,8 +431,11 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: brightColor,
           onSelected: (SelfProfileAction result) {
             switch (result) {
-              case SelfProfileAction.synchronize:
-                _sync(context);
+              case SelfProfileAction.saveBackup:
+                _sync(context, true);
+                break;
+              case SelfProfileAction.loadBackup:
+                _sync(context, false);
                 break;
               case SelfProfileAction.toggleTheme:
                 _changeTheme(context);
@@ -445,9 +449,17 @@ class SelfProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
               <PopupMenuEntry<SelfProfileAction>>[
             if (isUserLoggedIn)
               PopupMenuItem<SelfProfileAction>(
-                value: SelfProfileAction.synchronize,
+                value: SelfProfileAction.saveBackup,
                 child: Text(
-                  'Sincronizar',
+                  'Salvar Backup',
+                  style: body,
+                ),
+              ),
+            if (isUserLoggedIn)
+              PopupMenuItem<SelfProfileAction>(
+                value: SelfProfileAction.loadBackup,
+                child: Text(
+                  'Carregar Backup',
                   style: body,
                 ),
               ),
